@@ -10,7 +10,7 @@ const shakeSvgContainer = document.getElementById("shakeSvgContainer");
 
 const currentLotCard = document.getElementById("currentLotCard");
 
-const meritEl = document.getElementById("merit");
+const meritEl = document.getElementById("window.addMerit(1);");
 const lightStatusEl = document.getElementById("lightStatus");
 const lightBtn = document.getElementById("lightBtn");
 const offerBtn = document.getElementById("offerBtn");
