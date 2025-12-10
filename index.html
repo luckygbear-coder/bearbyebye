@@ -134,5 +134,29 @@
   </div>
 
   <script src="script.js"></script>
+<script src="script.js"></script>
+<script>
+  function hideLoadingScreen() {
+    const loading = document.getElementById('loading-screen');
+    if (!loading) return;
+    // 已經移除了就不要重覆
+    if (loading.classList.contains('fade-out')) return;
+
+    loading.classList.add('fade-out');
+    setTimeout(() => {
+      if (loading && loading.parentNode) {
+        loading.parentNode.removeChild(loading);
+      }
+    }, 600);
+  }
+
+  // 頁面載入完成時關啟動畫面
+  window.addEventListener('load', hideLoadingScreen);
+
+  // 保險機制：就算 load 沒觸發，1.8 秒後還是把它關掉
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(hideLoadingScreen, 1800);
+  });
+</script>
 </body>
 </html>
