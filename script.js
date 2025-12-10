@@ -72,103 +72,7 @@ const SHAKE_SVG = `
 </svg>
 `;
 
-// ================== 食物清單 ==================
-// 主食 + 小吃 42 種
-const foodsMainSnack = [
-  { name: "滷肉飯一碗", calories: 650, exerciseMinutes: 25 },
-  { name: "雞肉飯一碗", calories: 620, exerciseMinutes: 24 },
-  { name: "排骨飯便當", calories: 780, exerciseMinutes: 30 },
-  { name: "雞腿便當", calories: 820, exerciseMinutes: 32 },
-  { name: "家常雙主菜便當", calories: 750, exerciseMinutes: 30 },
-  { name: "牛肉麵一碗", calories: 680, exerciseMinutes: 27 },
-  { name: "榨菜肉絲麵", calories: 620, exerciseMinutes: 24 },
-  { name: "陽春麵一碗", calories: 550, exerciseMinutes: 22 },
-  { name: "鍋燒意麵一碗", calories: 580, exerciseMinutes: 23 },
-  { name: "蚵仔麵線一碗", calories: 520, exerciseMinutes: 21 },
-  { name: "米粉湯＋小菜", calories: 540, exerciseMinutes: 22 },
-  { name: "肉圓兩粒", calories: 600, exerciseMinutes: 24 },
-  { name: "臭豆腐一盤", calories: 480, exerciseMinutes: 19 },
-  { name: "炸雞排一片", calories: 540, exerciseMinutes: 22 },
-  { name: "鹽酥雞一份", calories: 600, exerciseMinutes: 24 },
-  { name: "蚵仔煎一份", calories: 520, exerciseMinutes: 21 },
-  { name: "蘿蔔糕＋蛋", calories: 460, exerciseMinutes: 18 },
-  { name: "蛋餅一份", calories: 430, exerciseMinutes: 17 },
-  { name: "湯包八顆", calories: 520, exerciseMinutes: 21 },
-  { name: "小籠包十顆", calories: 580, exerciseMinutes: 23 },
-  { name: "水餃十顆", calories: 500, exerciseMinutes: 20 },
-  { name: "鍋貼十顆", calories: 540, exerciseMinutes: 22 },
-  { name: "蔥抓餅一份", calories: 480, exerciseMinutes: 19 },
-  { name: "蔥油餅一片", calories: 460, exerciseMinutes: 18 },
-  { name: "刈包一個", calories: 420, exerciseMinutes: 17 },
-  { name: "魯味拼盤一份", calories: 550, exerciseMinutes: 22 },
-  { name: "炸物綜合拼盤", calories: 650, exerciseMinutes: 26 },
-  { name: "章魚燒六顆", calories: 420, exerciseMinutes: 17 },
-  { name: "炒飯一盤", calories: 700, exerciseMinutes: 28 },
-  { name: "炒麵一盤", calories: 680, exerciseMinutes: 27 },
-  { name: "炒米粉一盤", calories: 640, exerciseMinutes: 25 },
-  { name: "日式豬排丼飯", calories: 780, exerciseMinutes: 31 },
-  { name: "親子丼一碗", calories: 650, exerciseMinutes: 26 },
-  { name: "壽司便當一份", calories: 620, exerciseMinutes: 24 },
-  { name: "韓式拌飯一碗", calories: 640, exerciseMinutes: 25 },
-  { name: "部隊鍋一鍋", calories: 820, exerciseMinutes: 32 },
-  { name: "泡菜鍋套餐", calories: 680, exerciseMinutes: 27 },
-  { name: "鐵板麵一份", calories: 630, exerciseMinutes: 25 },
-  { name: "擔仔麵一碗", calories: 540, exerciseMinutes: 22 },
-  { name: "肉羹湯＋白飯", calories: 620, exerciseMinutes: 24 },
-  { name: "火鍋（多菜少加工）", calories: 700, exerciseMinutes: 28 }
-];
-
-// 甜點 + 水果 21 種
-const foodsDessertFruit = [
-  { name: "豆花一碗（少糖）", calories: 250, exerciseMinutes: 15 },
-  { name: "仙草凍加鮮奶", calories: 230, exerciseMinutes: 14 },
-  { name: "芋圓地瓜圓甜湯", calories: 320, exerciseMinutes: 18 },
-  { name: "黑糖剉冰加配料", calories: 350, exerciseMinutes: 19 },
-  { name: "芒果冰一份", calories: 380, exerciseMinutes: 21 },
-  { name: "車輪餅兩顆", calories: 260, exerciseMinutes: 16 },
-  { name: "雞蛋糕三顆", calories: 240, exerciseMinutes: 15 },
-  { name: "草莓奶油蛋糕一片", calories: 320, exerciseMinutes: 18 },
-  { name: "巧克力蛋糕一片", calories: 360, exerciseMinutes: 20 },
-  { name: "手工餅乾兩片", calories: 180, exerciseMinutes: 12 },
-  { name: "布朗尼小塊", calories: 220, exerciseMinutes: 14 },
-  { name: "芋泥奶酥厚片", calories: 420, exerciseMinutes: 23 },
-  { name: "地瓜球一小包", calories: 280, exerciseMinutes: 16 },
-  { name: "水果優格一杯", calories: 180, exerciseMinutes: 12 },
-  { name: "蘋果一顆", calories: 90, exerciseMinutes: 8 },
-  { name: "香蕉一條", calories: 100, exerciseMinutes: 9 },
-  { name: "奇異果兩顆", calories: 90, exerciseMinutes: 8 },
-  { name: "葡萄一小串", calories: 80, exerciseMinutes: 7 },
-  { name: "鳳梨切片一份", calories: 90, exerciseMinutes: 8 },
-  { name: "綜合水果盤一份", calories: 120, exerciseMinutes: 10 },
-  { name: "愛文芒果一顆", calories: 130, exerciseMinutes: 11 }
-];
-
-// 飲料 + 果汁 21 種
-const foodsDrinkJuice = [
-  { name: "珍珠奶茶一杯（半糖少冰）", calories: 420, exerciseMinutes: 25 },
-  { name: "鮮奶茶一杯（微糖）", calories: 320, exerciseMinutes: 20 },
-  { name: "紅茶拿鐵一杯", calories: 280, exerciseMinutes: 18 },
-  { name: "青茶無糖一杯", calories: 20, exerciseMinutes: 5 },
-  { name: "烏龍奶蓋茶一杯", calories: 350, exerciseMinutes: 21 },
-  { name: "黑咖啡一杯", calories: 10, exerciseMinutes: 3 },
-  { name: "拿鐵咖啡一杯", calories: 220, exerciseMinutes: 14 },
-  { name: "抹茶拿鐵一杯", calories: 260, exerciseMinutes: 16 },
-  { name: "熱可可一杯", calories: 230, exerciseMinutes: 14 },
-  { name: "豆漿一杯", calories: 150, exerciseMinutes: 11 },
-  { name: "麥茶無糖一杯", calories: 10, exerciseMinutes: 3 },
-  { name: "西瓜汁一杯", calories: 160, exerciseMinutes: 11 },
-  { name: "柳橙汁一杯", calories: 150, exerciseMinutes: 11 },
-  { name: "葡萄柚綠茶一杯", calories: 180, exerciseMinutes: 12 },
-  { name: "檸檬愛玉一杯", calories: 160, exerciseMinutes: 11 },
-  { name: "甘蔗汁一杯", calories: 220, exerciseMinutes: 14 },
-  { name: "木瓜牛奶一杯", calories: 260, exerciseMinutes: 16 },
-  { name: "冬瓜茶一杯（微糖）", calories: 160, exerciseMinutes: 11 },
-  { name: "百香果多多一杯", calories: 240, exerciseMinutes: 15 },
-  { name: "氣泡水加檸檬一杯", calories: 10, exerciseMinutes: 3 },
-  { name: "檸檬水一杯", calories: 5, exerciseMinutes: 2 }
-];
-
-// ================== 詩籤（24 筆示意） ==================
+// ================== 詩籤（每一籤都綁定專屬食物） ==================
 const lots = [
   {
     id: 1,
@@ -178,7 +82,10 @@ const lots = [
     poem: "晨光破霧好風來，\n心定步穩路自開；\n若能溫飽常知足，\n福到人間喜盈腮。",
     meaning:
       "最近是往前走的好時機，只要腳步穩定，不用太急，事情會一件件明朗。記得在忙碌中也要好好吃飯、照顧自己。",
-    summary: "福氣上門、穩穩前進。"
+    summary: "福氣上門、穩穩前進。",
+    food: "台式早餐：蛋餅＋豆漿",
+    calories: 520,
+    exerciseMinutes: 20
   },
   {
     id: 2,
@@ -188,7 +95,10 @@ const lots = [
     poem: "微雨過後見晴天，\n雲開月上好人緣；\n心中疑慮慢慢解，\n一碗暖湯最貼肩。",
     meaning:
       "心裡的擔心會慢慢解除，不必一次想通全部，只要願意和信任的人聊聊，就能找到出口。",
-    summary: "心事漸解、適合溫暖相聚。"
+    summary: "心事漸解、適合溫暖相聚。",
+    food: "暖呼呼湯麵一碗",
+    calories: 560,
+    exerciseMinutes: 22
   },
   {
     id: 3,
@@ -198,7 +108,10 @@ const lots = [
     poem: "腳步雖慢仍向前，\n迂迴小路也有緣；\n偶遇甜味添笑意，\n莫忘抬頭看藍天。",
     meaning:
       "進度比想像中慢一些，但並不是失敗，而是宇宙在幫你安排更合適的步伐。途中給自己一點甜，也能補充勇氣。",
-    summary: "慢慢走也會到、甜中有力量。"
+    summary: "慢慢走也會到、甜中有力量。",
+    food: "黑糖珍珠奶茶（半糖少冰）",
+    calories: 420,
+    exerciseMinutes: 25
   },
   {
     id: 4,
@@ -208,7 +121,10 @@ const lots = [
     poem: "薄雲輕罩未成陰，\n心若安然自有金；\n一盤青葉入口爽，\n煩憂隨風不再尋。",
     meaning:
       "有些小煩惱在身邊，但還不會真正阻礙你。先照顧身體，讓心情穩定，處理事情就會更順利。",
-    summary: "小煩惱擋不住，穩住自己就好。"
+    summary: "小煩惱擋不住，穩住自己就好。",
+    food: "青菜雞肉便當（多菜少炸）",
+    calories: 650,
+    exerciseMinutes: 26
   },
   {
     id: 5,
@@ -218,7 +134,10 @@ const lots = [
     poem: "夜路微暗心不安，\n言語誤會易成端；\n且先緩步暖身胃，\n明日再談更心寬。",
     meaning:
       "最近容易有溝通小摩擦，先不要急著爭對錯，把身體照顧好，讓自己睡飽再談，比硬撐有效。",
-    summary: "少說一點、多休息一點。"
+    summary: "少說一點、多休息一點。",
+    food: "清粥小菜一份",
+    calories: 350,
+    exerciseMinutes: 18
   },
   {
     id: 6,
@@ -228,7 +147,10 @@ const lots = [
     poem: "船行河上波微搖，\n掌舵在手心不焦；\n一杯豆漿暖喉間，\n前程雖遠路不遙。",
     meaning:
       "有一些變動，但主控權還在你手上。適度調整腳步，保持彈性，你會發現其實自己比想像中更有力量。",
-    summary: "變動中仍能掌舵。"
+    summary: "變動中仍能掌舵。",
+    food: "無糖豆漿＋烤地瓜",
+    calories: 280,
+    exerciseMinutes: 16
   },
   {
     id: 7,
@@ -238,7 +160,10 @@ const lots = [
     poem: "風平浪靜無大波，\n小事堆疊亦成多；\n一碗青菜暖心腹，\n慢慢整理不必拖。",
     meaning:
       "生活現在沒大風波，但小事情堆起來會讓你覺得煩。可以從最簡單的一件開始收拾，給自己一點完成的成就感。",
-    summary: "小事慢慢清，心就慢慢輕。"
+    summary: "小事慢慢清，心就慢慢輕。",
+    food: "家常便當一份",
+    calories: 700,
+    exerciseMinutes: 28
   },
   {
     id: 8,
@@ -248,7 +173,10 @@ const lots = [
     poem: "舊枝抽新芽，\n轉彎見彩霞；\n心願雖未滿，\n腳下有好茶。",
     meaning:
       "計畫還在路上，但已經開始有小成果。值得為現在的自己鼓鼓掌，再多走幾步就更接近了。",
-    summary: "正在長出新芽的小小好兆頭。"
+    summary: "正在長出新芽的小小好兆頭。",
+    food: "鮮奶茶一杯（微糖）",
+    calories: 320,
+    exerciseMinutes: 20
   },
   {
     id: 9,
@@ -258,7 +186,10 @@ const lots = [
     poem: "雲有陰晴月有圓，\n喜怒哀樂在人間；\n允許情緒慢慢走，\n一顆水果伴身邊。",
     meaning:
       "最近情緒比較敏感，沒關係，那代表你在認真生活。允許自己偶爾難過，吃點喜歡的水果，也算是給自己一點溫柔。",
-    summary: "允許情緒，也給自己甜甜的照顧。"
+    summary: "允許情緒，也給自己甜甜的照顧。",
+    food: "綜合水果盤一份",
+    calories: 120,
+    exerciseMinutes: 10
   },
   {
     id: 10,
@@ -268,7 +199,10 @@ const lots = [
     poem: "風急雨驟樹難安，\n暫避鋒頭保心安；\n切莫逞強硬向前，\n熱湯入口身自暖。",
     meaning:
       "現在不太適合做太大的決定，比起硬撐，更需要的是保護自己。先把生活簡化，讓自己暖起來，等情況穩定再出手也不遲。",
-    summary: "暫時避風頭，先照顧好自己。"
+    summary: "暫時避風頭，先照顧好自己。",
+    food: "味噌湯＋白飯一份",
+    calories: 480,
+    exerciseMinutes: 20
   },
   {
     id: 11,
@@ -278,7 +212,10 @@ const lots = [
     poem: "人來人往有貴人，\n一句暖語勝黃金；\n多聽少說心放鬆，\n甜點一口笑盈盈。",
     meaning:
       "最近有機會遇到願意幫助你、理解你的人。試著多聽聽別人的建議，也別忘了跟自己說一些溫柔的話。",
-    summary: "貴人運上升，多聽多笑。"
+    summary: "貴人運上升，多聽多笑。",
+    food: "小塊蛋糕＋熱茶一杯",
+    calories: 320,
+    exerciseMinutes: 18
   },
   {
     id: 12,
@@ -288,7 +225,10 @@ const lots = [
     poem: "山路雖彎景更佳，\n回頭一望有紅霞；\n路邊小館香味繞，\n好好用餐莫心煩。",
     meaning:
       "事情不像一條直線，而是有點曲折，但這些轉彎會帶來不同風景。先把每一餐吃好，讓身體有力氣，才有精神欣賞沿途風景。",
-    summary: "彎路也是風景，好好吃飯就有力氣。"
+    summary: "彎路也是風景，好好吃飯就有力氣。",
+    food: "牛肉麵一碗",
+    calories: 680,
+    exerciseMinutes: 27
   },
   {
     id: 13,
@@ -298,7 +238,10 @@ const lots = [
     poem: "忙裡偷閒一口茶，\n心火微退煩也差；\n莫把自己逼太緊，\n慢嚼飯菜最優雅。",
     meaning:
       "最近事情有點多，容易覺得喘不過氣。先從放慢吃飯速度開始，讓自己在餐桌上好好呼吸一下。",
-    summary: "放慢吃飯，也是休息。"
+    summary: "放慢吃飯，也是休息。",
+    food: "家常便當一份（多菜少炸）",
+    calories: 720,
+    exerciseMinutes: 29
   },
   {
     id: 14,
@@ -308,7 +251,10 @@ const lots = [
     poem: "好事將臨心先暖，\n路旁花開香不遠；\n與人分享好滋味，\n喜氣自會多一半。",
     meaning:
       "有好消息正在路上，和身邊的人分享你的喜悅或喜歡的食物，會讓幸福感放大。",
-    summary: "分享食物，分享好運。"
+    summary: "分享食物，分享好運。",
+    food: "炸雞拼盤（與朋友分享）",
+    calories: 600,
+    exerciseMinutes: 26
   },
   {
     id: 15,
@@ -318,7 +264,10 @@ const lots = [
     poem: "日子平平也算福，\n三餐溫飽已是富；\n偶爾小辣提精神，\n記得多喝幾口水。",
     meaning:
       "生活沒有特別大起伏，但平安就是一種祝福。可以用一點點刺激口味讓自己醒醒，但記得顧胃。",
-    summary: "平淡日常，加一點小辣就好。"
+    summary: "平淡日常，加一點小辣就好。",
+    food: "小辣酸辣湯一碗",
+    calories: 350,
+    exerciseMinutes: 19
   },
   {
     id: 16,
@@ -328,7 +277,10 @@ const lots = [
     poem: "心煩意亂睡不安，\n手機螢光夜未完；\n不如關機早就寢，\n清粥暖胃夢也甜。",
     meaning:
       "最近睡眠狀況可能不太好，情緒也容易跟著起伏。先從早點放下手機開始，讓自己好好睡一晚。",
-    summary: "關機休息，讓胃和心一起放鬆。"
+    summary: "關機休息，讓胃和心一起放鬆。",
+    food: "燕麥牛奶一碗",
+    calories: 280,
+    exerciseMinutes: 17
   },
   {
     id: 17,
@@ -338,7 +290,10 @@ const lots = [
     poem: "陌生巷口有驚喜，\n轉角香味把人喚；\n敢於踏出舒適圈，\n新味新景眼前展。",
     meaning:
       "適合嘗試沒吃過的料理或新的生活方式。小小的改變，會帶來意想不到的靈感。",
-    summary: "試試新口味，打開新視野。"
+    summary: "試試新口味，打開新視野。",
+    food: "沒吃過的新口味料理一份",
+    calories: 550,
+    exerciseMinutes: 23
   },
   {
     id: 18,
@@ -348,7 +303,10 @@ const lots = [
     poem: "工作雖忙手不閒，\n桌上咖啡伴身邊；\n慎防空腹太刺激，\n點心一塊保平安。",
     meaning:
       "事情多、壓力也不小，但你撐得很好。不要靠空腹咖啡硬撐，搭配一點點心或正餐，身體會比較穩。",
-    summary: "咖啡配點心，比單喝溫柔。"
+    summary: "咖啡配點心，比單喝溫柔。",
+    food: "拿鐵咖啡＋小餅乾一份",
+    calories: 260,
+    exerciseMinutes: 16
   },
   {
     id: 19,
@@ -358,7 +316,10 @@ const lots = [
     poem: "家人相聚一桌圓，\n湯匙碰碗笑聲連；\n偶有爭執皆小事，\n好好吃飯才是先。",
     meaning:
       "家庭或親密關係可能有一點小摩擦，但本質上仍是相愛的人。先一起吃頓飯，再談心事也不遲。",
-    summary: "先吃飯再吵架，通常就不想吵了。"
+    summary: "先吃飯再吵架，通常就不想吵了。",
+    food: "蔬菜多多火鍋一鍋（大家一起分）",
+    calories: 750,
+    exerciseMinutes: 30
   },
   {
     id: 20,
@@ -368,7 +329,10 @@ const lots = [
     poem: "情緒上湧如巨浪，\n言語不慎易受傷；\n暫時離席深呼吸，\n一碗熱湯護心腸。",
     meaning:
       "這段時間比較容易暴躁或受傷害，說出口的話可能會後悔。先離開吵鬧現場，讓自己喝點溫熱的東西冷靜一下。",
-    summary: "先保護自己，再處理問題。"
+    summary: "先保護自己，再處理問題。",
+    food: "熱味噌湯一碗",
+    calories: 200,
+    exerciseMinutes: 12
   },
   {
     id: 21,
@@ -378,7 +342,10 @@ const lots = [
     poem: "創意靈感正發芽，\n腦中點子如煙花；\n小小甜點當獎勵，\n別忘肯定好自家。",
     meaning:
       "最近特別有創意與靈感，很適合寫計畫、畫圖、創作。也別忘了在完成後獎勵自己一下。",
-    summary: "靈感滿滿，配一點甜更開心。"
+    summary: "靈感滿滿，配一點甜更開心。",
+    food: "手作甜點小拼盤一份",
+    calories: 380,
+    exerciseMinutes: 21
   },
   {
     id: 22,
@@ -388,7 +355,10 @@ const lots = [
     poem: "身體微累信號現，\n肩頸緊繃眼也酸；\n少滑一集追劇吧，\n熱茶水果最相伴。",
     meaning:
       "身體正在發出疲勞警報，需要好好伸展和休息眼睛。可以把追劇時間縮短一點，留給自己和身體。",
-    summary: "少看一集劇，多愛自己一點。"
+    summary: "少看一集劇，多愛自己一點。",
+    food: "一盤切好的水果＋熱茶",
+    calories: 110,
+    exerciseMinutes: 9
   },
   {
     id: 23,
@@ -398,7 +368,10 @@ const lots = [
     poem: "錢財進出有節奏，\n省一點來花更久；\n外食搭配自備菜，\n荷包健康都加油。",
     meaning:
       "金錢上需要多一點節制，但不是要你完全不能享受，而是學會搭配與平衡。",
-    summary: "聰明吃飯，也聰明存錢。"
+    summary: "聰明吃飯，也聰明存錢。",
+    food: "自備便當＋外食湯品一碗",
+    calories: 650,
+    exerciseMinutes: 26
   },
   {
     id: 24,
@@ -408,7 +381,10 @@ const lots = [
     poem: "旅程將啟心雀躍，\n車站街角香味烈；\n玩樂之前先吃飽，\n體力足夠笑不滅。",
     meaning:
       "適合安排小旅行或外出走走。記得先吃好、帶點水和小點心，玩起來會更愉快。",
-    summary: "先充飽電，再出發冒險。"
+    summary: "先充飽電，再出發冒險。",
+    food: "便利商店飯糰一顆＋無糖茶一瓶",
+    calories: 480,
+    exerciseMinutes: 20
   }
 ];
 
@@ -644,24 +620,11 @@ function hideShake() {
 function handleDrawClick() {
   if (!canDraw) return;
 
+  // 直接抽一支詩籤，使用詩籤內建的食物建議
   const lotBase = lots[Math.floor(Math.random() * lots.length)];
-
-  const catIdx = Math.floor(Math.random() * 3);
-  let foodItem;
-  if (catIdx === 0) {
-    foodItem = randomFrom(foodsMainSnack);
-  } else if (catIdx === 1) {
-    foodItem = randomFrom(foodsDessertFruit);
-  } else {
-    foodItem = randomFrom(foodsDrinkJuice);
-  }
-
   const lot = {
     ...lotBase,
-    time: formatNow(),
-    food: foodItem.name,
-    calories: foodItem.calories,
-    exerciseMinutes: foodItem.exerciseMinutes
+    time: formatNow()
   };
 
   currentLot = lot;
