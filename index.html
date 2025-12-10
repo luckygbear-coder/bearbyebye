@@ -69,18 +69,22 @@
 </div>
 
 <!-- 🔸 詩籤彈窗 -->
-<div id="lotModal" class="modal hidden">
+<div id="lotModal" class="modal hidden"
+     onclick="if (event.target === this) closeAllModals()">
   <div class="modal-content">
     <div id="lotText"></div>
-    <button id="closeLot" class="close-btn">關閉</button>
+    <button id="closeLot" class="close-btn"
+            onclick="closeAllModals()">關閉</button>
   </div>
 </div>
 
 <!-- 🔸 抽籤紀錄彈窗 -->
-<div id="historyModal" class="modal hidden">
+<div id="historyModal" class="modal hidden"
+     onclick="if (event.target === this) closeAllModals()">
   <div class="modal-content">
     <div id="historyList"></div>
-    <button id="closeHistory" class="close-btn">關閉</button>
+    <button id="closeHistory" class="close-btn"
+            onclick="closeAllModals()">關閉</button>
   </div>
 </div>
 
