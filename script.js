@@ -8,7 +8,7 @@ let merit = 0;
 let lightEndTime = null; // ms timestamp
 let records = [];
 
-// 籤詩資料（示範一些，可之後再擴充）
+// 籤詩資料
 const lots = [
   {
     id: 1,
@@ -165,6 +165,7 @@ const lotMeaningEl = document.getElementById("lotMeaning");
 const lotFoodEl = document.getElementById("lotFood");
 const lotCalorieEl = document.getElementById("lotCalorie");
 const lotExerciseEl = document.getElementById("lotExercise");
+const lastLotSummaryEl = document.getElementById("lastLotSummary");
 
 const mainActionBtn = document.getElementById("mainActionBtn");
 const lotTubeEl = document.getElementById("lotTube");
@@ -181,6 +182,19 @@ const historyOkBtn = document.getElementById("historyOkBtn");
 const historyListEl = document.getElementById("historyList");
 const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
+// 詩籤 Modal DOM
+const lotModal = document.getElementById("lotModal");
+const lotBackdrop = document.getElementById("lotBackdrop");
+const lotCloseBtn = document.getElementById("lotCloseBtn");
+const lotOkBtn = document.getElementById("lotOkBtn");
+const mLotNumberEl = document.getElementById("mLotNumber");
+const mLotFortuneEl = document.getElementById("mLotFortune");
+const mLotPoemEl = document.getElementById("mLotPoem");
+const mLotMeaningEl = document.getElementById("mLotMeaning");
+const mLotFoodEl = document.getElementById("mLotFood");
+const mLotCalorieEl = document.getElementById("mLotCalorie");
+const mLotExerciseEl = document.getElementById("mLotExercise");
+
 // 初始化
 initFromStorage();
 renderMeritAndLight();
@@ -196,6 +210,10 @@ historyBackdrop.addEventListener("click", closeHistoryModal);
 historyCloseBtn.addEventListener("click", closeHistoryModal);
 historyOkBtn.addEventListener("click", closeHistoryModal);
 clearHistoryBtn.addEventListener("click", clearHistory);
+
+lotBackdrop.addEventListener("click", closeLotModal);
+lotCloseBtn.addEventListener("click", closeLotModal);
+lotOkBtn.addEventListener("click", closeLotModal);
 
 // --- 初始化與 Storage ---
 
@@ -217,7 +235,6 @@ function initFromStorage() {
     }
   }
 
-  // 檢查光明燈是否過期
   updateLightTime();
 }
 
@@ -253,7 +270,6 @@ function renderMeritAndLight() {
     lightBtn.classList.remove("enabled");
     lightBtn.textContent = "光明燈祝福中";
   } else {
-    // 未點燈
     if (merit >= 30) {
       lightStatusEl.textContent = "功德已滿，可點光明燈！";
       lightBtn.disabled = false;
@@ -287,7 +303,7 @@ function updateStatusText() {
     mainActionBtn.textContent = "再試一次擲筊";
   } else if (state === "result") {
     statusTextEl.textContent =
-      "熊熊食神已應允，以下是本次的詩籤與飲食、小運動建議。";
+      "熊熊食神已應允，本次詩籤已顯示在畫面上，可再問一卦或慢慢體會。";
     mainActionBtn.textContent = "再問一卦";
   }
 }
@@ -301,9 +317,9 @@ function renderLot(lot) {
   lotFortuneEl.classList.remove("best", "good", "bad");
   if (lot.fortune === "大吉") {
     lotFortuneEl.classList.add("best");
-  } else if (lot.fortune === "吉" || lot.fortune === "中吉" || lot.fortune === "小吉") {
+  } else if (["吉", "中吉", "小吉"].includes(lot.fortune)) {
     lotFortuneEl.classList.add("good");
-  } else if (lot.fortune === "凶" || lot.fortune === "小凶") {
+  } else if (["凶", "小凶"].includes(lot.fortune)) {
     lotFortuneEl.classList.add("bad");
   }
 
@@ -313,11 +329,12 @@ function renderLot(lot) {
   lotFoodEl.textContent = `建議：${lot.food}`;
   lotCalorieEl.textContent = `約 ${lot.calories} kcal（熱量為估計值，請以實際份量為準）`;
   lotExerciseEl.textContent = `建議做約 ${lot.exerciseMinutes} 分鐘的輕鬆小運動（散步、伸展或家事活動）。`;
+
+  lastLotSummaryEl.textContent = `${lot.title}｜${lot.fortune}｜${lot.food}`;
 }
 
 function renderLastLotIfAny() {
   if (records.length > 0) {
-    // 最近一次
     const last = records[0];
     lotNumberEl.textContent = last.title;
     lotFortuneEl.textContent = last.fortune;
@@ -326,6 +343,7 @@ function renderLastLotIfAny() {
     lotFoodEl.textContent = `建議：${last.food}`;
     lotCalorieEl.textContent = `約 ${last.calories} kcal（熱量為估計值，請以實際份量為準）`;
     lotExerciseEl.textContent = `建議做約 ${last.exerciseMinutes} 分鐘的輕鬆小運動（散步、伸展或家事活動）。`;
+    lastLotSummaryEl.textContent = `${last.title}｜${last.fortune}｜${last.food}`;
   }
 }
 
@@ -333,16 +351,13 @@ function renderLastLotIfAny() {
 
 function handleMainAction() {
   if (state === "ready" || state === "notApproved") {
-    // 重新開始擲筊流程
     resetThrowState();
     state = "throwing";
     updateStatusText();
     performThrow();
   } else if (state === "throwing") {
-    // 進行第 2、3 次擲筊
     performThrow();
   } else if (state === "result") {
-    // 再問一卦 → 回到 ready 狀態
     resetThrowState();
     state = "ready";
     updateStatusText();
@@ -350,7 +365,7 @@ function handleMainAction() {
 }
 
 function performThrow() {
-  if (throwCount >= 3) return; // 保險，避免超過三次
+  if (throwCount >= 3) return;
 
   mainActionBtn.disabled = true;
   shakeLotTube();
@@ -368,17 +383,16 @@ function performThrow() {
     }
 
     if (throwCount < 3) {
-      // 還沒擲完三次 -> 再擲
       mainActionBtn.disabled = false;
       state = "throwing";
       updateStatusText();
     } else {
-      // 三次都結束
       if (successCount === 3) {
-        // 應允抽籤
-        drawLotAndShow();
+        // 三個聖筊 → 抽籤動畫後顯示詩籤
+        animateTubeDraw(() => {
+          drawLotAndShow();
+        });
       } else {
-        // 不給問
         state = "notApproved";
         mainActionBtn.disabled = false;
         updateStatusText();
@@ -388,10 +402,19 @@ function performThrow() {
 }
 
 function shakeLotTube() {
+  lotTubeEl.classList.remove("shake");
+  void lotTubeEl.offsetWidth; // 重新觸發動畫
   lotTubeEl.classList.add("shake");
+}
+
+function animateTubeDraw(callback) {
+  lotTubeEl.classList.remove("draw");
+  void lotTubeEl.offsetWidth;
+  lotTubeEl.classList.add("draw");
   setTimeout(() => {
-    lotTubeEl.classList.remove("shake");
-  }, 300);
+    lotTubeEl.classList.remove("draw");
+    if (typeof callback === "function") callback();
+  }, 600);
 }
 
 function resetThrowState() {
@@ -402,28 +425,25 @@ function resetThrowState() {
 // --- 抽籤與紀錄 ---
 
 function drawLotAndShow() {
-  // 從 lots 中隨機抽一籤
   const index = Math.floor(Math.random() * lots.length);
   const lot = lots[index];
   currentLot = lot;
 
-  // 顯示籤
   renderLot(lot);
 
-  // 計算功德值 +1
   merit += 1;
   saveMerit();
 
-  // 檢查光明燈
   updateLightTime();
   renderMeritAndLight();
 
-  // 存紀錄
   addRecord(lot);
 
   state = "result";
   mainActionBtn.disabled = false;
   updateStatusText();
+
+  openLotModal(lot);
 }
 
 function addRecord(lot) {
@@ -449,11 +469,8 @@ function addRecord(lot) {
     meaning: lot.meaning,
   };
 
-  records.unshift(record); // 最新在最前
-  if (records.length > 10) {
-    records.pop();
-  }
-
+  records.unshift(record);
+  if (records.length > 10) records.pop();
   saveRecords();
 }
 
@@ -462,7 +479,6 @@ function addRecord(lot) {
 function updateLightTime() {
   const now = Date.now();
   if (lightEndTime && now >= lightEndTime) {
-    // 過期
     lightEndTime = null;
     saveLightEndTime();
   }
@@ -470,21 +486,13 @@ function updateLightTime() {
 
 function handleLightBtnClick() {
   const now = Date.now();
-  if (lightEndTime && now < lightEndTime) {
-    // 已點燈中
-    return;
-  }
+  if (lightEndTime && now < lightEndTime) return;
+  if (merit < 30) return;
 
-  if (merit < 30) {
-    return;
-  }
-
-  // 點燈 7 天
   const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
   lightEndTime = now + sevenDaysMs;
   saveLightEndTime();
 
-  // 功德值歸零
   merit = 0;
   saveMerit();
 
@@ -533,4 +541,25 @@ function clearHistory() {
   records = [];
   saveRecords();
   renderHistoryList();
+}
+
+// --- 詩籤 Modal ---
+
+function openLotModal(lot) {
+  if (!lot) lot = currentLot;
+  if (!lot) return;
+
+  mLotNumberEl.textContent = lot.title;
+  mLotFortuneEl.textContent = lot.fortune;
+  mLotPoemEl.textContent = lot.poem;
+  mLotMeaningEl.textContent = "🐻 熊熊食神解籤： " + lot.meaning;
+  mLotFoodEl.textContent = `建議：${lot.food}`;
+  mLotCalorieEl.textContent = `約 ${lot.calories} kcal（熱量為估計值，請以實際份量為準）`;
+  mLotExerciseEl.textContent = `建議做約 ${lot.exerciseMinutes} 分鐘的輕鬆小運動（散步、伸展或家事活動）。`;
+
+  lotModal.classList.add("show");
+}
+
+function closeLotModal() {
+  lotModal.classList.remove("show");
 }
