@@ -14,90 +14,64 @@
 </head>
 
 <body>
-  <!-- 啟動畫面 / Loading 畫面（熊熊 + 對聯 + 橫批） -->
+  <!-- 啟動畫面：熊熊 + 對聯 + 橫批 -->
   <div id="loading-screen">
     <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
   </div>
 
   <div class="app">
-
     <!-- 標題區 -->
     <header class="header">
       <div class="title">愛吃熊美食占卜</div>
       <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
     </header>
 
-<!-- 五臟廟主視覺 改為可愛熊熊圖 -->
-<section class="temple-wrapper">
-  <div class="temple-image-box">
-    <img src="images/bear-loading-couplet.png" alt="愛吃熊主視覺" class="temple-main-img">
-  </div>
-</section>
+    <!-- 主視覺 + 浮動按鈕 + 功德值 -->
+    <section class="temple-wrapper">
+      <div class="temple-image-box">
+        <img src="images/bear-loading-couplet.png"
+             alt="愛吃熊主視覺" class="temple-main-img">
 
-    <!-- 搖籤筒動畫區（擲筊時） -->
-    <section id="shakeArea" class="shake-area hidden">
-      <div id="shakeSvgContainer"></div>
-    </section>
-
-    <!-- 狀態文字 -->
-    <p id="statusText" class="status-text">
-      請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
-    </p>
-
-    <!-- 主要按鈕 -->
-    <button id="boBtn" class="main-btn">擲筊</button>
-    <button id="drawBtn" class="main-btn hidden">抽籤</button>
-
-    <!-- 當前詩籤卡片（可點開彈窗） -->
-    <section id="currentLotCard" class="lot-card hidden"></section>
-
-    <!-- 下方面板 -->
-    <section class="panel">
-      <div class="row">
-        <div class="box">
-          <div>功德值</div>
-          <div id="merit" class="big-num">0</div>
+        <!-- 功德值角標 -->
+        <div class="merit-badge">
+          功德值
+          <span id="merit">0</span>
         </div>
-        <div class="box">
-          <div>光明燈</div>
-          <div id="lightStatus" class="light-status">尚未點燈</div>
-          <button id="lightBtn" class="small-btn disabled">
-            功德滿 30 可點燈
+
+        <!-- 浮動圓形按鈕群 -->
+        <div class="floating-buttons">
+          <button id="boBtn" class="circle-btn circle-main">
+            🙏<span>擲筊</span>
+          </button>
+
+          <button id="drawBtn" class="circle-btn circle-main hidden">
+            🧧<span>抽籤</span>
+          </button>
+
+          <button id="historyBtn" class="circle-btn">
+            📘<span>紀錄</span>
+          </button>
+
+          <button id="offerBtn" class="circle-btn small disabled">
+            🍱<span>供品</span>
+          </button>
+
+          <button id="resetBtn" class="circle-btn danger">
+            ♻️<span>清空</span>
           </button>
         </div>
       </div>
-
-      <div class="row row-single">
-        <button id="offerBtn" class="small-btn full disabled">
-          上供品給愛吃熊（消耗 5 功德）
-        </button>
-      </div>
-
-      <div class="row row-double">
-        <button id="historyBtn" class="small-btn full">
-          📘 抽籤紀錄 & 功德無量匾額
-        </button>
-      </div>
-
-      <div class="row row-double">
-        <a class="small-btn full" href="https://instagram.com/luckygbear"
-           target="_blank" rel="noopener noreferrer">
-          📸 追蹤愛吃熊 IG @luckygbear
-        </a>
-      </div>
-
-      <div class="row row-single">
-        <button id="resetBtn" class="danger-btn full">
-          清空所有紀錄
-        </button>
-      </div>
     </section>
 
+    <!-- 提示文字（放在圖下方，不擋操作） -->
+    <p id="statusText" class="status-text">
+      請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
+    </p>
   </div>
 
   <!-- 詩籤彈窗 -->
   <div id="lotModal" class="modal hidden"
-      onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
+       onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
     <div class="modal-content">
       <div id="lotText"></div>
       <button id="closeLot" class="close-btn"
@@ -109,7 +83,7 @@
 
   <!-- 抽籤 & 功德紀錄彈窗 -->
   <div id="historyModal" class="modal hidden"
-      onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
+       onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
     <div class="modal-content">
       <div id="historyList"></div>
       <button id="closeHistory" class="close-btn"
@@ -119,30 +93,52 @@
     </div>
   </div>
 
+  <!-- 你的主要遊戲邏輯 -->
   <script src="script.js"></script>
-<script src="script.js"></script>
-<script>
-  function hideLoadingScreen() {
-    const loading = document.getElementById('loading-screen');
-    if (!loading) return;
-    // 已經移除了就不要重覆
-    if (loading.classList.contains('fade-out')) return;
 
-    loading.classList.add('fade-out');
-    setTimeout(() => {
-      if (loading && loading.parentNode) {
-        loading.parentNode.removeChild(loading);
-      }
-    }, 600);
-  }
+  <!-- 啟動畫面淡出 + 功德值動畫工具 -->
+  <script>
+    function hideLoadingScreen() {
+      const loading = document.getElementById('loading-screen');
+      if (!loading) return;
+      if (loading.classList.contains('fade-out')) return;
 
-  // 頁面載入完成時關啟動畫面
-  window.addEventListener('load', hideLoadingScreen);
+      loading.classList.add('fade-out');
+      setTimeout(() => {
+        if (loading && loading.parentNode) {
+          loading.parentNode.removeChild(loading);
+        }
+      }, 600);
+    }
 
-  // 保險機制：就算 load 沒觸發，1.8 秒後還是把它關掉
-  document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(hideLoadingScreen, 1800);
-  });
-</script>
+    // 頁面載完 → 淡出啟動畫面
+    window.addEventListener('load', hideLoadingScreen);
+    // 保險：即使 load 有問題，1.8 秒後也會關掉
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(hideLoadingScreen, 1800);
+    });
+
+    // 全域：每次增加功德值時呼叫這個
+    window.addMerit = function (delta) {
+      const badgeValue = document.getElementById('merit');
+      if (!badgeValue) return;
+      const current = parseInt(badgeValue.textContent || '0', 10);
+      const next = current + delta;
+      badgeValue.textContent = next;
+
+      // +1 動畫
+      const badge = document.querySelector('.merit-badge');
+      if (!badge) return;
+
+      const plus = document.createElement('span');
+      plus.className = 'merit-plus';
+      plus.textContent = (delta > 0 ? '+' : '') + delta;
+      badge.appendChild(plus);
+
+      setTimeout(() => {
+        plus.remove();
+      }, 800);
+    };
+  </script>
 </body>
 </html>
