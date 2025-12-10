@@ -9,86 +9,129 @@
 
 <body>
 
-<!-- 🔸 Loading 畫面 -->
+<!-- 讀取畫面 -->
 <div id="loadingScreen" class="loading">
-  <div class="loading-text">人生只有兩件事：吃美食，或在吃美食的路上…</div>
+  <div class="loading-box">
+    <div class="loading-title">五臟廟 · 熊熊食神占</div>
+    <div class="loading-text">人生只有兩件事：吃美食，或在吃美食的路上。</div>
+  </div>
 </div>
 
 <div class="app">
 
-  <!-- 五臟廟主視覺（之後換成你的 SVG） -->
-  <div class="temple-wrapper">
-    <img src="images/temple_temp.png" class="temple-img" />
-  </div>
+  <!-- 標題區 -->
+  <header class="header">
+    <div class="title">五臟廟．熊熊食神占</div>
+    <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
+  </header>
 
-  <!-- 搖籤筒動畫 (顯示於抽籤前) -->
-  <div id="shakeArea" class="shake-area hidden">
+  <!-- 五臟廟主視覺（純 CSS） -->
+  <section class="temple-wrapper">
+    <div class="temple-frame">
+      <div class="temple-roof"></div>
+      <div class="temple-inner">
+        <div class="temple-couplet left">心安胃暖萬事如意</div>
+
+        <div class="temple-god">
+          <div class="temple-god-face">🐻</div>
+          <div class="temple-god-name">熊熊食神</div>
+          <div class="temple-stick-box">籤筒</div>
+        </div>
+
+        <div class="temple-couplet right">五臟平安百病不侵</div>
+      </div>
+      <div class="temple-footer">
+        <span>保佑身體健康</span>
+        <span>胃口好好好</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 搖籤筒動畫區（擲筊時） -->
+  <section id="shakeArea" class="shake-area hidden">
     <div id="shakeSvgContainer"></div>
-  </div>
+  </section>
 
-  <!-- 狀態描述 -->
-  <div id="statusText" class="status-text">請擲筊（三次內出聖筊即可抽籤）</div>
+  <!-- 狀態文字 -->
+  <p id="statusText" class="status-text">
+    請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
+  </p>
 
+  <!-- 主要按鈕 -->
   <button id="boBtn" class="main-btn">擲筊</button>
   <button id="drawBtn" class="main-btn hidden">抽籤</button>
 
-  <!-- 當前詩籤卡片（可再點開彈窗） -->
-  <div id="currentLotCard" class="lot-card hidden"></div>
+  <!-- 當前詩籤卡片（可點開彈窗） -->
+  <section id="currentLotCard" class="lot-card hidden"></section>
 
-  <!-- 功德值、光明燈、供品 -->
-  <div class="panel">
-
+  <!-- 下方面板 -->
+  <section class="panel">
     <div class="row">
       <div class="box">
         <div>功德值</div>
-        <div id="merit">0</div>
+        <div id="merit" class="big-num">0</div>
       </div>
-
       <div class="box">
         <div>光明燈</div>
-        <div id="lightStatus">尚未點燈</div>
-        <button id="lightBtn" class="small-btn disabled">功德滿 30 可點燈</button>
+        <div id="lightStatus" class="light-status">尚未點燈</div>
+        <button id="lightBtn" class="small-btn disabled">
+          功德滿 30 可點燈
+        </button>
       </div>
     </div>
 
-    <div class="row">
-      <button id="offerBtn" class="small-btn disabled">上供品（消耗 5）</button>
+    <div class="row row-single">
+      <button id="offerBtn" class="small-btn full disabled">
+        上供品給熊熊食神（消耗 5 功德）
+      </button>
     </div>
 
-    <div class="row">
-      <button id="historyBtn" class="small-btn">📘 抽籤紀錄</button>
-      <a class="small-btn" href="https://instagram.com/luckygbear" target="_blank">📸 追蹤熊熊廟公 IG</a>
+    <div class="row row-double">
+      <button id="historyBtn" class="small-btn full">
+        📘 抽籤紀錄 & 功德無量匾額
+      </button>
     </div>
 
-    <div class="row">
-      <button id="resetBtn" class="danger-btn">清空所有紀錄</button>
+    <div class="row row-double">
+      <a class="small-btn full" href="https://instagram.com/luckygbear"
+         target="_blank" rel="noopener noreferrer">
+        📸 追蹤熊熊廟公 IG @luckygbear
+      </a>
     </div>
 
-  </div>
+    <div class="row row-single">
+      <button id="resetBtn" class="danger-btn full">
+        清空所有紀錄
+      </button>
+    </div>
+  </section>
 
 </div>
 
-<!-- 🔸 詩籤彈窗 -->
+<!-- 詩籤彈窗 -->
 <div id="lotModal" class="modal hidden"
-     onclick="if (event.target === this) closeAllModals()">
+     onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
   <div class="modal-content">
     <div id="lotText"></div>
     <button id="closeLot" class="close-btn"
-            onclick="closeAllModals()">關閉</button>
+            onclick="window.closeAllModals && window.closeAllModals();">
+      關閉
+    </button>
   </div>
 </div>
 
-<!-- 🔸 抽籤紀錄彈窗 -->
+<!-- 抽籤 & 功德紀錄彈窗 -->
 <div id="historyModal" class="modal hidden"
-     onclick="if (event.target === this) closeAllModals()">
+     onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
   <div class="modal-content">
     <div id="historyList"></div>
     <button id="closeHistory" class="close-btn"
-            onclick="closeAllModals()">關閉</button>
+            onclick="window.closeAllModals && window.closeAllModals();">
+      關閉
+    </button>
   </div>
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
