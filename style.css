@@ -365,3 +365,18 @@ a.small-btn {
   width: auto;
   border-radius: 24px;         /* 看你要不要圓角，可刪掉 */
 }
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffecb3;
+  z-index: 9999;
+}
+
+/* 淡出用的 class */
+#loading-screen.fade-out {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
