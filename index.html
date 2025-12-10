@@ -108,21 +108,29 @@
       setTimeout(hideLoadingScreen, 1800);
     });
 
-    /* 功德 +1 飄字動畫 */
-    window.addMerit = function (delta) {
-      const badgeValue = document.getElementById('merit');
-      const current = parseInt(badgeValue.textContent || '0', 10);
-      const next = current + delta;
-      badgeValue.textContent = next;
+// 功德值：只會增加、不會減少
+window.addMerit = function (delta) {
+  // 只允許正數，不接受減少
+  if (!delta || delta <= 0) return;
 
-      const badge = document.querySelector('.merit-badge');
-      const plus = document.createElement('span');
-      plus.className = 'merit-plus';
-      plus.textContent = (delta > 0 ? '+' : '') + delta;
-      badge.appendChild(plus);
+  const badgeValue = document.getElementById('merit');
+  if (!badgeValue) return;
 
-      setTimeout(() => plus.remove(), 800);
-    };
+  const current = parseInt(badgeValue.textContent || '0', 10);
+  const next = current + delta;
+  badgeValue.textContent = next;
+
+  // +1 / +5 飄字動畫
+  const badge = document.querySelector('.merit-badge');
+  if (!badge) return;
+
+  const plus = document.createElement('span');
+  plus.className = 'merit-plus';
+  plus.textContent = '+' + delta;
+  badge.appendChild(plus);
+
+  setTimeout(() => plus.remove(), 800);
+};
 
     /* 全域關閉彈窗 */
     window.closeAllModals = function () {
