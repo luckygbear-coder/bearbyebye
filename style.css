@@ -79,10 +79,36 @@ body {
 }
 
 /* ============ 五臟廟主視覺（純 CSS） ============ */
+/* ===== 主畫面的熊熊主視覺調整（避免佔滿整個畫面） ===== */
+
+/* 整個主視覺區塊不要太高 */
 .temple-wrapper {
+  margin: 12px 0 16px;
+}
+
+/* 圖片外框：限制高度，避免超級長 */
+.temple-image-box {
   width: 100%;
   display: flex;
   justify-content: center;
+  max-height: 260px;        /* 主畫面熊熊最多只佔 260px 高 */
+  overflow: hidden;         /* 超出就裁掉一點邊緣 */
+}
+
+/* 主視覺圖片本身 */
+.temple-main-img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  max-height: 260px;        /* 和上面一樣的高度限制 */
+  object-fit: contain;      /* 以「整張圖完整縮小」為主 */
+  border-radius: 24px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+/* 確保頁面可以正常捲動 */
+body {
+  overflow-y: auto;
 }
 
 .temple-frame {
