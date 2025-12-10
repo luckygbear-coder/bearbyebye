@@ -2,43 +2,40 @@
 <html lang="zh-Hant">
 <head>
   <link rel="manifest" href="manifest.webmanifest">
-
-  <!-- iOS Safari 比較囉嗦，要再加一個圖示（用 192 或 512 任一張即可） -->
   <link rel="apple-touch-icon" href="icons/icon-512.png">
 
   <meta name="theme-color" content="#f4a63a">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>五臟廟-愛吃熊</title>
+
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <!-- 啟動畫面：熊熊 + 對聯 + 橫批 -->
+  <!-- 啟動畫面 -->
   <div id="loading-screen">
     <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
   </div>
 
   <div class="app">
-    <!-- 標題區 -->
+
+    <!-- 標題 -->
     <header class="header">
       <div class="title">愛吃熊美食占卜</div>
       <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
     </header>
 
-    <!-- 主視覺 + 浮動按鈕 + 功德值 -->
+    <!-- 主視覺：背景即熊熊圖 -->
     <section class="temple-wrapper">
       <div class="temple-image-box">
-        <img src="images/bear-loading-couplet.png"
-             alt="愛吃熊主視覺" class="temple-main-img">
 
         <!-- 功德值角標 -->
         <div class="merit-badge">
-          功德值
-          <span id="merit">0</span>
+          功德值 <span id="merit">0</span>
         </div>
 
-        <!-- 浮動圓形按鈕群 -->
+        <!-- 浮動按鈕組 -->
         <div class="floating-buttons">
           <button id="boBtn" class="circle-btn circle-main">
             🙏<span>擲筊</span>
@@ -56,88 +53,81 @@
             🍱<span>供品</span>
           </button>
 
-          <button id="resetBtn" class="circle-btn danger">
+          <!-- 隱藏清空按鈕，但保留 ID 給 script.js 用 -->
+          <button id="resetBtn" class="circle-btn danger hidden">
             ♻️<span>清空</span>
           </button>
         </div>
       </div>
     </section>
 
-    <!-- 提示文字（放在圖下方，不擋操作） -->
+    <!-- 狀態提示 -->
     <p id="statusText" class="status-text">
       請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
     </p>
+
   </div>
 
   <!-- 詩籤彈窗 -->
   <div id="lotModal" class="modal hidden"
-       onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
+       onclick="if (event.target === this) window.closeAllModals();">
     <div class="modal-content">
       <div id="lotText"></div>
       <button id="closeLot" class="close-btn"
-              onclick="window.closeAllModals && window.closeAllModals();">
+              onclick="window.closeAllModals();">
         關閉
       </button>
     </div>
   </div>
 
-  <!-- 抽籤 & 功德紀錄彈窗 -->
+  <!-- 紀錄彈窗 -->
   <div id="historyModal" class="modal hidden"
-       onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
+       onclick="if (event.target === this) window.closeAllModals();">
     <div class="modal-content">
       <div id="historyList"></div>
       <button id="closeHistory" class="close-btn"
-              onclick="window.closeAllModals && window.closeAllModals();">
+              onclick="window.closeAllModals();">
         關閉
       </button>
     </div>
   </div>
 
-  <!-- 你的主要遊戲邏輯 -->
   <script src="script.js"></script>
 
-  <!-- 啟動畫面淡出 + 功德值動畫工具 -->
+  <!-- 啟動畫面淡出 + 功德值動畫 -->
   <script>
     function hideLoadingScreen() {
       const loading = document.getElementById('loading-screen');
       if (!loading) return;
-      if (loading.classList.contains('fade-out')) return;
-
       loading.classList.add('fade-out');
-      setTimeout(() => {
-        if (loading && loading.parentNode) {
-          loading.parentNode.removeChild(loading);
-        }
-      }, 600);
+      setTimeout(() => loading.remove(), 700);
     }
 
-    // 頁面載完 → 淡出啟動畫面
     window.addEventListener('load', hideLoadingScreen);
-    // 保險：即使 load 有問題，1.8 秒後也會關掉
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(hideLoadingScreen, 1800);
     });
 
-    // 全域：每次增加功德值時呼叫這個
+    /* 功德 +1 飄字動畫 */
     window.addMerit = function (delta) {
       const badgeValue = document.getElementById('merit');
-      if (!badgeValue) return;
       const current = parseInt(badgeValue.textContent || '0', 10);
       const next = current + delta;
       badgeValue.textContent = next;
 
-      // +1 動畫
       const badge = document.querySelector('.merit-badge');
-      if (!badge) return;
-
       const plus = document.createElement('span');
       plus.className = 'merit-plus';
       plus.textContent = (delta > 0 ? '+' : '') + delta;
       badge.appendChild(plus);
 
-      setTimeout(() => {
-        plus.remove();
-      }, 800);
+      setTimeout(() => plus.remove(), 800);
+    };
+
+    /* 全域關閉彈窗 */
+    window.closeAllModals = function () {
+      document.getElementById('lotModal').classList.add('hidden');
+      document.getElementById('historyModal').classList.add('hidden');
     };
   </script>
 </body>
