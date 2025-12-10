@@ -274,12 +274,16 @@ function updateStatusText() {
       "請在心中向熊熊食神誠心發問，然後按下「開始擲筊」。需要三次聖筊才能抽籤。";
     mainActionBtn.textContent = "🙏 開始擲筊問熊熊";
   } else if (state === "throwing") {
-    statusTextEl.textContent = `第 ${throwCount + 1} 次擲筊中……請靜心等待結果。`;
-  } else if (state === "throwing_done") {
-    // 理論上立即進入 result / notApproved，不太會看到這段
+    if (throwCount === 0) {
+      statusTextEl.textContent = "第 1 次擲筊中……請靜心等待結果。";
+      mainActionBtn.textContent = "第 1 次擲筊";
+    } else {
+      statusTextEl.textContent = `準備第 ${throwCount + 1} 次擲筊，請再按一次按鈕。`;
+      mainActionBtn.textContent = `第 ${throwCount + 1} 次擲筊`;
+    }
   } else if (state === "notApproved") {
     statusTextEl.textContent =
-      `這次沒有連續三個聖筊，熊熊食神說可以改天再來問，或先換個問題。功德值不會扣喔～`;
+      "這次沒有連續三個聖筊，熊熊食神說可以改天再來問，或先換個問題。功德值不會扣喔～";
     mainActionBtn.textContent = "再試一次擲筊";
   } else if (state === "result") {
     statusTextEl.textContent =
@@ -331,10 +335,12 @@ function handleMainAction() {
   if (state === "ready" || state === "notApproved") {
     // 重新開始擲筊流程
     resetThrowState();
-    startThrowing();
+    state = "throwing";
+    updateStatusText();
+    performThrow();
   } else if (state === "throwing") {
-    // 理論上不會，因為擲筊中會鎖按鈕，但保險
-    return;
+    // 進行第 2、3 次擲筊
+    performThrow();
   } else if (state === "result") {
     // 再問一卦 → 回到 ready 狀態
     resetThrowState();
@@ -343,13 +349,9 @@ function handleMainAction() {
   }
 }
 
-function startThrowing() {
-  state = "throwing";
-  updateStatusText();
-  performThrow();
-}
-
 function performThrow() {
+  if (throwCount >= 3) return; // 保險，避免超過三次
+
   mainActionBtn.disabled = true;
   shakeLotTube();
 
@@ -368,8 +370,8 @@ function performThrow() {
     if (throwCount < 3) {
       // 還沒擲完三次 -> 再擲
       mainActionBtn.disabled = false;
-      mainActionBtn.textContent = `第 ${throwCount + 1} 次擲筊`;
       state = "throwing";
+      updateStatusText();
     } else {
       // 三次都結束
       if (successCount === 3) {
