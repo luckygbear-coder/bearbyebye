@@ -1,553 +1,32 @@
-/* === 全域：整頁固定，不能捲動 === */
-html, body {
+/* 共用設定 */
+body {
   margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
   background: #ffe9c7;
-  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Noto Sans TC", sans-serif;
 }
 
-body {
-  position: fixed;
-  inset: 0;
-}
-
-/* ============ Loading ============ */
-.loading {
-  position: fixed;
-  inset: 0;
-  background: rgba(244, 217, 173, 0.95);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.loading-box {
-  width: 80%;
-  max-width: 360px;
-  background: #fff7e0;
-  border-radius: 16px;
-  border: 2px solid #e0b572;
-  padding: 16px 18px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-}
-
-.loading-title {
-  font-size: 18px;
-  color: #b5411c;
-  margin-bottom: 8px;
-}
-
-.loading-text {
-  font-size: 14px;
-  color: #6b3b1f;
-}
-
-/* ============ App 容器 ============ */
-.app {
-  width: 100%;
-  height: 100%;
-  max-width: 430px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 8px;
-  box-sizing: border-box;
-}
-
-/* 標題區 */
-.header {
-  text-align: center;
-  margin-bottom: 6px;
-}
-
-.title {
-  font-size: 20px;
-  color: #b5411c;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-
-.subtitle {
-  font-size: 12px;
-  color: #a66a36;
-}
-
-/* ============ 五臟廟主視覺（純 CSS） ============ */
-/* ===== 主畫面的熊熊主視覺調整（避免佔滿整個畫面） ===== */
-
-/* 整個主視覺區塊不要太高 */
-.temple-wrapper {
-  margin: 12px 0 16px;
-}
-
-/* 圖片外框：限制高度，避免超級長 */
-.temple-image-box {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  max-height: 260px;        /* 主畫面熊熊最多只佔 260px 高 */
-  overflow: hidden;         /* 超出就裁掉一點邊緣 */
-}
-
-/* 主視覺圖片本身 */
-.temple-main-img {
-  width: 100%;
-  max-width: 420px;
-  height: auto;
-  max-height: 260px;        /* 和上面一樣的高度限制 */
-  object-fit: contain;      /* 以「整張圖完整縮小」為主 */
-  border-radius: 24px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
-}
-
-/* 確保頁面可以正常捲動 */
-body {
-  overflow-y: auto;
-}
-
-.temple-frame {
-  width: 90%;
-  max-width: 380px;
-  background: #ffe6c9;
-  border-radius: 18px;
-  border: 2px solid #e0a965;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  padding: 8px 8px 10px;
-  box-sizing: border-box;
-}
-
-/* 屋頂 */
-.temple-roof {
-  height: 10px;
-  border-radius: 16px;
-  background: linear-gradient(90deg, #d8572a, #c2351b);
-  margin-bottom: 6px;
-}
-
-/* 內框 */
-.temple-inner {
-  display: grid;
-  grid-template-columns: 1fr 5fr 1fr;
-  background: #fdf6e9;
-  border-radius: 14px;
-  padding: 8px;
-  box-sizing: border-box;
-  margin-bottom: 6px;
-}
-
-/* 對聯 */
-.temple-couplet {
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  font-size: 12px;
-  color: #fff7df;
-  background: #d8572a;
-  border-radius: 14px;
-  padding: 6px 4px;
-  text-align: center;
-}
-
-.temple-couplet.left {
-  margin-right: 4px;
-}
-
-.temple-couplet.right {
-  margin-left: 4px;
-}
-
-/* 食神區 */
-.temple-god {
-  background: #fae9cf;
-  border-radius: 16px;
-  border: 2px solid #e8c593;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 6px 4px 10px;
-}
-
-.temple-god-face {
-  font-size: 30px;
-  margin-bottom: 2px;
-}
-
-.temple-god-name {
-  font-size: 14px;
-  color: #8b4a2a;
-  margin-bottom: 6px;
-}
-
-.temple-stick-box {
-  font-size: 13px;
-  color: #fff7df;
-  background: #c76933;
-  border-radius: 20px;
-  padding: 4px 18px;
-}
-
-/* 底部匾額 */
-.temple-footer {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #fff7df;
-  background: #c74926;
-  border-radius: 999px;
-  padding: 4px 12px;
-}
-
-/* ============ 搖籤筒區 ============ */
-.shake-area {
-  margin-top: 4px;
-}
-
-/* ============ 文字 + 按鈕 ============ */
-.status-text {
-  margin-top: 4px;
-  font-size: 14px;
-  color: #6b3b1f;
-  min-height: 20px;
-  padding: 0 10px;
-  text-align: center;
-}
-
-.main-btn {
-  margin-top: 8px;
-  width: 80%;
-  padding: 12px;
-  border-radius: 22px;
-  border: none;
-  background: #d8572a;
-  color: #fff;
-  font-size: 18px;
-}
-
-.main-btn:disabled {
-  opacity: 0.6;
-}
-
-/* 當前詩籤卡片 */
-.lot-card {
-  width: 90%;
-  max-width: 380px;
-  background: #fff8e9;
-  border-radius: 12px;
-  border: 2px solid #d9b07e;
-  margin-top: 10px;
-  padding: 10px 12px;
-  box-sizing: border-box;
-  text-align: left;
-  font-size: 13px;
-}
-
-/* 下方面板 */
-.panel {
-  width: 90%;
-  max-width: 380px;
-  background: #fff2d7;
-  border-radius: 12px;
-  border: 2px solid #d9b07e;
-  padding: 8px 10px 10px;
-  box-sizing: border-box;
-  margin-top: 8px;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-}
-
-.row-single {
-  justify-content: center;
-}
-
-.row-double {
-  justify-content: center;
-}
-
-.box {
-  width: 48%;
-  background: #fff8e9;
-  border-radius: 10px;
-  border: 2px solid #d9b07e;
-  padding: 6px 8px;
-  box-sizing: border-box;
-  font-size: 13px;
-}
-
-.big-num {
-  font-size: 20px;
-  margin-top: 4px;
-  color: #b5411c;
-}
-
-.light-status {
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-/* 按鈕 */
-.small-btn,
-.danger-btn {
-  margin-top: 6px;
-  padding: 8px 10px;
-  border-radius: 14px;
-  border: none;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.small-btn {
-  background: #ffb86c;
-  color: #5a3211;
-}
-
-.danger-btn {
-  background: #d33;
-  color: #fff;
-}
-
-.full {
-  width: 100%;
-}
-
-.small-btn.disabled {
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-a.small-btn {
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-}
-
-/* ============ Modal 彈窗 ============ */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9000;
-}
-
-.modal-content {
-  width: 90%;
-  max-width: 380px;
-  max-height: 75%;
-  background: #fffdf6;
-  border-radius: 14px;
-  padding: 16px 16px 18px;
-  box-sizing: border-box;
-  overflow-y: auto;
-}
-
-.close-btn {
-  margin-top: 10px;
-  padding: 8px 18px;
-  border-radius: 10px;
-  border: none;
-  background: #d8572a;
-  color: #fff;
-  font-size: 15px;
-}
-
-/* ============ hidden 保證隱藏 ============ */
 .hidden {
   display: none !important;
 }
-.modal.hidden {
-  display: none !important;
-}
-#lotModal.hidden,
-#historyModal.hidden {
-  display: none !important;
-}
-/* 全螢幕啟動畫面 */
-#loading-screen {
-  position: fixed;
-  inset: 0;                    /* 等於 top:0; right:0; bottom:0; left:0 */
-  background: #ffecb3;         /* 跟圖片背景接近的奶油黃色 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;               /* 一定蓋在最上面 */
+
+.header {
+  text-align: center;
+  margin-top: 16px;
 }
 
-/* 啟動畫面圖片：自適應高度，不超出螢幕 */
-#loading-screen img {
-  max-width: 90%;
-  max-height: 90%;
-  height: auto;
-  width: auto;
-  border-radius: 24px;         /* 看你要不要圓角，可刪掉 */
-}
-#loading-screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffecb3;
-  z-index: 9999;
-}
-
-/* 淡出用的 class */
-#loading-screen.fade-out {
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-.temple-image-box {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.temple-main-img {
-  width: 90%;
-  max-width: 420px;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-/* ===== 主視覺 & 浮動按鈕佈局 ===== */
-
-.temple-wrapper {
-  margin: 12px 0 8px;
-}
-
-.temple-image-box {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.temple-main-img {
-  width: 100%;
-  max-width: 440px;
-  border-radius: 24px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
-}
-
-/* 功德值角標（左上） */
-.merit-badge {
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(255, 248, 230, 0.92);
-  border: 2px solid #f1c688;
-  font-size: 12px;
-  color: #8b4d2d;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.merit-badge #merit {
+.title {
+  color: #b15532;
+  font-size: 28px;
   font-weight: 700;
-  font-size: 16px;
 }
 
-/* +1 浮起來的動畫 */
-.merit-plus {
-  position: absolute;
-  right: -6px;
-  top: -6px;
+.subtitle {
   font-size: 14px;
-  color: #e6533c;
-  font-weight: 700;
-  animation: merit-pop 0.8s ease-out forwards;
+  color: #a36b52;
+  margin-top: 4px;
 }
 
-@keyframes merit-pop {
-  0% {
-    opacity: 0;
-    transform: translateY(6px) scale(0.7);
-  }
-  20% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-18px) scale(0.9);
-  }
-}
-
-/* 浮動按鈕群：靠右排成一列（或手機窄螢幕時上下排） */
-.floating-buttons {
-  position: absolute;
-  right: 10px;
-  bottom: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* 共用圓形按鈕樣式 */
-.circle-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 248, 230, 0.96);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: #7b4228;
-  cursor: pointer;
-}
-
-.circle-btn span {
-  margin-top: 2px;
-}
-
-/* 主要操作（擲筊、抽籤）稍微強調一點 */
-.circle-btn.circle-main {
-  background: linear-gradient(135deg, #f0c48a, #f8e0b6);
-}
-
-/* 小一點的按鈕（供品） */
-.circle-btn.small {
-  width: 48px;
-  height: 48px;
-  font-size: 10px;
-}
-
-/* 危險操作（清空）顏色偏紅一點 */
-.circle-btn.danger {
-  background: linear-gradient(135deg, #f19a88, #f6c0b3);
-}
-
-/* 禁用狀態（配合原本 disabled class） */
-.circle-btn.disabled {
-  opacity: 0.6;
-  cursor: default;
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
-}
-
-/* 狀態文字稍微往上收一點，貼近主視覺 */
-.status-text {
-  margin-top: 6px;
-  margin-bottom: 12px;
-}
-
-/* 啟動畫面：全滿、淡出動畫 */
+/* ===== 啟動畫面 ===== */
 #loading-screen {
   position: fixed;
   inset: 0;
@@ -559,13 +38,123 @@ a.small-btn {
 }
 
 #loading-screen img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 #loading-screen.fade-out {
   opacity: 0;
   transition: opacity 0.6s ease;
+}
+
+/* ===== 背景版熊熊主視覺 ===== */
+
+.temple-wrapper {
+  position: relative;
+  margin: 12px auto 14px;
+  width: 92%;
+  border-radius: 28px;
+  overflow: hidden;
+  background-image: url("images/bear-loading-couplet.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 450px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.temple-image-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== 功德角標 ===== */
+.merit-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 248, 230, 0.92);
+  border: 2px solid #f1c688;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b4d2d;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.merit-badge #merit {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.merit-plus {
+  position: absolute;
+  right: -6px;
+  top: -6px;
+  font-size: 16px;
+  color: #e6533c;
+  font-weight: 700;
+  animation: merit-pop 0.8s ease-out forwards;
+}
+
+@keyframes merit-pop {
+  0% { opacity: 0; transform: translateY(6px) scale(0.7); }
+  20% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-18px) scale(0.9); }
+}
+
+/* ===== 浮動圓形按鈕 ===== */
+.floating-buttons {
+  position: absolute;
+  right: 12px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.circle-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 248, 230, 0.96);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #7b4228;
+}
+
+.circle-btn span {
+  margin-top: 2px;
+}
+
+.circle-main {
+  background: linear-gradient(135deg, #f0c48a, #f8e0b6);
+}
+
+.small {
+  width: 52px;
+  height: 52px;
+  font-size: 11px;
+}
+
+.danger {
+  background: linear-gradient(135deg, #f19a88, #f6c0b3);
+}
+
+/* ===== 下方狀態文字 ===== */
+.status-text {
+  text-align: center;
+  color: #8b5336;
+  font-size: 15px;
+  margin-top: 10px;
 }
