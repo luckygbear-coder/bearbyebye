@@ -2,196 +2,89 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>五臟廟抽詩籤・熊熊食神占</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>五臟廟．熊熊食神占</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <div class="app-wrap">
-    <!-- 上方標題 -->
-    <header class="app-header">
-      <div class="app-title-main">五臟廟・熊熊食神占</div>
-      <div class="app-title-sub">不是正在吃美食就是在吃美食的路上</div>
-      <div class="app-badge">🍙 吃貨御守版</div>
-    </header>
 
-    <!-- 中間主視覺：熊熊廟置中 -->
-    <main class="app-main">
-      <section class="temple-section">
-        <div class="temple-wrap">
-          <div class="temple-top">
-            <div class="temple-sign">五臟廟</div>
-          </div>
+<!-- 🔸 Loading 畫面 -->
+<div id="loadingScreen" class="loading">
+  <div class="loading-text">人生只有兩件事：吃美食，或在吃美食的路上…</div>
+</div>
 
-          <div class="temple-body">
-            <!-- 春聯對聯 -->
-            <div class="couplet couplet-left">
-              <span>心安胃暖</span>
-              <span>萬事如意</span>
-            </div>
-            <div class="couplet couplet-right">
-              <span>五臟平安</span>
-              <span>百病不侵</span>
-            </div>
+<div class="app">
 
-            <!-- 廟門內部：熊熊食神 + 籤筒 -->
-            <div class="temple-inner">
-              <div class="bear-god">
-                <div class="bear-face">🐻</div>
-                <div class="bear-name">熊熊食神</div>
-              </div>
-              <div class="lot-tube" id="lotTube">
-                <div class="lot-stick">籤</div>
-              </div>
-            </div>
-
-            <!-- 門簾 -->
-            <div class="door-curtain">
-              <span>保佑身體健康</span>
-              <span>胃口好好好</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 下方分類 + 狀態＋摘要 -->
-      <section class="result-section">
-        <div class="category-row">
-          <button class="category-btn active" data-cat="all">全部</button>
-          <button class="category-btn" data-cat="主食">主食</button>
-          <button class="category-btn" data-cat="甜點">甜點</button>
-          <button class="category-btn" data-cat="飲料">飲料</button>
-        </div>
-
-        <div class="status-text" id="statusText">
-          請先向熊熊食神誠心發問，按下下面的按鈕開始擲筊。
-        </div>
-
-        <div class="result-card" id="resultCard">
-          <div class="lot-header">
-            <div class="lot-number" id="lotNumber">尚未抽籤</div>
-            <div class="lot-fortune" id="lotFortune">——</div>
-          </div>
-          <div class="last-lot-summary" id="lastLotSummary">
-            今日尚未抽籤，擲筊三次聖筊後，熊熊食神就會跳出詩籤給你。
-          </div>
-
-          <!-- 這些只當資料暫存，不在主畫面顯示 -->
-          <div class="lot-poem" id="lotPoem" style="display:none;"></div>
-          <div class="lot-meaning" id="lotMeaning" style="display:none;"></div>
-          <div class="lot-food-block" style="display:none;">
-            <div class="lot-food-text" id="lotFood"></div>
-            <div class="lot-calorie" id="lotCalorie"></div>
-            <div class="lot-exercise" id="lotExercise"></div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- 底部操作區 -->
-    <footer class="app-footer">
-      <button class="main-btn" id="mainActionBtn">
-        🙏 開始擲筊問熊熊
-      </button>
-
-      <div class="footer-info-row">
-        <div class="merit-block">
-          <div class="merit-label">功德值</div>
-          <div class="merit-value" id="meritValue">0</div>
-        </div>
-
-        <div class="light-block">
-          <div class="light-label">光明燈</div>
-          <div class="light-status" id="lightStatus">尚未點燈</div>
-          <button class="light-btn" id="lightBtn" disabled>
-            功德滿 30 可點燈
-          </button>
-        </div>
-      </div>
-
-      <div class="footer-btn-row">
-        <button class="secondary-btn" id="historyBtn">📘 抽籤紀錄</button>
-        <a
-          class="secondary-btn ig-btn"
-          href="https://www.instagram.com/luckygbear"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          📸 追蹤熊熊廟公 IG
-        </a>
-      </div>
-    </footer>
+  <!-- 五臟廟主視覺（之後換成你的 SVG） -->
+  <div class="temple-wrapper">
+    <img src="images/temple_temp.png" class="temple-img" />
   </div>
 
-  <!-- 詩籤結果 Modal -->
-  <div class="modal" id="lotModal">
-    <div class="modal-backdrop" id="lotBackdrop"></div>
-    <div class="modal-dialog lot-dialog">
-      <div class="modal-header">
-        <div class="modal-title">📜 熊熊食神詩籤</div>
-        <button class="modal-close" id="lotCloseBtn">✕</button>
-      </div>
-      <div class="modal-body lot-modal-body">
-        <div class="lot-modal-header-row">
-          <div class="lot-modal-number" id="mLotNumber"></div>
-          <div class="lot-modal-fortune" id="mLotFortune"></div>
-        </div>
-        <div class="lot-modal-poem" id="mLotPoem"></div>
-        <div class="lot-modal-meaning" id="mLotMeaning"></div>
+  <!-- 搖籤筒動畫 (顯示於抽籤前) -->
+  <div id="shakeArea" class="shake-area hidden">
+    <div id="shakeSvgContainer"></div>
+  </div>
 
-        <div class="lot-modal-food-title">🍱 今日食物與小運動建議</div>
-        <div class="lot-modal-food" id="mLotFood"></div>
-        <div class="lot-modal-cal" id="mLotCalorie"></div>
-        <div class="lot-modal-ex" id="mLotExercise"></div>
+  <!-- 狀態描述 -->
+  <div id="statusText" class="status-text">請擲筊（三次內出聖筊即可抽籤）</div>
+
+  <button id="boBtn" class="main-btn">擲筊</button>
+  <button id="drawBtn" class="main-btn hidden">抽籤</button>
+
+  <!-- 當前詩籤卡片（可再點開彈窗） -->
+  <div id="currentLotCard" class="lot-card hidden"></div>
+
+  <!-- 功德值、光明燈、供品 -->
+  <div class="panel">
+
+    <div class="row">
+      <div class="box">
+        <div>功德值</div>
+        <div id="merit">0</div>
       </div>
-      <div class="modal-footer">
-        <button class="secondary-btn" id="lotOkBtn">感謝熊熊食神</button>
+
+      <div class="box">
+        <div>光明燈</div>
+        <div id="lightStatus">尚未點燈</div>
+        <button id="lightBtn" class="small-btn disabled">功德滿 30 可點燈</button>
       </div>
     </div>
-  </div>
 
-  <!-- 抽籤紀錄 Modal -->
-  <div class="modal" id="historyModal">
-    <div class="modal-backdrop" id="historyBackdrop"></div>
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <div class="modal-title">📘 抽籤紀錄</div>
-        <button class="modal-close" id="historyCloseBtn">✕</button>
-      </div>
-      <div class="modal-body" id="historyList">
-        <!-- JS 填入紀錄 -->
-      </div>
-      <div class="modal-footer">
-        <button class="danger-btn" id="clearHistoryBtn">清除所有紀錄</button>
-        <button class="secondary-btn" id="historyOkBtn">關閉</button>
-      </div>
+    <div class="row">
+      <button id="offerBtn" class="small-btn disabled">上供品（消耗 5）</button>
     </div>
-  </div>
 
-  <!-- 進入遊戲讀取動畫 -->
-  <div class="splash show" id="splash">
-    <div class="splash-inner">
-      <div class="splash-title">讀取中⋯⋯</div>
-      <div class="splash-text">
-        人生只有兩件事：<br />吃美食，或在吃美食的路上。
-      </div>
-      <div class="splash-dots">
-        <span></span><span></span><span></span>
-      </div>
+    <div class="row">
+      <button id="historyBtn" class="small-btn">📘 抽籤紀錄</button>
+      <a class="small-btn" href="https://instagram.com/luckygbear" target="_blank">📸 追蹤熊熊廟公 IG</a>
     </div>
-  </div>
 
-  <!-- 擲筊動畫 Overlay -->
-  <div class="throw-overlay" id="throwOverlay">
-    <div class="throw-box">
-      <div class="throw-text">擲筊中⋯⋯</div>
-      <div class="throw-sub">等一下吃什麼…</div>
-      <div class="throw-animation">
-        <span>🥮</span><span>🙏</span><span>🥮</span>
-      </div>
+    <div class="row">
+      <button id="resetBtn" class="danger-btn">清空所有紀錄</button>
     </div>
+
   </div>
 
-  <script src="script.js"></script>
+</div>
+
+<!-- 🔸 詩籤彈窗 -->
+<div id="lotModal" class="modal hidden">
+  <div class="modal-content">
+    <div id="lotText"></div>
+    <button id="closeLot" class="close-btn">關閉</button>
+  </div>
+</div>
+
+<!-- 🔸 抽籤紀錄彈窗 -->
+<div id="historyModal" class="modal hidden">
+  <div class="modal-content">
+    <div id="historyList"></div>
+    <button id="closeHistory" class="close-btn">關閉</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
