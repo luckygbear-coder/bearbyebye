@@ -15,55 +15,54 @@
       <div class="app-badge">🍙 吃貨御守版</div>
     </header>
 
-    <!-- 中間主視覺：五臟廟 -->
+    <!-- 中間主視覺：熊熊廟置中 -->
     <main class="app-main">
       <section class="temple-section">
-        <div class="temple-container">
-          <!-- 左側紅色牌匾：五臟廟 -->
-          <div class="temple-badge">
-            <span>五</span><span>臟</span><span>廟</span>
+        <div class="temple-wrap">
+          <div class="temple-top">
+            <div class="temple-sign">五臟廟</div>
           </div>
 
-          <!-- 右側真正廟宇 -->
-          <div class="temple-wrap">
-            <div class="temple-top">
-              <div class="temple-sign">五臟廟</div>
+          <div class="temple-body">
+            <!-- 春聯對聯 -->
+            <div class="couplet couplet-left">
+              <span>心安胃暖</span>
+              <span>萬事如意</span>
+            </div>
+            <div class="couplet couplet-right">
+              <span>五臟平安</span>
+              <span>百病不侵</span>
             </div>
 
-            <div class="temple-body">
-              <!-- 春聯對聯 -->
-              <div class="couplet couplet-left">
-                <span>心安胃暖</span>
-                <span>萬事如意</span>
+            <!-- 廟門內部：熊熊食神 + 籤筒 -->
+            <div class="temple-inner">
+              <div class="bear-god">
+                <div class="bear-face">🐻</div>
+                <div class="bear-name">熊熊食神</div>
               </div>
-              <div class="couplet couplet-right">
-                <span>五臟平安</span>
-                <span>百病不侵</span>
+              <div class="lot-tube" id="lotTube">
+                <div class="lot-stick">籤</div>
               </div>
+            </div>
 
-              <!-- 廟門內部：熊熊食神 + 籤筒 -->
-              <div class="temple-inner">
-                <div class="bear-god">
-                  <div class="bear-face">🐻</div>
-                  <div class="bear-name">熊熊食神</div>
-                </div>
-                <div class="lot-tube" id="lotTube">
-                  <div class="lot-stick">籤</div>
-                </div>
-              </div>
-
-              <!-- 門簾 -->
-              <div class="door-curtain">
-                <span>保佑身體健康</span>
-                <span>胃口好好好</span>
-              </div>
+            <!-- 門簾 -->
+            <div class="door-curtain">
+              <span>保佑身體健康</span>
+              <span>胃口好好好</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 下方狀態＋摘要 -->
+      <!-- 下方分類 + 狀態＋摘要 -->
       <section class="result-section">
+        <div class="category-row">
+          <button class="category-btn active" data-cat="all">全部</button>
+          <button class="category-btn" data-cat="主食">主食</button>
+          <button class="category-btn" data-cat="甜點">甜點</button>
+          <button class="category-btn" data-cat="飲料">飲料</button>
+        </div>
+
         <div class="status-text" id="statusText">
           請先向熊熊食神誠心發問，按下下面的按鈕開始擲筊。
         </div>
@@ -165,6 +164,30 @@
       <div class="modal-footer">
         <button class="danger-btn" id="clearHistoryBtn">清除所有紀錄</button>
         <button class="secondary-btn" id="historyOkBtn">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 進入遊戲讀取動畫 -->
+  <div class="splash show" id="splash">
+    <div class="splash-inner">
+      <div class="splash-title">讀取中⋯⋯</div>
+      <div class="splash-text">
+        人生只有兩件事：<br />吃美食，或在吃美食的路上。
+      </div>
+      <div class="splash-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 擲筊動畫 Overlay -->
+  <div class="throw-overlay" id="throwOverlay">
+    <div class="throw-box">
+      <div class="throw-text">擲筊中⋯⋯</div>
+      <div class="throw-sub">等一下吃什麼…</div>
+      <div class="throw-animation">
+        <span>🥮</span><span>🙏</span><span>🥮</span>
       </div>
     </div>
   </div>
