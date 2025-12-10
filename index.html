@@ -181,6 +181,19 @@ function showBearBlessing() {
       document.getElementById('lotModal').classList.add('hidden');
       document.getElementById('historyModal').classList.add('hidden');
     };
+    // 啟用上供品按鈕：不扣功德，純祝福氣泡
+document.addEventListener('DOMContentLoaded', () => {
+  const offerBtn = document.getElementById('offerBtn');
+  if (!offerBtn) return;
+
+  // 無條件解鎖按鈕
+  offerBtn.disabled = false;
+  offerBtn.classList.remove('disabled');
+
+  offerBtn.addEventListener('click', () => {
+    showBearBlessing();
+  });
+});
   </script>
 </body>
 </html>
