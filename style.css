@@ -5,6 +5,7 @@ body {
   overflow: hidden;
 }
 
+/* 讀取畫面 */
 .loading {
   position: fixed;
   inset: 0;
@@ -13,13 +14,23 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 18px;
+  z-index: 999;
   animation: fadeOut 1s ease 1.3s forwards;
 }
 
-.hidden { display: none; }
+.loading-text {
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff7e0;
+  border: 2px solid #e0b572;
+  color: #6b3b1f;
+}
 
 @keyframes fadeOut {
-  to { opacity: 0; visibility: hidden; }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .app {
@@ -30,6 +41,7 @@ body {
   padding: 10px;
 }
 
+/* 五臟廟主視覺 */
 .temple-wrapper {
   width: 100%;
   display: flex;
@@ -38,8 +50,10 @@ body {
 
 .temple-img {
   width: 90%;
+  max-width: 380px;
 }
 
+/* 按鈕與文字 */
 .main-btn {
   margin-top: 10px;
   width: 80%;
@@ -51,6 +65,10 @@ body {
   font-size: 20px;
 }
 
+.main-btn:disabled {
+  opacity: 0.6;
+}
+
 .status-text {
   margin-top: 8px;
   font-size: 16px;
@@ -58,6 +76,12 @@ body {
   min-height: 24px;
 }
 
+/* 搖籤筒區塊 */
+.shake-area {
+  margin-top: 8px;
+}
+
+/* 當前詩籤卡 */
 .lot-card {
   background: #fff8e9;
   border: 2px solid #d9b07e;
@@ -67,6 +91,7 @@ body {
   text-align: left;
 }
 
+/* 功德、光明燈面板 */
 .panel {
   margin-top: 10px;
   background: #fff2d7;
@@ -94,6 +119,7 @@ body {
   border-radius: 15px;
   border: none;
   background: #ffb86c;
+  font-size: 14px;
 }
 
 .small-btn.disabled {
@@ -107,19 +133,23 @@ body {
   border: none;
   background: #d33;
   color: white;
+  font-size: 14px;
 }
 
+/* 彈窗共用樣式 */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 998;
 }
 
 .modal-content {
   width: 90%;
+  max-width: 380px;
   background: #fffdf6;
   padding: 20px;
   border-radius: 14px;
@@ -134,4 +164,16 @@ body {
   background: #d8572a;
   color: white;
   border-radius: 10px;
+  font-size: 16px;
+}
+
+/* ========= 關鍵修正：hidden 要蓋過 modal 的 display ========= */
+
+.hidden {
+  display: none !important;
+}
+
+/* 對 modal 再加一層保險 */
+.modal.hidden {
+  display: none !important;
 }
