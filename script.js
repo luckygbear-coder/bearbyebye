@@ -8,12 +8,19 @@ let merit = 0;
 let lightEndTime = null; // ms timestamp
 let records = [];
 
-// 籤詩資料（吃貨御守版示範 12 籤）
+let currentCategory = "all"; // all / 主食 / 甜點 / 飲料
+
+// 吃貨御守版 24 籤
+// fortune = 顯示文字（大滿足、微餓…）
+// rating = best / good / hungry （用來決定顏色）
+// categories = ["主食"] / ["甜點"] / ["飲料"] 可多選
 const lots = [
   {
     id: 1,
-    title: "第一籤・大吉",
-    fortune: "大吉",
+    title: "第一籤・晨光好胃口",
+    fortune: "大滿足",
+    rating: "best",
+    categories: ["主食"],
     poem: "晨光破霧好風來，\n心定步穩路自開；\n若能溫飽常知足，\n福到人間喜盈腮。",
     meaning:
       "最近是往前走的好時機，只要保持腳步穩定，不用太急，事情會一件件明朗。記得在忙碌中也要好好吃飯、照顧自己。",
@@ -24,8 +31,10 @@ const lots = [
   },
   {
     id: 2,
-    title: "第二籤・中吉",
-    fortune: "中吉",
+    title: "第二籤・暖湯好人緣",
+    fortune: "暖暖飽",
+    rating: "good",
+    categories: ["主食"],
     poem: "微雨過後見晴天，\n雲開月上好人緣；\n心中疑慮慢慢解，\n一碗暖湯最貼肩。",
     meaning:
       "心裡的擔心會慢慢解除，不必一次想通全部，只要願意和信任的人聊聊，就能找到出口。",
@@ -36,8 +45,10 @@ const lots = [
   },
   {
     id: 3,
-    title: "第三籤・小吉",
-    fortune: "小吉",
+    title: "第三籤・甜甜補勇氣",
+    fortune: "甜甜飽",
+    rating: "good",
+    categories: ["甜點"],
     poem: "腳步雖慢仍向前，\n迂迴小路也有緣；\n偶遇甜味添笑意，\n莫忘抬頭看藍天。",
     meaning:
       "進度比想像中慢一些，但並不是失敗，而是宇宙在幫你安排更合適的步伐。途中給自己一點甜，也能補充勇氣。",
@@ -48,8 +59,10 @@ const lots = [
   },
   {
     id: 4,
-    title: "第四籤・吉",
-    fortune: "吉",
+    title: "第四籤・青菜好心情",
+    fortune: "剛剛好飽",
+    rating: "good",
+    categories: ["主食"],
     poem: "薄雲輕罩未成陰，\n心若安然自有金；\n一盤青葉入口爽，\n煩憂隨風不再尋。",
     meaning:
       "有些小煩惱在身邊，但還不會真正阻礙你。先照顧身體，讓心情穩定，處理事情就會更順利。",
@@ -60,8 +73,10 @@ const lots = [
   },
   {
     id: 5,
-    title: "第五籤・小凶",
-    fortune: "小凶",
+    title: "第五籤・清粥安安胃",
+    fortune: "有點餓",
+    rating: "hungry",
+    categories: ["主食"],
     poem: "夜路微暗心不安，\n言語誤會易成端；\n且先緩步暖身胃，\n明日再談更心寬。",
     meaning:
       "最近容易有溝通小摩擦，先不要急著爭對錯，把身體照顧好，讓自己睡飽再談，比硬撐有效。",
@@ -72,8 +87,10 @@ const lots = [
   },
   {
     id: 6,
-    title: "第六籤・中吉",
-    fortune: "中吉",
+    title: "第六籤・豆漿掌舵手",
+    fortune: "穩穩飽",
+    rating: "good",
+    categories: ["主食", "飲料"],
     poem: "船行河上波微搖，\n掌舵在手心不焦；\n一杯豆漿暖喉間，\n前程雖遠路不遙。",
     meaning:
       "有一些變動，但主控權還在你手上。適度調整腳步，保持彈性，你會發現其實自己比想像中更有力量。",
@@ -84,8 +101,10 @@ const lots = [
   },
   {
     id: 7,
-    title: "第七籤・平",
-    fortune: "平",
+    title: "第七籤・小事慢慢吃",
+    fortune: "平平飽",
+    rating: "good",
+    categories: ["主食"],
     poem: "風平浪靜無大波，\n小事堆疊亦成多；\n一碗青菜暖心腹，\n慢慢整理不必拖。",
     meaning:
       "生活現在沒大風波，但小事情堆起來會讓你覺得煩。可以從最簡單的一件開始收拾，給自己一點完成的成就感。",
@@ -96,8 +115,10 @@ const lots = [
   },
   {
     id: 8,
-    title: "第八籤・吉",
-    fortune: "吉",
+    title: "第八籤・奶茶小確幸",
+    fortune: "幸福飽",
+    rating: "good",
+    categories: ["飲料", "甜點"],
     poem: "舊枝抽新芽，\n轉彎見彩霞；\n心願雖未滿，\n腳下有好茶。",
     meaning:
       "計畫還在路上，但已經開始有小成果。值得為現在的自己鼓鼓掌，再多走幾步就更接近了。",
@@ -108,8 +129,10 @@ const lots = [
   },
   {
     id: 9,
-    title: "第九籤・小吉",
-    fortune: "小吉",
+    title: "第九籤・水果小點心",
+    fortune: "微微餓",
+    rating: "good",
+    categories: ["甜點", "飲料"],
     poem: "雲有陰晴月有圓，\n喜怒哀樂在人間；\n允許情緒慢慢走，\n一顆水果伴身邊。",
     meaning:
       "最近情緒比較敏感，沒關係，那代表你在認真生活。允許自己偶爾難過，吃點喜歡的水果，也算是給自己一點溫柔。",
@@ -120,8 +143,10 @@ const lots = [
   },
   {
     id: 10,
-    title: "第十籤・凶",
-    fortune: "凶",
+    title: "第十籤・熱湯救餓龍",
+    fortune: "好餓狀態",
+    rating: "hungry",
+    categories: ["主食"],
     poem: "風急雨驟樹難安，\n暫避鋒頭保心安；\n切莫逞強硬向前，\n熱湯入口身自暖。",
     meaning:
       "現在不太適合做太大的決定，比起硬撐，更需要的是保護自己。先把生活簡化，讓身體暖起來，等情況穩定再出手也不遲。",
@@ -132,8 +157,10 @@ const lots = [
   },
   {
     id: 11,
-    title: "第十一籤・吉",
-    fortune: "吉",
+    title: "第十一籤・甜點貴人運",
+    fortune: "甜甜飽",
+    rating: "good",
+    categories: ["甜點"],
     poem: "人來人往有貴人，\n一句暖語勝黃金；\n多聽少說心放鬆，\n甜點一口笑盈盈。",
     meaning:
       "最近有機會遇到願意幫助你、理解你的人。試著多聽聽別人的建議，也別忘了跟自己說一些溫柔的話。",
@@ -144,8 +171,10 @@ const lots = [
   },
   {
     id: 12,
-    title: "第十二籤・中吉",
-    fortune: "中吉",
+    title: "第十二籤・牛肉麵轉彎路",
+    fortune: "暖暖飽",
+    rating: "good",
+    categories: ["主食"],
     poem: "山路雖彎景更佳，\n回頭一望有紅霞；\n路邊小館香味繞，\n好好用餐莫心煩。",
     meaning:
       "事情不像一條直線，而是有點曲折，但這些轉彎會帶來不同風景。先把每一餐吃好，讓身體有力氣，才有精神欣賞沿途風景。",
@@ -153,6 +182,174 @@ const lots = [
     calories: 650,
     exerciseMinutes: 28,
     summary: "彎路也是風景，好好吃飯就有力氣。",
+  },
+  {
+    id: 13,
+    title: "第十三籤・便當慢慢嚼",
+    fortune: "需要休息",
+    rating: "good",
+    categories: ["主食"],
+    poem: "忙裡偷閒一口茶，\n心火微退煩也差；\n莫把自己逼太緊，\n慢嚼飯菜最優雅。",
+    meaning:
+      "最近事情有點多，容易覺得喘不過氣。先從放慢吃飯速度開始，讓自己在餐桌上好好呼吸一下。",
+    food: "便當一份（飯七分滿）",
+    calories: 600,
+    exerciseMinutes: 23,
+    summary: "放慢吃飯，也是休息。",
+  },
+  {
+    id: 14,
+    title: "第十四籤・炸雞好分享",
+    fortune: "歡樂飽",
+    rating: "best",
+    categories: ["主食"],
+    poem: "好事將臨心先暖，\n路旁花開香不遠；\n與人分享好滋味，\n喜氣自會多一半。",
+    meaning:
+      "有好消息正在路上，和身邊的人分享你的喜悅或喜歡的食物，會讓幸福感放大。",
+    food: "炸雞分享餐（多人分食）",
+    calories: 700,
+    exerciseMinutes: 30,
+    summary: "分享食物，分享好運。",
+  },
+  {
+    id: 15,
+    title: "第十五籤・小辣醒腦湯",
+    fortune: "微辣飽",
+    rating: "good",
+    categories: ["主食"],
+    poem: "日子平平也算福，\n三餐溫飽已是富；\n偶爾小辣提精神，\n記得多喝幾口水。",
+    meaning:
+      "生活沒有特別大起伏，但平安就是一種祝福。可以用一點點刺激口味讓自己醒醒，但記得顧胃。",
+    food: "麻辣燙小辣（多青菜）",
+    calories: 520,
+    exerciseMinutes: 24,
+    summary: "平淡日常，加一點小辣就好。",
+  },
+  {
+    id: 16,
+    title: "第十六籤・燕麥助好眠",
+    fortune: "睏到餓",
+    rating: "hungry",
+    categories: ["主食"],
+    poem: "心煩意亂睡不安，\n手機螢光夜未完；\n不如關機早就寢，\n清粥暖胃夢也甜。",
+    meaning:
+      "最近睡眠狀況可能不太好，情緒也容易跟著起伏。先從早點放下手機開始，讓自己好好睡一晚。",
+    food: "燕麥粥／清粥一碗",
+    calories: 280,
+    exerciseMinutes: 18,
+    summary: "關機休息，讓胃和心一起放鬆。",
+  },
+  {
+    id: 17,
+    title: "第十七籤・新味小冒險",
+    fortune: "新口味",
+    rating: "good",
+    categories: ["主食"],
+    poem: "陌生巷口有驚喜，\n轉角香味把人喚；\n敢於踏出舒適圈，\n新味新景眼前展。",
+    meaning:
+      "適合嘗試沒吃過的料理或新的生活方式。小小的改變，會帶來意想不到的靈感。",
+    food: "異國料理一份（如韓式拌飯）",
+    calories: 580,
+    exerciseMinutes: 26,
+    summary: "試試新口味，打開新視野。",
+  },
+  {
+    id: 18,
+    title: "第十八籤・咖啡配點心",
+    fortune: "午茶飽",
+    rating: "good",
+    categories: ["飲料", "甜點"],
+    poem: "工作雖忙手不閒，\n桌上咖啡伴身邊；\n慎防空腹太刺激，\n點心一塊保平安。",
+    meaning:
+      "事情多、壓力也不小，但你撐得很好。不要靠空腹咖啡硬撐，搭配一點點心或正餐，身體會比較穩。",
+    food: "黑咖啡＋小塊司康",
+    calories: 220,
+    exerciseMinutes: 16,
+    summary: "咖啡配點心，比單喝溫柔。",
+  },
+  {
+    id: 19,
+    title: "第十九籤・火鍋暖家人",
+    fortune: "團圓飽",
+    rating: "best",
+    categories: ["主食"],
+    poem: "家人相聚一桌圓，\n湯匙碰碗笑聲連；\n偶有爭執皆小事，\n好好吃飯才是先。",
+    meaning:
+      "家庭或親密關係可能有一點小摩擦，但本質上仍是相愛的人。先一起吃頓飯，再談心事也不遲。",
+    food: "家常火鍋（多菜少加工品）",
+    calories: 650,
+    exerciseMinutes: 27,
+    summary: "先吃飯再吵架，通常就不想吵了。",
+  },
+  {
+    id: 20,
+    title: "第二十籤・味噌冷靜湯",
+    fortune: "餓怒狀態",
+    rating: "hungry",
+    categories: ["主食"],
+    poem: "情緒上湧如巨浪，\n言語不慎易受傷；\n暫時離席深呼吸，\n一碗熱湯護心腸。",
+    meaning:
+      "這段時間比較容易暴躁或受傷害，說出口的話可能會後悔。先離開吵鬧現場，讓自己喝點溫熱的東西冷靜一下。",
+    food: "味噌湯／雞湯一碗",
+    calories: 180,
+    exerciseMinutes: 15,
+    summary: "先保護自己，再處理問題。",
+  },
+  {
+    id: 21,
+    title: "第二十一籤・靈感甜點盤",
+    fortune: "創作飽",
+    rating: "best",
+    categories: ["甜點"],
+    poem: "創意靈感正發芽，\n腦中點子如煙花；\n小小甜點當獎勵，\n別忘肯定好自家。",
+    meaning:
+      "最近特別有創意與靈感，很適合寫計畫、畫圖、創作。也別忘了在完成後獎勵自己一下。",
+    food: "馬卡龍／餅乾兩片",
+    calories: 210,
+    exerciseMinutes: 15,
+    summary: "靈感滿滿，配一點甜更開心。",
+  },
+  {
+    id: 22,
+    title: "第二十二籤・水果休息站",
+    fortune: "補充元氣",
+    rating: "good",
+    categories: ["甜點"],
+    poem: "身體微累信號現，\n肩頸緊繃眼也酸；\n少滑一集追劇吧，\n熱茶水果最相伴。",
+    meaning:
+      "身體正在發出疲勞警報，需要好好伸展和休息眼睛。可以把追劇時間縮短一點，留給自己和身體。",
+    food: "切片水果盤（奇異果／橘子等）",
+    calories: 120,
+    exerciseMinutes: 12,
+    summary: "少看一集劇，多愛自己一點。",
+  },
+  {
+    id: 23,
+    title: "第二十三籤・聰明荷包餐",
+    fortune: "省錢飽",
+    rating: "good",
+    categories: ["主食"],
+    poem: "錢財進出有節奏，\n省一點來花更久；\n外食搭配自備菜，\n荷包健康都加油。",
+    meaning:
+      "金錢上需要多一點節制，但不是要你完全不能享受，而是學會搭配與平衡。",
+    food: "外帶便當＋自備燙青菜",
+    calories: 550,
+    exerciseMinutes: 24,
+    summary: "聰明吃飯，也聰明存錢。",
+  },
+  {
+    id: 24,
+    title: "第二十四籤・旅程補給站",
+    fortune: "出遊飽",
+    rating: "good",
+    categories: ["主食"],
+    poem: "旅程將啟心雀躍，\n車站街角香味烈；\n玩樂之前先吃飽，\n體力足夠笑不滅。",
+    meaning:
+      "適合安排小旅行或外出走走。記得先吃好、帶點水和小點心，玩起來會更愉快。",
+    food: "鐵路便當／三明治＋飲料",
+    calories: 580,
+    exerciseMinutes: 26,
+    summary: "先充飽電，再出發冒險。",
   },
 ];
 
@@ -195,11 +392,20 @@ const mLotFoodEl = document.getElementById("mLotFood");
 const mLotCalorieEl = document.getElementById("mLotCalorie");
 const mLotExerciseEl = document.getElementById("mLotExercise");
 
+// Splash & 擲筊動畫
+const splashEl = document.getElementById("splash");
+const throwOverlayEl = document.getElementById("throwOverlay");
+
+// 分類按鈕
+const categoryButtons = document.querySelectorAll(".category-btn");
+
 // 初始化
 initFromStorage();
 renderMeritAndLight();
 updateStatusText();
 renderLastLotIfAny();
+initSplash();
+initCategoryButtons();
 
 // 綁定事件
 mainActionBtn.addEventListener("click", handleMainAction);
@@ -251,6 +457,30 @@ function saveLightEndTime() {
 
 function saveRecords() {
   localStorage.setItem("wuzang_records", JSON.stringify(records));
+}
+
+// === Splash ===
+function initSplash() {
+  if (!splashEl) return;
+  splashEl.classList.add("show");
+  splashEl.addEventListener("click", hideSplash);
+  setTimeout(hideSplash, 1400);
+}
+
+function hideSplash() {
+  if (!splashEl) return;
+  splashEl.classList.remove("show");
+}
+
+// === 分類按鈕 ===
+function initCategoryButtons() {
+  categoryButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      categoryButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentCategory = btn.dataset.cat || "all";
+    });
+  });
 }
 
 // === UI 更新 ===
@@ -312,13 +542,13 @@ function renderLot(lot) {
   lotNumberEl.textContent = lot.title;
   lotFortuneEl.textContent = lot.fortune;
 
-  lotFortuneEl.classList.remove("best", "good", "bad");
-  if (lot.fortune === "大吉") {
+  lotFortuneEl.classList.remove("best", "good", "hungry");
+  if (lot.rating === "best") {
     lotFortuneEl.classList.add("best");
-  } else if (["吉", "中吉", "小吉"].includes(lot.fortune)) {
+  } else if (lot.rating === "hungry") {
+    lotFortuneEl.classList.add("hungry");
+  } else {
     lotFortuneEl.classList.add("good");
-  } else if (["凶", "小凶"].includes(lot.fortune)) {
-    lotFortuneEl.classList.add("bad");
   }
 
   lotPoemEl.textContent = lot.poem;
@@ -365,9 +595,11 @@ function performThrow() {
   if (throwCount >= 3) return;
 
   mainActionBtn.disabled = true;
+  showThrowOverlay();
   shakeLotTube();
 
   setTimeout(() => {
+    hideThrowOverlay();
     throwCount += 1;
 
     // 90% 聖筊機率
@@ -395,7 +627,7 @@ function performThrow() {
         updateStatusText();
       }
     }
-  }, 650);
+  }, 700);
 }
 
 function shakeLotTube() {
@@ -419,10 +651,25 @@ function resetThrowState() {
   successCount = 0;
 }
 
+// 擲筊 overlay
+function showThrowOverlay() {
+  if (throwOverlayEl) throwOverlayEl.classList.add("show");
+}
+function hideThrowOverlay() {
+  if (throwOverlayEl) throwOverlayEl.classList.remove("show");
+}
+
 // === 抽籤與紀錄 ===
 function drawLotAndShow() {
-  const index = Math.floor(Math.random() * lots.length);
-  const lot = lots[index];
+  // 依分類篩選
+  let pool = lots;
+  if (currentCategory !== "all") {
+    pool = lots.filter((l) => l.categories.includes(currentCategory));
+  }
+  if (!pool.length) pool = lots;
+
+  const index = Math.floor(Math.random() * pool.length);
+  const lot = pool[index];
   currentLot = lot;
 
   renderLot(lot);
