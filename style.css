@@ -346,3 +346,22 @@ a.small-btn {
 #historyModal.hidden {
   display: none !important;
 }
+/* 全螢幕啟動畫面 */
+#loading-screen {
+  position: fixed;
+  inset: 0;                    /* 等於 top:0; right:0; bottom:0; left:0 */
+  background: #ffecb3;         /* 跟圖片背景接近的奶油黃色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;               /* 一定蓋在最上面 */
+}
+
+/* 啟動畫面圖片：自適應高度，不超出螢幕 */
+#loading-screen img {
+  max-width: 90%;
+  max-height: 90%;
+  height: auto;
+  width: auto;
+  border-radius: 24px;         /* 看你要不要圓角，可刪掉 */
+}
