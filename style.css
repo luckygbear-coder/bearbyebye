@@ -1,32 +1,53 @@
-/* === 基本設定：整個頁面完全不捲動 === */
+/* === 全域：整頁固定，不能捲動 === */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* ❗ 不讓頁面捲動 */
+  overflow: hidden;
   background: #ffe9c7;
-  font-family: "Noto Sans TC", sans-serif;
+  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* iOS 修正：避免拉動出現回彈捲動 */
 body {
   position: fixed;
   inset: 0;
 }
 
-/* === Loading 畫面 === */
+/* ============ Loading ============ */
 .loading {
   position: fixed;
   inset: 0;
-  background: #f4d9ad;
+  background: rgba(244, 217, 173, 0.95);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
 }
 
-/* === App 主容器（固定滿版） === */
+.loading-box {
+  width: 80%;
+  max-width: 360px;
+  background: #fff7e0;
+  border-radius: 16px;
+  border: 2px solid #e0b572;
+  padding: 16px 18px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.loading-title {
+  font-size: 18px;
+  color: #b5411c;
+  margin-bottom: 8px;
+}
+
+.loading-text {
+  font-size: 14px;
+  color: #6b3b1f;
+}
+
+/* ============ App 容器 ============ */
 .app {
   width: 100%;
   height: 100%;
@@ -34,152 +55,293 @@ body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-  overflow: hidden;  /* ❗ 包含內容都不能捲動 */
-  text-align: center;
-  padding-top: 10px;
+  padding-top: 8px;
+  box-sizing: border-box;
 }
 
-/* === 五臟廟主視覺 === */
+/* 標題區 */
+.header {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.title {
+  font-size: 20px;
+  color: #b5411c;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #a66a36;
+}
+
+/* ============ 五臟廟主視覺（純 CSS） ============ */
 .temple-wrapper {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-.temple-img {
-  width: 85%;
+.temple-frame {
+  width: 90%;
   max-width: 380px;
+  background: #ffe6c9;
+  border-radius: 18px;
+  border: 2px solid #e0a965;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  padding: 8px 8px 10px;
+  box-sizing: border-box;
 }
 
-/* === 文字、按鈕 === */
-.status-text {
-  font-size: 16px;
-  color: #6b3b1f;
+/* 屋頂 */
+.temple-roof {
+  height: 10px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #d8572a, #c2351b);
+  margin-bottom: 6px;
+}
+
+/* 內框 */
+.temple-inner {
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  background: #fdf6e9;
+  border-radius: 14px;
+  padding: 8px;
+  box-sizing: border-box;
+  margin-bottom: 6px;
+}
+
+/* 對聯 */
+.temple-couplet {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: 12px;
+  color: #fff7df;
+  background: #d8572a;
+  border-radius: 14px;
+  padding: 6px 4px;
+  text-align: center;
+}
+
+.temple-couplet.left {
+  margin-right: 4px;
+}
+
+.temple-couplet.right {
+  margin-left: 4px;
+}
+
+/* 食神區 */
+.temple-god {
+  background: #fae9cf;
+  border-radius: 16px;
+  border: 2px solid #e8c593;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 4px 10px;
+}
+
+.temple-god-face {
+  font-size: 30px;
+  margin-bottom: 2px;
+}
+
+.temple-god-name {
+  font-size: 14px;
+  color: #8b4a2a;
+  margin-bottom: 6px;
+}
+
+.temple-stick-box {
+  font-size: 13px;
+  color: #fff7df;
+  background: #c76933;
+  border-radius: 20px;
+  padding: 4px 18px;
+}
+
+/* 底部匾額 */
+.temple-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #fff7df;
+  background: #c74926;
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+/* ============ 搖籤筒區 ============ */
+.shake-area {
   margin-top: 4px;
-  min-height: 22px;
+}
+
+/* ============ 文字 + 按鈕 ============ */
+.status-text {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #6b3b1f;
+  min-height: 20px;
+  padding: 0 10px;
+  text-align: center;
 }
 
 .main-btn {
-  margin-top: 10px;
+  margin-top: 8px;
   width: 80%;
-  padding: 14px;
-  border-radius: 20px;
+  padding: 12px;
+  border-radius: 22px;
   border: none;
   background: #d8572a;
-  color: white;
-  font-size: 20px;
+  color: #fff;
+  font-size: 18px;
 }
 
 .main-btn:disabled {
   opacity: 0.6;
 }
 
-/* === 搖籤筒區塊 === */
-.shake-area {
-  margin-top: 8px;
-}
-
-/* === 當前詩籤卡片 === */
+/* 當前詩籤卡片 */
 .lot-card {
-  width: 85%;
+  width: 90%;
+  max-width: 380px;
   background: #fff8e9;
-  border: 2px solid #d9b07e;
   border-radius: 12px;
-  padding: 12px;
-  margin-top: 12px;
+  border: 2px solid #d9b07e;
+  margin-top: 10px;
+  padding: 10px 12px;
+  box-sizing: border-box;
   text-align: left;
-  overflow: hidden;
+  font-size: 13px;
 }
 
-/* === 下方面板 === */
+/* 下方面板 */
 .panel {
   width: 90%;
+  max-width: 380px;
   background: #fff2d7;
-  border: 2px solid #d9b07e;
   border-radius: 12px;
-  padding: 10px;
-  margin-top: 10px;
+  border: 2px solid #d9b07e;
+  padding: 8px 10px 10px;
+  box-sizing: border-box;
+  margin-top: 8px;
 }
 
 .row {
   display: flex;
   justify-content: space-between;
+  margin-top: 6px;
+}
+
+.row-single {
+  justify-content: center;
+}
+
+.row-double {
+  justify-content: center;
 }
 
 .box {
   width: 48%;
   background: #fff8e9;
-  border: 2px solid #d9b07e;
-  padding: 10px;
   border-radius: 10px;
+  border: 2px solid #d9b07e;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  font-size: 13px;
 }
 
-/* 小按鈕 */
+.big-num {
+  font-size: 20px;
+  margin-top: 4px;
+  color: #b5411c;
+}
+
+.light-status {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 按鈕 */
 .small-btn,
 .danger-btn {
-  margin-top: 8px;
-  padding: 8px 14px;
-  border-radius: 15px;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-radius: 14px;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .small-btn {
   background: #ffb86c;
+  color: #5a3211;
 }
 
 .danger-btn {
   background: #d33;
-  color: white;
+  color: #fff;
+}
+
+.full {
+  width: 100%;
 }
 
 .small-btn.disabled {
-  opacity: .4;
+  opacity: 0.4;
   pointer-events: none;
 }
 
-/* === Modal 彈窗 === */
+a.small-btn {
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+/* ============ Modal 彈窗 ============ */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9000;
 }
 
-/* Modal 內容可捲動，但外部不捲動 */
 .modal-content {
   width: 90%;
   max-width: 380px;
   max-height: 75%;
   background: #fffdf6;
   border-radius: 14px;
-  padding: 20px;
-  overflow-y: auto;   /* ✔ 內容捲動，但螢幕不捲動 */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 16px 16px 18px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
-/* 關閉按鈕 */
 .close-btn {
-  margin-top: 12px;
-  padding: 10px 20px;
-  background: #d8572a;
-  color: white;
+  margin-top: 10px;
+  padding: 8px 18px;
   border-radius: 10px;
   border: none;
-  font-size: 16px;
+  background: #d8572a;
+  color: #fff;
+  font-size: 15px;
 }
 
-/* === 重點：3 層防護讓 modal 必定隱藏 === */
-
-.hidden { display: none !important; }
-
-.modal.hidden { display: none !important; }
-
+/* ============ hidden 保證隱藏 ============ */
+.hidden {
+  display: none !important;
+}
+.modal.hidden {
+  display: none !important;
+}
 #lotModal.hidden,
 #historyModal.hidden {
   display: none !important;
