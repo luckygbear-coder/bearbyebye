@@ -12,41 +12,52 @@
     <header class="app-header">
       <div class="app-title-main">五臟廟・熊熊食神占</div>
       <div class="app-title-sub">不是正在吃美食就是在吃美食的路上</div>
+      <div class="app-badge">🍙 吃貨御守版</div>
     </header>
 
-    <!-- 中間主視覺：廟門 + 熊熊食神 -->
+    <!-- 中間主視覺：五臟廟 -->
     <main class="app-main">
       <section class="temple-section">
-        <div class="temple-top">
-          <div class="temple-sign">五臟廟</div>
-        </div>
-
-        <div class="temple-body">
-          <!-- 春聯對聯 -->
-          <div class="couplet couplet-left">
-            <span>心安胃暖</span>
-            <span>萬事如意</span>
-          </div>
-          <div class="couplet couplet-right">
-            <span>五臟平安</span>
-            <span>百病不侵</span>
+        <div class="temple-container">
+          <!-- 左側紅色牌匾：五臟廟 -->
+          <div class="temple-badge">
+            <span>五</span><span>臟</span><span>廟</span>
           </div>
 
-          <!-- 廟門內部：熊熊食神 + 籤筒 -->
-          <div class="temple-inner">
-            <div class="bear-god">
-              <div class="bear-face">🐻</div>
-              <div class="bear-name">熊熊食神</div>
+          <!-- 右側真正廟宇 -->
+          <div class="temple-wrap">
+            <div class="temple-top">
+              <div class="temple-sign">五臟廟</div>
             </div>
-            <div class="lot-tube" id="lotTube">
-              <div class="lot-stick">籤</div>
-            </div>
-          </div>
 
-          <!-- 門簾 -->
-          <div class="door-curtain">
-            <span>保佑身體健康</span>
-            <span>胃口好好好</span>
+            <div class="temple-body">
+              <!-- 春聯對聯 -->
+              <div class="couplet couplet-left">
+                <span>心安胃暖</span>
+                <span>萬事如意</span>
+              </div>
+              <div class="couplet couplet-right">
+                <span>五臟平安</span>
+                <span>百病不侵</span>
+              </div>
+
+              <!-- 廟門內部：熊熊食神 + 籤筒 -->
+              <div class="temple-inner">
+                <div class="bear-god">
+                  <div class="bear-face">🐻</div>
+                  <div class="bear-name">熊熊食神</div>
+                </div>
+                <div class="lot-tube" id="lotTube">
+                  <div class="lot-stick">籤</div>
+                </div>
+              </div>
+
+              <!-- 門簾 -->
+              <div class="door-curtain">
+                <span>保佑身體健康</span>
+                <span>胃口好好好</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -66,7 +77,7 @@
             今日尚未抽籤，擲筊三次聖筊後，熊熊食神就會跳出詩籤給你。
           </div>
 
-          <!-- 這三塊只拿來暫存資料，不會在主畫面顯示 -->
+          <!-- 這些只當資料暫存，不在主畫面顯示 -->
           <div class="lot-poem" id="lotPoem" style="display:none;"></div>
           <div class="lot-meaning" id="lotMeaning" style="display:none;"></div>
           <div class="lot-food-block" style="display:none;">
@@ -93,7 +104,9 @@
         <div class="light-block">
           <div class="light-label">光明燈</div>
           <div class="light-status" id="lightStatus">尚未點燈</div>
-          <button class="light-btn" id="lightBtn" disabled>功德滿 30 可點燈</button>
+          <button class="light-btn" id="lightBtn" disabled>
+            功德滿 30 可點燈
+          </button>
         </div>
       </div>
 
