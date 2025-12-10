@@ -3,10 +3,10 @@
 <head>
   <link rel="manifest" href="manifest.webmanifest">
 
-<!-- iOS Safari 比較囉嗦，要再加一個圖示（用 192 或 512 任一張即可） -->
-<link rel="apple-touch-icon" href="icons/icon-512.png">
+  <!-- iOS Safari 比較囉嗦，要再加一個圖示（用 192 或 512 任一張即可） -->
+  <link rel="apple-touch-icon" href="icons/icon-512.png">
 
-<meta name="theme-color" content="#f4a63a">
+  <meta name="theme-color" content="#f4a63a">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>五臟廟-愛吃熊</title>
@@ -14,148 +14,125 @@
 </head>
 
 <body>
-  <!-- 啟動畫面 / Loading 畫面 -->
-<div id="loading-screen">
-  <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
-</div>
-
-<!-- 讀取畫面 -->
-<div id="loadingScreen" class="loading">
-  <div class="loading-box">
-    <div class="loading-title">五臟廟 · 愛吃熊</div>
-    <div class="loading-text">人生只有兩件事：吃美食，或在吃美食的路上。</div>
+  <!-- 啟動畫面 / Loading 畫面（熊熊 + 對聯 + 橫批） -->
+  <div id="loading-screen">
+    <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
   </div>
-</div>
 
-<div class="app">
+  <div class="app">
 
-  <!-- 標題區 -->
-  <header class="header">
-    <div class="title">愛吃熊美食占卜</div>
-    <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
-  </header>
+    <!-- 標題區 -->
+    <header class="header">
+      <div class="title">愛吃熊美食占卜</div>
+      <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
+    </header>
 
-  <!-- 五臟廟主視覺（純 CSS） -->
-  <section class="temple-wrapper">
-    <div class="temple-frame">
-      <div class="temple-roof"></div>
-      <div class="temple-inner">
-        <div class="temple-couplet left">珍奶入口甜進心</div>
+    <!-- 五臟廟主視覺（純 CSS） -->
+    <section class="temple-wrapper">
+      <div class="temple-frame">
+        <div class="temple-roof"></div>
+        <div class="temple-inner">
+          <div class="temple-couplet left">珍奶入口甜進心</div>
 
-        <div class="temple-god">
-          <div class="temple-god-face">🐻</div>
-          <div class="temple-god-name">愛吃熊</div>
-          <div class="temple-stick-box">籤筒</div>
+          <div class="temple-god">
+            <div class="temple-god-face">🐻</div>
+            <div class="temple-god-name">愛吃熊</div>
+            <div class="temple-stick-box">籤筒</div>
+          </div>
+
+          <div class="temple-couplet right">滷肉飯香暖五臟</div>
         </div>
-
-        <div class="temple-couplet right">滷肉飯香暖五臟</div>
+        <div class="temple-footer">
+          <span>開運開吃</span>
+        </div>
       </div>
-      <div class="temple-footer">
-        <span>開運開吃</span>
+    </section>
+
+    <!-- 搖籤筒動畫區（擲筊時） -->
+    <section id="shakeArea" class="shake-area hidden">
+      <div id="shakeSvgContainer"></div>
+    </section>
+
+    <!-- 狀態文字 -->
+    <p id="statusText" class="status-text">
+      請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
+    </p>
+
+    <!-- 主要按鈕 -->
+    <button id="boBtn" class="main-btn">擲筊</button>
+    <button id="drawBtn" class="main-btn hidden">抽籤</button>
+
+    <!-- 當前詩籤卡片（可點開彈窗） -->
+    <section id="currentLotCard" class="lot-card hidden"></section>
+
+    <!-- 下方面板 -->
+    <section class="panel">
+      <div class="row">
+        <div class="box">
+          <div>功德值</div>
+          <div id="merit" class="big-num">0</div>
+        </div>
+        <div class="box">
+          <div>光明燈</div>
+          <div id="lightStatus" class="light-status">尚未點燈</div>
+          <button id="lightBtn" class="small-btn disabled">
+            功德滿 30 可點燈
+          </button>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <!-- 搖籤筒動畫區（擲筊時） -->
-  <section id="shakeArea" class="shake-area hidden">
-    <div id="shakeSvgContainer"></div>
-  </section>
-
-  <!-- 狀態文字 -->
-  <p id="statusText" class="status-text">
-    請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
-  </p>
-
-  <!-- 主要按鈕 -->
-  <button id="boBtn" class="main-btn">擲筊</button>
-  <button id="drawBtn" class="main-btn hidden">抽籤</button>
-
-  <!-- 當前詩籤卡片（可點開彈窗） -->
-  <section id="currentLotCard" class="lot-card hidden"></section>
-
-  <!-- 下方面板 -->
-  <section class="panel">
-    <div class="row">
-      <div class="box">
-        <div>功德值</div>
-        <div id="merit" class="big-num">0</div>
-      </div>
-      <div class="box">
-        <div>光明燈</div>
-        <div id="lightStatus" class="light-status">尚未點燈</div>
-        <button id="lightBtn" class="small-btn disabled">
-          功德滿 30 可點燈
+      <div class="row row-single">
+        <button id="offerBtn" class="small-btn full disabled">
+          上供品給愛吃熊（消耗 5 功德）
         </button>
       </div>
-    </div>
 
-    <div class="row row-single">
-      <button id="offerBtn" class="small-btn full disabled">
-        上供品給愛吃熊（消耗 5 功德）
-      </button>
-    </div>
+      <div class="row row-double">
+        <button id="historyBtn" class="small-btn full">
+          📘 抽籤紀錄 & 功德無量匾額
+        </button>
+      </div>
 
-    <div class="row row-double">
-      <button id="historyBtn" class="small-btn full">
-        📘 抽籤紀錄 & 功德無量匾額
-      </button>
-    </div>
+      <div class="row row-double">
+        <a class="small-btn full" href="https://instagram.com/luckygbear"
+           target="_blank" rel="noopener noreferrer">
+          📸 追蹤愛吃熊 IG @luckygbear
+        </a>
+      </div>
 
-    <div class="row row-double">
-      <a class="small-btn full" href="https://instagram.com/luckygbear"
-         target="_blank" rel="noopener noreferrer">
-        📸 追蹤愛吃熊 IG @luckygbear
-      </a>
-    </div>
+      <div class="row row-single">
+        <button id="resetBtn" class="danger-btn full">
+          清空所有紀錄
+        </button>
+      </div>
+    </section>
 
-    <div class="row row-single">
-      <button id="resetBtn" class="danger-btn full">
-        清空所有紀錄
-      </button>
-    </div>
-  </section>
-
-</div>
-
-<!-- 詩籤彈窗 -->
-<div id="lotModal" class="modal hidden"
-     onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
-  <div class="modal-content">
-    <div id="lotText"></div>
-    <button id="closeLot" class="close-btn"
-            onclick="window.closeAllModals && window.closeAllModals();">
-      關閉
-    </button>
   </div>
-</div>
 
-<!-- 抽籤 & 功德紀錄彈窗 -->
-<div id="historyModal" class="modal hidden"
-     onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
-  <div class="modal-content">
-    <div id="historyList"></div>
-    <button id="closeHistory" class="close-btn"
-            onclick="window.closeAllModals && window.closeAllModals();">
-      關閉
-    </button>
+  <!-- 詩籤彈窗 -->
+  <div id="lotModal" class="modal hidden"
+      onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
+    <div class="modal-content">
+      <div id="lotText"></div>
+      <button id="closeLot" class="close-btn"
+              onclick="window.closeAllModals && window.closeAllModals();">
+        關閉
+      </button>
+    </div>
   </div>
-</div>
 
-<script src="script.js"></script>
-<script>
-  // 當整個頁面載入完成後，慢慢隱藏啟動畫面
-  window.addEventListener("load", function () {
-    const loading = document.getElementById("loading-screen");
-    if (!loading) return;
+  <!-- 抽籤 & 功德紀錄彈窗 -->
+  <div id="historyModal" class="modal hidden"
+      onclick="if (event.target === this) window.closeAllModals && window.closeAllModals();">
+    <div class="modal-content">
+      <div id="historyList"></div>
+      <button id="closeHistory" class="close-btn"
+              onclick="window.closeAllModals && window.closeAllModals();">
+        關閉
+      </button>
+    </div>
+  </div>
 
-    loading.style.transition = "opacity 0.6s ease";
-    loading.style.opacity = "0";
-
-    // 動畫結束後移除節點，避免擋到點擊
-    setTimeout(() => {
-      loading.remove();
-    }, 600);
-  });
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
