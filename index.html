@@ -63,7 +63,7 @@
 
     <!-- 狀態提示 -->
     <p id="statusText" class="status-text">
-      請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
+      請先擲筊，一次聖筊就可以抽籤
     </p>
 
   </div>
@@ -131,7 +131,51 @@ window.addMerit = function (delta) {
 
   setTimeout(() => plus.remove(), 800);
 };
+// 18 句熊熊食神祝福
+const BEAR_BLESSINGS = [
+  "熊熊食神祝你三餐都有好東西吃～",
+  "今天的胃口也要被好好照顧喔！",
+  "吃飽飽，心情就會亮晶晶 ✨",
+  "你願意照顧自己的肚子，好棒的功德～",
+  "慢慢吃、好好吃，給自己一點溫柔。",
+  "熊熊幫你加持：每一口都沒有罪惡感。",
+  "把愛吃的東西放進心裡，也放進肚子裡。",
+  "今天的你，值得被好好餵飽。",
+  "感謝自己走到這裡，先吃一口再說。",
+  "就算心情普通，食物也能偷偷加一點快樂進去。",
+  "吃東西的時候，請暫時不用那麼勇敢，先好好享受。",
+  "每一份你選擇的食物，都是在照顧自己的方式。",
+  "給肚子一點時間，也給情緒一點空間。",
+  "熊熊說：吃飯不是拖累，是補充魔法的儀式。",
+  "願你今天吃到的每一口都剛剛好。",
+  "願你不只吃飽，也吃到安心與被愛的感覺。",
+  "好好吃飯，就是對自己最溫柔的修行。",
+  "世界有點累沒關係，先讓晚餐抱抱你。"
+];
 
+// 在 temple-wrapper 上顯示 / 更新氣泡
+function showBearBlessing() {
+  const wrapper = document.querySelector('.temple-wrapper');
+  if (!wrapper) return;
+
+  let bubble = document.getElementById('bearBubble');
+  if (!bubble) {
+    bubble = document.createElement('div');
+    bubble.id = 'bearBubble';
+    bubble.className = 'bear-bubble';
+    wrapper.appendChild(bubble);
+  }
+
+  const msg =
+    BEAR_BLESSINGS[Math.floor(Math.random() * BEAR_BLESSINGS.length)];
+  bubble.textContent = msg;
+
+  // 重新觸發動畫
+  bubble.classList.remove('show');
+  // 強制重繪一次
+  void bubble.offsetWidth;
+  bubble.classList.add('show');
+}
     /* 全域關閉彈窗 */
     window.closeAllModals = function () {
       document.getElementById('lotModal').classList.add('hidden');
