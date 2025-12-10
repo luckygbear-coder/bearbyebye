@@ -20,19 +20,17 @@ const resetBtn = document.getElementById("resetBtn");
 
 const lotModal = document.getElementById("lotModal");
 const lotTextEl = document.getElementById("lotText");
-const closeLot = document.getElementById("closeLot");
 
 const historyModal = document.getElementById("historyModal");
 const historyListEl = document.getElementById("historyList");
-const closeHistory = document.getElementById("closeHistory");
 
 // ================== 狀態變數 ==================
-let canDraw = false;             // 是否已獲得「可抽籤」資格（一次聖筊）
-let currentLot = null;           // 當下詩籤
-let merit = 0;                   // 現在功德值
-let lightEndTime = null;         // 光明燈到期時間（timestamp）
-let lotHistory = [];             // 抽籤紀錄
-let meritLog = [];               // 功德無量匾額紀錄（光明燈與供品）
+let canDraw = false;     // 是否已獲得可抽籤資格
+let currentLot = null;   // 當下詩籤
+let merit = 0;           // 功德值
+let lightEndTime = null; // 光明燈到期時間
+let lotHistory = [];     // 抽籤紀錄
+let meritLog = [];       // 功德無量匾額
 
 // ================== 常數設定 ==================
 const STORAGE_MERIT = "wuzang_merit";
@@ -40,13 +38,10 @@ const STORAGE_LIGHT_END = "wuzang_lightEnd";
 const STORAGE_LOT_HISTORY = "wuzang_lotHistory";
 const STORAGE_MERIT_LOG = "wuzang_meritLog";
 
-// 光明燈持續 7 天
-const LIGHT_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
+const LIGHT_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 光明燈 7 天
+const SHENGBO_RATE = 0.9;                          // 聖筊機率 90%
 
-// 擲筊聖筊機率 90%
-const SHENGBO_RATE = 0.9;
-
-// ========== 搖籤筒 SVG（暫時用，之後可換成你的熊熊 SVG） ==========
+// 搖籤筒 SVG（暫時用，占位）
 const SHAKE_SVG = `
 <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -55,14 +50,13 @@ const SHAKE_SVG = `
       <stop offset="100%" stop-color="#c27b53"/>
     </linearGradient>
   </defs>
-  <!-- 籤筒主體 -->
-  <g id="shaker" transform="translate(90,100)">
-    <rect x="-30" y="-40" width="60" height="80" rx="16" ry="16" fill="url(#jarGrad)" stroke="#6b3b1f" stroke-width="5"/>
-    <!-- 籤筒邊 -->
-    <rect x="-26" y="-36" width="52" height="10" rx="5" ry="5" fill="#f3e2c5" stroke="#6b3b1f" stroke-width="3"/>
-    <!-- 籤 -->
-    <rect x="-4" y="-52" width="8" height="26" rx="4" ry="4" fill="#ffebbb" stroke="#6b3b1f" stroke-width="3"/>
-    <!-- 動畫：左右搖動 -->
+  <g transform="translate(90,100)">
+    <rect x="-30" y="-40" width="60" height="80" rx="16" ry="16"
+      fill="url(#jarGrad)" stroke="#6b3b1f" stroke-width="5"/>
+    <rect x="-26" y="-36" width="52" height="10" rx="5" ry="5"
+      fill="#f3e2c5" stroke="#6b3b1f" stroke-width="3"/>
+    <rect x="-4" y="-52" width="8" height="26" rx="4" ry="4"
+      fill="#ffebbb" stroke="#6b3b1f" stroke-width="3"/>
     <animateTransform
       attributeName="transform"
       type="rotate"
@@ -71,8 +65,8 @@ const SHAKE_SVG = `
       repeatCount="indefinite"
     />
   </g>
-  <!-- 字：等一下吃什麼 -->
-  <text x="90" y="32" text-anchor="middle" font-size="14" fill="#6b3b1f" font-family="Noto Sans TC">
+  <text x="90" y="32" text-anchor="middle" font-size="14"
+    fill="#6b3b1f" font-family="Noto Sans TC">
     等一下吃什麼…
   </text>
 </svg>
@@ -174,7 +168,7 @@ const foodsDrinkJuice = [
   { name: "檸檬水一杯", calories: 5, exerciseMinutes: 2 }
 ];
 
-// ================== 詩籤（示例 24 筆，可再增加） ==================
+// ================== 詩籤（24 筆示意） ==================
 const lots = [
   {
     id: 1,
@@ -418,7 +412,7 @@ const lots = [
   }
 ];
 
-// ================== 熊熊食神隨機語（30 句） ==================
+// 熊熊食神隨機語（30 句）
 const bearBlessings = [
   "熊熊食神笑咪咪：願你今天吃得開心，心裡也暖暖的。",
   "熊熊食神拍拍肚子：把自己餵飽，就是很重要的修行。",
@@ -456,62 +450,46 @@ const bearBlessings = [
 init();
 
 function init() {
-  // Loading 畫面自動隱藏
+  // Loading 畫面 1.2 秒後關掉
   if (loadingScreen) {
     setTimeout(() => {
-      loadingScreen.style.display = "none";
-    }, 1500);
+      loadingScreen.classList.add("hidden");
+    }, 1200);
   }
 
-  // 從 localStorage 讀取狀態
   loadFromStorage();
-  updateLightStatus();
   renderMerit();
+  updateLightStatus();
   renderCurrentLotCard();
   updateButtonsState();
 
-  // 綁定事件
   if (boBtn) boBtn.addEventListener("click", handleBoClick);
   if (drawBtn) drawBtn.addEventListener("click", handleDrawClick);
-
   if (currentLotCard) {
     currentLotCard.addEventListener("click", () => {
       if (currentLot) openLotModal(currentLot);
     });
   }
 
+  if (historyBtn) historyBtn.addEventListener("click", openHistoryModal);
+  if (resetBtn) resetBtn.addEventListener("click", handleReset);
   if (lightBtn) lightBtn.addEventListener("click", handleLightClick);
   if (offerBtn) offerBtn.addEventListener("click", handleOfferClick);
 
-  if (historyBtn) historyBtn.addEventListener("click", openHistoryModal);
-  if (resetBtn) resetBtn.addEventListener("click", handleReset);
-
-  // 關閉彈窗（按鈕）
-  if (closeLot) closeLot.addEventListener("click", closeAllModals);
-  if (closeHistory) closeHistory.addEventListener("click", closeAllModals);
-
-  // 點背景也可以關閉
-  if (lotModal) {
-    lotModal.addEventListener("click", (e) => {
-      if (e.target === lotModal) closeAllModals();
-    });
-  }
-  if (historyModal) {
-    historyModal.addEventListener("click", (e) => {
-      if (e.target === historyModal) closeAllModals();
-    });
+  if (historyListEl) {
+    historyListEl.onclick = (e) => {
+      const item = e.target.closest(".lot-item");
+      if (!item) return;
+      const idx = parseInt(item.dataset.idx, 10);
+      const lot = lotHistory[idx];
+      if (lot) openLotModal(lot);
+    };
   }
 
-  // 初始提示
   if (statusTextEl) {
-    statusTextEl.textContent = "請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）";
+    statusTextEl.textContent =
+      "請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）";
   }
-}
-
-// 一次關掉所有彈窗
-function closeAllModals() {
-  if (lotModal) lotModal.classList.add("hidden");
-  if (historyModal) historyModal.classList.add("hidden");
 }
 
 // ================== localStorage ==================
@@ -569,7 +547,6 @@ function updateLightStatus() {
     lightBtn.classList.add("disabled");
     lightBtn.textContent = "光明燈祝福中";
   } else {
-    // 已過期
     lightEndTime = null;
     saveLightEnd();
 
@@ -584,7 +561,6 @@ function updateLightStatus() {
     }
   }
 
-  // 供品按鈕
   if (merit >= 5) {
     offerBtn.classList.remove("disabled");
   } else {
@@ -604,11 +580,11 @@ function renderCurrentLotCard() {
   currentLotCard.classList.remove("hidden");
   currentLotCard.innerHTML = `
     <div><strong>${currentLot.title}</strong>｜${currentLot.fortune}</div>
-    <div style="margin-top:4px; font-size:14px;">${currentLot.food}</div>
-    <div style="margin-top:4px; font-size:12px;color:#6b3b1f;">
+    <div style="margin-top:4px;font-size:14px;">${currentLot.food}</div>
+    <div style="margin-top:4px;font-size:12px;color:#6b3b1f;">
       約 ${currentLot.calories} kcal ｜ 建議小運動 ${currentLot.exerciseMinutes} 分鐘
     </div>
-    <div style="margin-top:4px; font-size:12px;color:#a36c33;">
+    <div style="margin-top:4px;font-size:12px;color:#a36c33;">
       （點這裡可再次查看完整詩籤）
     </div>
   `;
@@ -631,19 +607,19 @@ function handleBoClick() {
 
   statusTextEl.textContent = "擲筊中…等一下吃什麼？";
   boBtn.disabled = true;
-
-  // 顯示搖籤筒動畫
   showShake();
 
   setTimeout(() => {
     hideShake();
-
     const isShengBo = Math.random() < SHENGBO_RATE;
+
     if (isShengBo) {
-      statusTextEl.textContent = "聖筊！熊熊食神允許你抽籤～按下「抽籤」看看今天吃什麼。";
+      statusTextEl.textContent =
+        "聖筊！熊熊食神允許你抽籤～按下「抽籤」看看今天吃什麼。";
       canDraw = true;
     } else {
-      statusTextEl.textContent = "這次不是聖筊，再誠心問問熊熊食神吧。";
+      statusTextEl.textContent =
+        "這次不是聖筊，再誠心問問熊熊食神吧。";
       canDraw = false;
     }
 
@@ -668,21 +644,18 @@ function hideShake() {
 function handleDrawClick() {
   if (!canDraw) return;
 
-  // 1. 隨機抽一首詩籤
   const lotBase = lots[Math.floor(Math.random() * lots.length)];
 
-  // 2. 隨機選一種類：0 主食小吃 / 1 甜點水果 / 2 飲料果汁
   const catIdx = Math.floor(Math.random() * 3);
   let foodItem;
   if (catIdx === 0) {
-    foodItem = foodsMainSnack[Math.floor(Math.random() * foodsMainSnack.length)];
+    foodItem = randomFrom(foodsMainSnack);
   } else if (catIdx === 1) {
-    foodItem = foodsDessertFruit[Math.floor(Math.random() * foodsDessertFruit.length)];
+    foodItem = randomFrom(foodsDessertFruit);
   } else {
-    foodItem = foodsDrinkJuice[Math.floor(Math.random() * foodsDrinkJuice.length)];
+    foodItem = randomFrom(foodsDrinkJuice);
   }
 
-  // 3. 組合成完整詩籤結果
   const lot = {
     ...lotBase,
     time: formatNow(),
@@ -694,44 +667,56 @@ function handleDrawClick() {
   currentLot = lot;
   renderCurrentLotCard();
 
-  // 4. 功德 +1
   merit += 1;
   saveMerit();
   renderMerit();
   updateLightStatus();
 
-  // 5. 寫入抽籤紀錄（最新放最前面）
   lotHistory.unshift(lot);
   if (lotHistory.length > 100) lotHistory.pop();
   saveLotHistory();
 
-  // 6. 顯示詩籤 Modal
   openLotModal(lot);
 
-  // 7. 本輪結束，需重新擲筊
   canDraw = false;
   updateButtonsState();
 
   if (statusTextEl) {
-    statusTextEl.textContent = "熊熊食神已給你今日的吃貨詩籤，可以慢慢品味，也可以再擲筊問下一餐。";
+    statusTextEl.textContent =
+      "熊熊食神已給你今日的吃貨詩籤，可以慢慢品味，也可以再擲筊問下一餐。";
   }
 }
 
 function openLotModal(lot) {
   if (!lot || !lotModal || !lotTextEl) return;
 
-  const html = `
-    <div style="font-weight:bold; font-size:18px; margin-bottom:4px;">${lot.title}</div>
-    <div style="font-size:14px; margin-bottom:8px;">吉餓程度：${lot.fortune}</div>
-    <div style="white-space:pre-line; font-size:14px; margin-bottom:8px;">📜 詩文：\n${lot.poem}</div>
-    <div style="font-size:14px; margin-bottom:8px;">🐻 熊熊食神解籤：${lot.meaning}</div>
+  lotTextEl.innerHTML = `
+    <div style="font-weight:bold;font-size:18px;margin-bottom:4px;">
+      ${lot.title}
+    </div>
+    <div style="font-size:14px;margin-bottom:8px;">
+      吉餓程度：${lot.fortune}
+    </div>
+    <div style="white-space:pre-line;font-size:14px;margin-bottom:8px;">
+      📜 詩文：\n${lot.poem}
+    </div>
+    <div style="font-size:14px;margin-bottom:8px;">
+      🐻 熊熊食神解籤：${lot.meaning}
+    </div>
     <hr>
-    <div style="font-size:14px; margin-top:8px;">🍱 推薦食物：${lot.food}</div>
-    <div style="font-size:13px; margin-top:2px;">🔥 估計熱量：約 ${lot.calories} kcal（請以實際份量為準）</div>
-    <div style="font-size:13px; margin-top:2px;">🏃 小運動建議：約 ${lot.exerciseMinutes} 分鐘輕鬆活動（散步、伸展或做家事）</div>
-    <div style="font-size:12px; margin-top:6px; color:#a36c33;">抽籤時間：${lot.time}</div>
+    <div style="font-size:14px;margin-top:8px;">
+      🍱 推薦食物：${lot.food}
+    </div>
+    <div style="font-size:13px;margin-top:2px;">
+      🔥 估計熱量：約 ${lot.calories} kcal（請以實際份量為準）
+    </div>
+    <div style="font-size:13px;margin-top:2px;">
+      🏃 小運動建議：約 ${lot.exerciseMinutes} 分鐘輕鬆活動（散步、伸展或做家事）
+    </div>
+    <div style="font-size:12px;margin-top:6px;color:#a36c33;">
+      抽籤時間：${lot.time}
+    </div>
   `;
-  lotTextEl.innerHTML = html;
   lotModal.classList.remove("hidden");
 }
 
@@ -741,7 +726,6 @@ function handleLightClick() {
   if (lightEndTime && now < lightEndTime) return;
   if (merit < 30) return;
 
-  // 消耗 30 功德，點亮光明燈 7 天
   merit -= 30;
   saveMerit();
 
@@ -751,7 +735,6 @@ function handleLightClick() {
   renderMerit();
   updateLightStatus();
 
-  // 記錄功德無量匾額
   const bless = randomFrom(bearBlessings);
   const log = {
     time: formatNow(),
@@ -788,40 +771,41 @@ function handleOfferClick() {
   }
 }
 
-// ================== 抽籤紀錄（含功德無量匾額） ==================
+// ================== 抽籤紀錄 & 功德無量匾額 ==================
 function openHistoryModal() {
   if (!historyModal || !historyListEl) return;
 
   const parts = [];
 
-  // 抽籤紀錄
-  parts.push(`<div style="font-weight:bold; margin-bottom:4px;">📘 抽籤紀錄</div>`);
+  parts.push(`<div style="font-weight:bold;margin-bottom:4px;">📘 抽籤紀錄</div>`);
   if (!lotHistory.length) {
-    parts.push(`<div style="font-size:13px; margin-bottom:8px;">目前還沒有抽籤紀錄喔～</div>`);
+    parts.push(`<div style="font-size:13px;margin-bottom:8px;">目前還沒有抽籤紀錄喔～</div>`);
   } else {
     lotHistory.forEach((lot, idx) => {
       parts.push(`
-        <div class="hist-item lot-item" data-idx="${idx}" style="padding:6px 0; border-bottom:1px dashed #d9b07e; cursor:pointer;">
-          <div style="font-size:12px; color:#8c5a3f;">${lot.time}</div>
+        <div class="lot-item" data-idx="${idx}"
+             style="padding:6px 0;border-bottom:1px dashed #d9b07e;cursor:pointer;">
+          <div style="font-size:12px;color:#8c5a3f;">${lot.time}</div>
           <div style="font-size:14px;">${lot.title}｜${lot.fortune}</div>
-          <div style="font-size:12px; color:#6b3b1f;">${lot.food}｜約 ${lot.calories} kcal｜建議運動 ${lot.exerciseMinutes} 分鐘</div>
+          <div style="font-size:12px;color:#6b3b1f;">
+            ${lot.food}｜約 ${lot.calories} kcal｜建議運動 ${lot.exerciseMinutes} 分鐘
+          </div>
         </div>
       `);
     });
   }
 
-  // 功德無量匾額
-  parts.push(`<div style="font-weight:bold; margin:10px 0 4px;">🏮 功德無量匾額（光明燈／供品紀錄）</div>`);
+  parts.push(`<div style="font-weight:bold;margin:10px 0 4px;">🏮 功德無量匾額（光明燈／供品紀錄）</div>`);
   if (!meritLog.length) {
-    parts.push(`<div style="font-size:13px; margin-bottom:8px;">目前還沒有功德消耗紀錄。</div>`);
+    parts.push(`<div style="font-size:13px;margin-bottom:8px;">目前還沒有功德消耗紀錄。</div>`);
   } else {
     meritLog.forEach((log) => {
       const typeText = log.type === "light" ? "點光明燈" : "上供品";
       parts.push(`
-        <div style="padding:6px 0; border-bottom:1px dashed #d9b07e;">
-          <div style="font-size:12px; color:#8c5a3f;">${log.time}</div>
+        <div style="padding:6px 0;border-bottom:1px dashed #d9b07e;">
+          <div style="font-size:12px;color:#8c5a3f;">${log.time}</div>
           <div style="font-size:13px;">${typeText}</div>
-          <div style="font-size:12px; color:#6b3b1f;">${log.message}</div>
+          <div style="font-size:12px;color:#6b3b1f;">${log.message}</div>
         </div>
       `);
     });
@@ -829,16 +813,6 @@ function openHistoryModal() {
 
   historyListEl.innerHTML = parts.join("");
   historyModal.classList.remove("hidden");
-
-  // 讓歷史紀錄可點開詩籤
-  historyListEl.onclick = (e) => {
-    const item = e.target.closest(".lot-item");
-    if (!item) return;
-    const idx = parseInt(item.dataset.idx, 10);
-    const lot = lotHistory[idx];
-    if (!lot) return;
-    openLotModal(lot);
-  };
 }
 
 // ================== 重置 ==================
@@ -862,6 +836,7 @@ function handleReset() {
   updateLightStatus();
   renderCurrentLotCard();
   updateButtonsState();
+  closeAllModals();
 
   if (statusTextEl) {
     statusTextEl.textContent = "資料已清空，可以重新與熊熊食神開始吃貨之旅。";
@@ -882,9 +857,12 @@ function formatNow() {
 function randomFrom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
-function randomFrom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+
+// 彈窗統一關閉（給 JS & HTML 用）
+function closeAllModals() {
+  if (lotModal) lotModal.classList.add("hidden");
+  if (historyModal) historyModal.classList.add("hidden");
 }
 
-// 讓 HTML 的 onclick 可以呼叫到
+// 讓 HTML inline onclick 可以呼叫
 window.closeAllModals = closeAllModals;
