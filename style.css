@@ -158,3 +158,56 @@ body {
   font-size: 15px;
   margin-top: 10px;
 }
+/* ===== 熊熊祝福氣泡（上供品） ===== */
+
+.bear-bubble {
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  transform: translateX(-50%);
+  max-width: 260px;
+  padding: 10px 14px;
+  background: rgba(255, 248, 230, 0.96);
+  border-radius: 18px;
+  border: 2px solid #f1c688;
+  font-size: 13px;
+  color: #7b4228;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.bear-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 10px 0 10px;
+  border-style: solid;
+  border-color: #f1c688 transparent transparent transparent;
+}
+
+.bear-bubble.show {
+  animation: bear-bubble-pop 1.2s ease-out forwards;
+}
+
+@keyframes bear-bubble-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.9);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -4px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -10px) scale(0.98);
+  }
+}
