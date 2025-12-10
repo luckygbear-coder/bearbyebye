@@ -1,41 +1,40 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/icon-512.png">
-
-  <meta name="theme-color" content="#f4a63a">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>五臟廟-愛吃熊</title>
+
+  <!-- PWA / Icon 設定 -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-512.png">
+  <meta name="theme-color" content="#f4a63a">
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <!-- 啟動畫面 -->
+  <!-- 啟動畫面：進來時先看到熊熊整張圖 -->
   <div id="loading-screen">
     <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
   </div>
 
   <div class="app">
-
     <!-- 標題 -->
     <header class="header">
       <div class="title">愛吃熊美食占卜</div>
       <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
     </header>
 
-    <!-- 主視覺：背景即熊熊圖 -->
+    <!-- 主視覺：熊熊圖當背景 + 浮動功能按鈕 + 功德值 -->
     <section class="temple-wrapper">
       <div class="temple-image-box">
-
-        <!-- 功德值角標 -->
+        <!-- 功德值角標（右上角，不擋對聯） -->
         <div class="merit-badge">
           功德值 <span id="merit">0</span>
         </div>
 
-        <!-- 浮動按鈕組 -->
+        <!-- 浮動圓形按鈕：貼在右下 -->
         <div class="floating-buttons">
           <button id="boBtn" class="circle-btn circle-main">
             🙏<span>擲筊</span>
@@ -49,23 +48,28 @@
             📘<span>紀錄</span>
           </button>
 
-          <button id="offerBtn" class="circle-btn small disabled">
+          <button id="offerBtn" class="circle-btn small">
             🍱<span>供品</span>
           </button>
 
-          <!-- 隱藏清空按鈕，但保留 ID 給 script.js 用 -->
+          <!-- 清空按鈕：給 script.js 用，但畫面隱藏 -->
           <button id="resetBtn" class="circle-btn danger hidden">
             ♻️<span>清空</span>
           </button>
         </div>
       </div>
+
+      <!-- 熊熊祝福對話氣泡（用 JS 填文字） -->
+      <div id="bearBubble" class="bear-bubble"></div>
     </section>
 
-    <!-- 狀態提示 -->
+    <!-- 狀態提示文字 -->
     <p id="statusText" class="status-text">
-      請先擲筊，一次聖筊就可以抽籤
+      請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
     </p>
 
+    <!-- 如果 script.js 有用到目前詩籤卡片，就保留一個空容器 -->
+    <section id="currentLotCard" class="lot-card hidden"></section>
   </div>
 
   <!-- 詩籤彈窗 -->
@@ -80,7 +84,7 @@
     </div>
   </div>
 
-  <!-- 紀錄彈窗 -->
+  <!-- 抽籤 & 功德紀錄彈窗 -->
   <div id="historyModal" class="modal hidden"
        onclick="if (event.target === this) window.closeAllModals();">
     <div class="modal-content">
@@ -92,10 +96,12 @@
     </div>
   </div>
 
+  <!-- 你的原本遊戲邏輯（擲筊 / 抽籤 / 寫紀錄） -->
   <script src="script.js"></script>
 
-  <!-- 啟動畫面淡出 + 功德值動畫 -->
+  <!-- 啟動畫面、功德動畫、愛吃熊祝福、供品邏輯 -->
   <script>
+    /* --- 啟動畫面淡出 --- */
     function hideLoadingScreen() {
       const loading = document.getElementById('loading-screen');
       if (!loading) return;
@@ -108,92 +114,87 @@
       setTimeout(hideLoadingScreen, 1800);
     });
 
-// 功德值：只會增加、不會減少
-window.addMerit = function (delta) {
-  // 只允許正數，不接受減少
-  if (!delta || delta <= 0) return;
+    /* --- 愛吃熊祝福語（18句） --- */
+    const BEAR_BLESSINGS = [
+      "愛吃熊送你一口好心情，記得慢慢吃、好好吃。",
+      "你今天辛苦了，給自己一份好吃的，就會更有力量喔！",
+      "肚子被照顧好，心情也會跟著變甜甜的。",
+      "願每一餐都能安慰你，愛吃熊陪你一起吃好料。",
+      "好好吃飯不是奢侈，是一種對自己的溫柔。",
+      "吃飽的人最可愛，願你今天也是可愛的。",
+      "愛吃熊祝福你：每一口都剛剛好、每一步都順順的。",
+      "不用勉強微笑，先吃好吃的，笑容就會自然跑出來。",
+      "給自己一口溫暖，世界就會變得沒那麼可怕。",
+      "願你的肚子飽飽、心也暖暖，今天辛苦的都值得。",
+      "愛吃熊提醒你：好好吃飯，是最簡單的幸福魔法。",
+      "願你每一餐都能療癒自己，而不是勉強自己。",
+      "你值得被好好餵飽，也值得被好好對待。",
+      "吃東西時請放鬆，剩下的事交給明天的你就好。",
+      "願好的味道陪著你，把壞心情一點一點融化掉。",
+      "愛吃熊給你一個抱抱，再給你一份好吃的。",
+      "願你的碗裡永遠裝著安心、期待與小小的快樂。",
+      "如果覺得累，那就先吃好吃的，愛吃熊會陪著你。"
+    ];
 
-  const badgeValue = document.getElementById('merit');
-  if (!badgeValue) return;
+    /* --- 功德值：只會增加，不會減少 --- */
+    window.addMerit = function (delta) {
+      if (!delta || delta <= 0) return; // 不接受扣分
 
-  const current = parseInt(badgeValue.textContent || '0', 10);
-  const next = current + delta;
-  badgeValue.textContent = next;
+      const badgeValue = document.getElementById('merit');
+      if (!badgeValue) return;
 
-  // +1 / +5 飄字動畫
-  const badge = document.querySelector('.merit-badge');
-  if (!badge) return;
+      const current = parseInt(badgeValue.textContent || '0', 10);
+      const next = current + delta;
+      badgeValue.textContent = next;
 
-  const plus = document.createElement('span');
-  plus.className = 'merit-plus';
-  plus.textContent = '+' + delta;
-  badge.appendChild(plus);
+      // 飄出的 +1 動畫
+      const badge = document.querySelector('.merit-badge');
+      if (!badge) return;
 
-  setTimeout(() => plus.remove(), 800);
-};
-// 18 句熊熊食神祝福
-const BEAR_BLESSINGS = [
-  "熊熊食神祝你三餐都有好東西吃～",
-  "今天的胃口也要被好好照顧喔！",
-  "吃飽飽，心情就會亮晶晶 ✨",
-  "你願意照顧自己的肚子，好棒的功德～",
-  "慢慢吃、好好吃，給自己一點溫柔。",
-  "熊熊幫你加持：每一口都沒有罪惡感。",
-  "把愛吃的東西放進心裡，也放進肚子裡。",
-  "今天的你，值得被好好餵飽。",
-  "感謝自己走到這裡，先吃一口再說。",
-  "就算心情普通，食物也能偷偷加一點快樂進去。",
-  "吃東西的時候，請暫時不用那麼勇敢，先好好享受。",
-  "每一份你選擇的食物，都是在照顧自己的方式。",
-  "給肚子一點時間，也給情緒一點空間。",
-  "熊熊說：吃飯不是拖累，是補充魔法的儀式。",
-  "願你今天吃到的每一口都剛剛好。",
-  "願你不只吃飽，也吃到安心與被愛的感覺。",
-  "好好吃飯，就是對自己最溫柔的修行。",
-  "世界有點累沒關係，先讓晚餐抱抱你。"
-];
+      const plus = document.createElement('span');
+      plus.className = 'merit-plus';
+      plus.textContent = '+' + delta;
+      badge.appendChild(plus);
 
-// 在 temple-wrapper 上顯示 / 更新氣泡
-function showBearBlessing() {
-  const wrapper = document.querySelector('.temple-wrapper');
-  if (!wrapper) return;
-
-  let bubble = document.getElementById('bearBubble');
-  if (!bubble) {
-    bubble = document.createElement('div');
-    bubble.id = 'bearBubble';
-    bubble.className = 'bear-bubble';
-    wrapper.appendChild(bubble);
-  }
-
-  const msg =
-    BEAR_BLESSINGS[Math.floor(Math.random() * BEAR_BLESSINGS.length)];
-  bubble.textContent = msg;
-
-  // 重新觸發動畫
-  bubble.classList.remove('show');
-  // 強制重繪一次
-  void bubble.offsetWidth;
-  bubble.classList.add('show');
-}
-    /* 全域關閉彈窗 */
-    window.closeAllModals = function () {
-      document.getElementById('lotModal').classList.add('hidden');
-      document.getElementById('historyModal').classList.add('hidden');
+      setTimeout(() => plus.remove(), 900);
     };
-    // 啟用上供品按鈕：不扣功德，純祝福氣泡
-document.addEventListener('DOMContentLoaded', () => {
-  const offerBtn = document.getElementById('offerBtn');
-  if (!offerBtn) return;
 
-  // 無條件解鎖按鈕
-  offerBtn.disabled = false;
-  offerBtn.classList.remove('disabled');
+    /* --- 熊熊祝福氣泡 --- */
+    function showBearBlessing() {
+      const bubble = document.getElementById('bearBubble');
+      if (!bubble) return;
 
-  offerBtn.addEventListener('click', () => {
-    showBearBlessing();
-  });
-});
+      const msg =
+        BEAR_BLESSINGS[Math.floor(Math.random() * BEAR_BLESSINGS.length)];
+      bubble.textContent = msg;
+
+      bubble.classList.remove('show');
+      void bubble.offsetWidth; // 強制重繪
+      bubble.classList.add('show');
+    }
+
+    /* --- 關閉所有彈窗 --- */
+    window.closeAllModals = function () {
+      const lotModal = document.getElementById('lotModal');
+      const historyModal = document.getElementById('historyModal');
+      if (lotModal) lotModal.classList.add('hidden');
+      if (historyModal) historyModal.classList.add('hidden');
+    };
+
+    /* --- 啟用上供品按鈕：不扣功德，按一下 +1 & 祝福 --- */
+    document.addEventListener('DOMContentLoaded', () => {
+      const offerBtn = document.getElementById('offerBtn');
+      if (!offerBtn) return;
+
+      // 確保不會被標記 disabled
+      offerBtn.disabled = false;
+      offerBtn.classList.remove('disabled');
+
+      offerBtn.addEventListener('click', () => {
+        window.addMerit(1);   // 上供品 +1 功德
+        showBearBlessing();   // 顯示愛吃熊祝福
+      });
+    });
   </script>
 </body>
 </html>
