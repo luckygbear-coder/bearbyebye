@@ -142,5 +142,20 @@
 </div>
 
 <script src="script.js"></script>
+<script>
+  // 當整個頁面載入完成後，慢慢隱藏啟動畫面
+  window.addEventListener("load", function () {
+    const loading = document.getElementById("loading-screen");
+    if (!loading) return;
+
+    loading.style.transition = "opacity 0.6s ease";
+    loading.style.opacity = "0";
+
+    // 動畫結束後移除節點，避免擋到點擊
+    setTimeout(() => {
+      loading.remove();
+    }, 600);
+  });
+</script>
 </body>
 </html>
