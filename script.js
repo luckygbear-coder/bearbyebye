@@ -8,7 +8,7 @@ let merit = 0;
 let lightEndTime = null; // ms timestamp
 let records = [];
 
-// 籤詩資料
+// 籤詩資料（吃貨御守版示範 12 籤）
 const lots = [
   {
     id: 1,
@@ -215,8 +215,7 @@ lotBackdrop.addEventListener("click", closeLotModal);
 lotCloseBtn.addEventListener("click", closeLotModal);
 lotOkBtn.addEventListener("click", closeLotModal);
 
-// --- 初始化與 Storage ---
-
+// === 初始化與 Storage ===
 function initFromStorage() {
   const meritStr = localStorage.getItem("wuzang_merit");
   merit = meritStr ? parseInt(meritStr, 10) || 0 : 0;
@@ -254,8 +253,7 @@ function saveRecords() {
   localStorage.setItem("wuzang_records", JSON.stringify(records));
 }
 
-// --- UI 更新 ---
-
+// === UI 更新 ===
 function renderMeritAndLight() {
   meritValueEl.textContent = merit;
 
@@ -347,8 +345,7 @@ function renderLastLotIfAny() {
   }
 }
 
-// --- 主流程：按鈕邏輯 ---
-
+// === 主流程：按鈕邏輯 ===
 function handleMainAction() {
   if (state === "ready" || state === "notApproved") {
     resetThrowState();
@@ -388,7 +385,7 @@ function performThrow() {
       updateStatusText();
     } else {
       if (successCount === 3) {
-        // 三個聖筊 → 抽籤動畫後顯示詩籤
+        // 三個聖筊 → 抽籤動畫再顯示詩籤
         animateTubeDraw(() => {
           drawLotAndShow();
         });
@@ -403,7 +400,7 @@ function performThrow() {
 
 function shakeLotTube() {
   lotTubeEl.classList.remove("shake");
-  void lotTubeEl.offsetWidth; // 重新觸發動畫
+  void lotTubeEl.offsetWidth;
   lotTubeEl.classList.add("shake");
 }
 
@@ -422,8 +419,7 @@ function resetThrowState() {
   successCount = 0;
 }
 
-// --- 抽籤與紀錄 ---
-
+// === 抽籤與紀錄 ===
 function drawLotAndShow() {
   const index = Math.floor(Math.random() * lots.length);
   const lot = lots[index];
@@ -474,8 +470,7 @@ function addRecord(lot) {
   saveRecords();
 }
 
-// --- 光明燈 ---
-
+// === 光明燈 ===
 function updateLightTime() {
   const now = Date.now();
   if (lightEndTime && now >= lightEndTime) {
@@ -501,8 +496,7 @@ function handleLightBtnClick() {
     "🕯️ 光明燈已點亮七天，熊熊食神祝福你身體健康、萬事如意！";
 }
 
-// --- 抽籤紀錄 Modal ---
-
+// === 抽籤紀錄 Modal ===
 function openHistoryModal() {
   renderHistoryList();
   historyModal.classList.add("show");
@@ -520,8 +514,8 @@ function renderHistoryList() {
   }
 
   historyListEl.innerHTML = records
-    .map((r) => {
-      return `
+    .map(
+      (r) => `
         <div class="record-item">
           <div class="record-time">${r.time}</div>
           <div class="record-main">${r.title}｜${r.fortune}｜${r.summary}</div>
@@ -529,8 +523,8 @@ function renderHistoryList() {
             食物：約 ${r.calories} kcal｜建議運動：約 ${r.exerciseMinutes} 分鐘
           </div>
         </div>
-      `;
-    })
+      `
+    )
     .join("");
 }
 
@@ -543,8 +537,7 @@ function clearHistory() {
   renderHistoryList();
 }
 
-// --- 詩籤 Modal ---
-
+// === 詩籤 Modal ===
 function openLotModal(lot) {
   if (!lot) lot = currentLot;
   if (!lot) return;
