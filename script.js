@@ -882,3 +882,9 @@ function formatNow() {
 function randomFrom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
+function randomFrom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// 讓 HTML 的 onclick 可以呼叫到
+window.closeAllModals = closeAllModals;
