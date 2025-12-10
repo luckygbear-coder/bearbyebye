@@ -11,7 +11,7 @@ body {
     sans-serif;
   background: #ffeec9;
   color: #4b2a24;
-  overflow: hidden; /* 不讓畫面捲動 */
+  overflow: hidden; /* 不讓整頁捲動 */
 }
 
 /* 整個 App 外框 */
@@ -19,7 +19,7 @@ body {
   max-width: 480px;
   height: 100vh;
   margin: 0 auto;
-  padding: 10px 12px;
+  padding: 8px 12px 10px;
   display: flex;
   flex-direction: column;
 }
@@ -42,14 +42,14 @@ body {
   color: #8c5a3f;
 }
 
-/* 中間主視覺（廟＋結果） */
+/* 中間主視覺（廟＋摘要） */
 .app-main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;     /* 水平置中 */
-  justify-content: flex-start; /* 往上排 */
-  padding: 4px 0;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
 }
 
 /* 廟的部分 */
@@ -58,7 +58,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin-bottom: 6px;
+  margin-top: 2px;
+  margin-bottom: 4px;
 }
 
 /* 廟上方招牌 */
@@ -82,7 +83,7 @@ body {
 .temple-body {
   position: relative;
   width: 260px;
-  height: 170px;
+  height: 150px;
   background: #fbe4c0;
   border-radius: 0 0 20px 20px;
   border: 3px solid #d28a38;
@@ -93,7 +94,7 @@ body {
 /* 春聯 對聯 */
 .couplet {
   position: absolute;
-  top: 24px;
+  top: 22px;
   width: 32px;
   background: #b4391b;
   color: #fffbdd;
@@ -124,8 +125,8 @@ body {
   position: absolute;
   left: 45px;
   right: 45px;
-  top: 26px;
-  bottom: 40px;
+  top: 24px;
+  bottom: 38px;
   background: #fdf6de;
   border-radius: 12px;
   border: 2px solid #e9c58b;
@@ -165,11 +166,6 @@ body {
   justify-content: center;
   padding-top: 2px;
   box-shadow: 0 3px 0 #7a3f1e;
-  transition: transform 0.15s ease;
-}
-
-.lot-tube.shake {
-  transform: translateY(-3px) rotate(-4deg);
 }
 
 .lot-stick {
@@ -182,6 +178,30 @@ body {
   font-size: 12px;
   color: #7a3f1e;
   box-shadow: 0 1px 0 #cba070;
+}
+
+/* 擲筊抖動動畫 */
+.lot-tube.shake {
+  animation: tubeShake 0.4s ease;
+}
+
+@keyframes tubeShake {
+  0% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-2px) rotate(-4deg); }
+  50% { transform: translateY(0) rotate(3deg); }
+  75% { transform: translateY(-1px) rotate(-2deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+/* 抽籤彈起動畫 */
+.lot-tube.draw {
+  animation: tubeDraw 0.6s ease-out;
+}
+
+@keyframes tubeDraw {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
 }
 
 /* 門簾 */
@@ -203,34 +223,34 @@ body {
 /* 結果區 */
 .result-section {
   width: 100%;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .status-text {
   font-size: 12px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: #6b4333;
   text-align: center;
 }
 
-/* 結果卡片 */
+/* 摘要卡片（高度很矮，不會超出畫面） */
 .result-card {
   background: #fff7e6;
   border-radius: 16px;
   border: 2px solid #e1b676;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
-  padding: 10px 12px;
-  height: 185px;
+  padding: 6px 10px;
+  min-height: 64px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .lot-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .lot-number {
@@ -262,41 +282,9 @@ body {
   color: #8b1f2e;
 }
 
-.lot-poem {
-  font-size: 12px;
-  line-height: 1.4;
-  margin-bottom: 4px;
-  white-space: pre-line;
-}
-
-.lot-meaning {
+.last-lot-summary {
   font-size: 11px;
-  line-height: 1.4;
-  margin-bottom: 4px;
   color: #5e4033;
-}
-
-/* 食物區塊 */
-.lot-food-block {
-  border-top: 1px dashed #e1b676;
-  padding-top: 4px;
-  margin-top: 2px;
-  font-size: 11px;
-}
-
-.lot-food-title {
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-
-.lot-food-text {
-  margin-bottom: 2px;
-}
-
-.lot-calorie,
-.lot-exercise {
-  font-size: 10px;
-  color: #6b4333;
 }
 
 /* 頁尾 */
@@ -307,7 +295,7 @@ body {
 /* 主按鈕 */
 .main-btn {
   width: 100%;
-  padding: 10px 0;
+  padding: 9px 0;
   border-radius: 999px;
   border: none;
   font-size: 15px;
@@ -406,7 +394,7 @@ body {
   text-decoration: none;
 }
 
-/* Modal */
+/* === 共用 Modal === */
 .modal {
   position: fixed;
   inset: 0;
@@ -459,29 +447,9 @@ body {
 }
 
 .modal-body {
-  max-height: 220px;
+  max-height: 240px;
   overflow-y: auto;
   padding-right: 4px;
-}
-
-.record-item {
-  border-bottom: 1px dashed #e1b676;
-  padding: 4px 0;
-}
-
-.record-time {
-  font-size: 11px;
-  color: #8c5a3f;
-}
-
-.record-main {
-  font-size: 12px;
-  margin: 1px 0;
-}
-
-.record-extra {
-  font-size: 10px;
-  color: #6b4333;
 }
 
 .modal-footer {
@@ -500,4 +468,61 @@ body {
   cursor: pointer;
   background: #f6c2c2;
   color: #8b1f2e;
+}
+
+/* 詩籤 Modal 專用樣式 */
+.lot-dialog {
+  max-height: 90vh;
+}
+
+.lot-modal-body {
+  font-size: 12px;
+}
+
+.lot-modal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.lot-modal-number {
+  font-weight: 700;
+  color: #8b421f;
+}
+
+.lot-modal-fortune {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #fbe69d;
+  color: #66330f;
+}
+
+.lot-modal-poem {
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  white-space: pre-line;
+}
+
+.lot-modal-meaning {
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  color: #5e4033;
+}
+
+.lot-modal-food-title {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.lot-modal-food,
+.lot-modal-cal,
+.lot-modal-ex {
+  font-size: 11px;
+  color: #6b4333;
+  margin-bottom: 2px;
 }
