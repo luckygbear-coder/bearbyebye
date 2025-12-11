@@ -42,12 +42,12 @@
 
     <!-- 狀態提示文字 -->
     <p id="statusText" class="status-text">
-      請先擲筊，一次聖筊就可以抽籤。
+      請先擲筊，問問愛吃熊今天要吃什麼。
     </p>
 
-    <!-- 抽籤按鈕：小奶油色 pill -->
-    <section class="draw-row">
-      <button id="drawBtn" class="pill-btn draw-btn hidden">
+    <!-- 抽籤按鈕：這版不需要改按，只保留 class / id 以備未來使用 -->
+    <section class="draw-row hidden">
+      <button id="drawBtn" class="pill-btn draw-btn">
         🧧 抽籤
       </button>
     </section>
@@ -67,7 +67,7 @@
       </button>
 
       <button id="igBtn" class="round-btn">
-        📸<span>追蹤 IG</span>
+        📸<span>追蹤愛吃熊</span>
       </button>
     </section>
 
@@ -87,10 +87,10 @@
     </div>
   </div>
 
-  <!-- 抽籤紀錄彈窗（script.js 會填內容） -->
+  <!-- 抽籤紀錄彈窗 -->
   <div id="historyModal" class="modal hidden"
        onclick="if (event.target === this) window.closeAllModals();">
-    <div class="modal-content">
+    <div class="modal-content history-modal-content">
       <div id="historyList"></div>
       <button id="closeHistory" class="close-btn"
               onclick="window.closeAllModals();">
@@ -99,12 +99,9 @@
     </div>
   </div>
 
-  <!-- 原本的邏輯檔 -->
-  <script src="script.js"></script>
-
-  <!-- 額外 UI / 動畫 / 詩籤視窗邏輯 -->
+  <!-- ====== 全部邏輯都寫在這裡，不再需要外部 script.js ====== -->
   <script>
-    /* --- 啟動畫面淡出 --- */
+    /* === 啟動畫面淡出 === */
     function hideLoadingScreen() {
       const loading = document.getElementById('loading-screen');
       if (!loading) return;
@@ -117,45 +114,7 @@
       setTimeout(hideLoadingScreen, 1800);
     });
 
-    /* --- 愛吃熊祝福語（供品用） --- */
-    const BEAR_BLESSINGS = [
-      "愛吃熊送你一口好心情，記得慢慢吃、好好吃。",
-      "你今天辛苦了，給自己一份好吃的，就會更有力量喔！",
-      "肚子被照顧好，心情也會跟著變甜甜的。",
-      "願每一餐都能安慰你，愛吃熊陪你一起吃好料。",
-      "好好吃飯不是奢侈，是一種對自己的溫柔。",
-      "吃飽的人最可愛，願你今天也是可愛的。",
-      "愛吃熊祝福你：每一口都剛剛好、每一步都順順的。",
-      "不用勉強微笑，先吃好吃的，笑容就會自然跑出來。",
-      "給自己一口溫暖，世界就會變得沒那麼可怕。",
-      "願你的肚子飽飽、心也暖暖，今天辛苦的都值得。",
-      "愛吃熊提醒你：好好吃飯，是最簡單的幸福魔法。",
-      "願你每一餐都能療癒自己，而不是勉強自己。",
-      "你值得被好好餵飽，也值得被好好對待。",
-      "吃東西時請放鬆，剩下的事交給明天的你就好。",
-      "願好的味道陪著你，把壞心情一點一點融化掉。",
-      "愛吃熊給你一個抱抱，再給你一份好吃的。",
-      "願你的碗裡永遠裝著安心、期待與小小的快樂。",
-      "如果覺得累，那就先吃好吃的，愛吃熊會陪著你。"
-    ];
-
-    /* --- 愛吃熊建議（詩籤視窗用）--- */
-    const BEAR_ADVICE = [
-      "今天先照顧好肚子，再去面對那些讓你緊張的事情就好。",
-      "慢慢吃、慢慢想，不用一次把所有答案都找出來。",
-      "如果覺得心裡亂，就先從一頓好好吃的餐開始整理生活。",
-      "允許自己挑一個真的想吃的，而不是「應該吃」的東西。",
-      "吃飯時專心享受味道，就是在好好陪伴自己。",
-      "你已經很努力了，給自己一點喜歡的食物當小獎勵吧。"
-    ];
-
-    function getRandomAdvice() {
-      return BEAR_ADVICE[
-        Math.floor(Math.random() * BEAR_ADVICE.length)
-      ];
-    }
-
-    /* --- 功德值：只會增加，不會減少 --- */
+    /* === 功德值 +1 動畫 === */
     window.addMerit = function (delta) {
       if (!delta || delta <= 0) return;
 
@@ -177,7 +136,148 @@
       setTimeout(() => plus.remove(), 900);
     };
 
-    /* --- 熊熊祝福氣泡（上供品顯示） --- */
+    /* === 愛吃熊祝福語（供品用） === */
+    const BEAR_BLESSINGS = [
+      "愛吃熊送你一口好心情，記得慢慢吃、好好吃。",
+      "你今天辛苦了，給自己一份好吃的，就會更有力量喔！",
+      "肚子被照顧好，心情也會跟著變甜甜的。",
+      "願每一餐都能安慰你，愛吃熊陪你一起吃好料。",
+      "好好吃飯不是奢侈，是一種對自己的溫柔。",
+      "吃飽的人最可愛，願你今天也是可愛的。",
+      "愛吃熊祝福你：每一口都剛剛好、每一步都順順的。",
+      "不用勉強微笑，先吃好吃的，笑容就會自然跑出來。",
+      "給自己一口溫暖，世界就會變得沒那麼可怕。",
+      "願你的肚子飽飽、心也暖暖，今天辛苦的都值得。",
+      "愛吃熊提醒你：好好吃飯，是最簡單的幸福魔法。",
+      "願你每一餐都能療癒自己，而不是勉強自己。",
+      "你值得被好好餵飽，也值得被好好對待。",
+      "吃東西時請放鬆，剩下的事交給明天的你就好。",
+      "願好的味道陪著你，把壞心情一點一點融化掉。",
+      "愛吃熊給你一個抱抱，再給你一份好吃的。",
+      "願你的碗裡永遠裝著安心、期待與小小的快樂。",
+      "如果覺得累，那就先吃好吃的，愛吃熊會陪著你。"
+    ];
+
+    /* === 愛吃熊小提醒（詩籤視窗用）=== */
+    const BEAR_ADVICE = [
+      "今天先照顧好肚子，再去面對那些讓你緊張的事情就好。",
+      "慢慢吃、慢慢想，不用一次把所有答案都找出來。",
+      "如果覺得心裡亂，就先從一頓好好吃的餐開始整理生活。",
+      "允許自己挑一個真的想吃的，而不是「應該吃」的東西。",
+      "吃飯時專心享受味道，就是在好好陪伴自己。",
+      "你已經很努力了，給自己一點喜歡的食物當小獎勵吧。"
+    ];
+
+    function getRandomAdvice() {
+      return BEAR_ADVICE[
+        Math.floor(Math.random() * BEAR_ADVICE.length)
+      ];
+    }
+
+    /* === 詩籤資料（範例，可之後自己增加 / 替換） === */
+    const LOTS = [
+      {
+        no: "第一籤",
+        title: "暖湯救餓龍",
+        mood: "暖暖飽",
+        food: "味噌湯麵一碗",
+        kcal: 480,
+        minutes: 20
+      },
+      {
+        no: "第二籤",
+        title: "暖湯好人緣",
+        mood: "暖暖飽",
+        food: "暖呼呼湯麵一碗",
+        kcal: 560,
+        minutes: 22
+      },
+      {
+        no: "第三籤",
+        title: "甜甜補勇氣",
+        mood: "甜甜飽",
+        food: "黑糖珍珠奶茶（半糖少冰）",
+        kcal: 420,
+        minutes: 25
+      },
+      {
+        no: "第八籤",
+        title: "奶茶小確幸",
+        mood: "幸福飽",
+        food: "鮮奶茶一杯＋小點心",
+        kcal: 320,
+        minutes: 20
+      },
+      {
+        no: "第九籤",
+        title: "水果小點心",
+        mood: "微微飽",
+        food: "綜合水果盤一份",
+        kcal: 120,
+        minutes: 10
+      },
+      {
+        no: "第十二籤",
+        title: "轉彎牛肉麵",
+        mood: "暖暖飽",
+        food: "牛肉麵一碗",
+        kcal: 680,
+        minutes: 27
+      },
+      {
+        no: "第十三籤",
+        title: "便當慢慢嚐",
+        mood: "需要休息",
+        food: "家常便當一份（多菜少炸）",
+        kcal: 720,
+        minutes: 29
+      },
+      {
+        no: "第十五籤",
+        title: "小辣醒腦湯",
+        mood: "微辣飽",
+        food: "小辣酸辣湯一碗",
+        kcal: 350,
+        minutes: 19
+      },
+      {
+        no: "第十九籤",
+        title: "火鍋暖家人",
+        mood: "團圓飽",
+        food: "蔬菜多多火鍋一鍋（大家一起分）",
+        kcal: 750,
+        minutes: 30
+      },
+      {
+        no: "第二十二籤",
+        title: "水果休息站",
+        mood: "補充元氣",
+        food: "一盤切好的水果＋熱茶",
+        kcal: 110,
+        minutes: 9
+      }
+    ];
+
+    /* === localStorage 抽籤紀錄 === */
+    const STORAGE_KEY = "eatBearLotsHistory";
+
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) return arr;
+        return [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveHistory(list) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    }
+
+    /* === 顯示熊熊祝福氣泡（上供品按鈕） === */
     function showBearBlessing() {
       const bubble = document.getElementById('bearBubble');
       if (!bubble) return;
@@ -191,71 +291,197 @@
       bubble.classList.add('show');
     }
 
-    /* --- 關閉所有彈窗 --- */
+    /* === 關閉所有彈窗 === */
     window.closeAllModals = function () {
-      const lotModal = document.getElementById('lotModal');
-      const historyModal = document.getElementById('historyModal');
-      if (lotModal) lotModal.classList.add('hidden');
-      if (historyModal) historyModal.classList.add('hidden');
+      document.getElementById('lotModal')?.classList.add('hidden');
+      document.getElementById('historyModal')?.classList.add('hidden');
     };
 
-    /* --- DOM 載入後的額外處理 --- */
-    document.addEventListener('DOMContentLoaded', () => {
-      const offerBtn = document.getElementById('offerBtn');
-      const igBtn = document.getElementById('igBtn');
-      const historyBtn = document.getElementById('historyBtn');
-      const boBtn = document.getElementById('boBtn');
+    /* === 抽籤：從 LOTS 中隨機選一張 === */
+    function drawLot(isFromHistory, historyRecord) {
+      const lotCard = document.getElementById('currentLotCard');
+      if (!lotCard) return;
 
-      /* 上供品：永遠可以按，按一次 +1 功德 + 祝福 */
+      let lot, timeText;
+      if (isFromHistory && historyRecord) {
+        // 從歷史紀錄重看
+        lotCard.innerText = historyRecord.fullText;
+        return;
+      } else {
+        lot =
+          LOTS[Math.floor(Math.random() * LOTS.length)];
+      }
+
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const MM = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      timeText = `${yyyy}/${MM}/${dd} ${hh}:${mm}`;
+
+      const fullText =
+        `${lot.no}．${lot.title}｜${lot.mood}\n` +
+        `${lot.food}\n` +
+        `約 ${lot.kcal} kcal｜建議小運動 ${lot.minutes} 分鐘`;
+
+      // 寫入中繼區（這行會觸發 MutationObserver → 打開詩籤彈窗）
+      lotCard.innerText = fullText;
+
+      // 存進歷史
+      const history = loadHistory();
+      history.push({
+        time: now.getTime(),
+        timeText,
+        fullText
+      });
+      saveHistory(history);
+      renderHistory();
+    }
+
+    /* === 抽籤紀錄畫面 === */
+    function renderHistory() {
+      const historyListEl = document.getElementById('historyList');
+      if (!historyListEl) return;
+
+      const history = loadHistory().sort((a, b) => b.time - a.time);
+
+      historyListEl.innerHTML = "";
+
+      const title = document.createElement('div');
+      title.className = 'history-title';
+      title.textContent = "📘 抽籤紀錄";
+      historyListEl.appendChild(title);
+
+      if (history.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'history-empty';
+        empty.textContent = "目前還沒有抽籤紀錄。";
+        historyListEl.appendChild(empty);
+        return;
+      }
+
+      history.forEach((record) => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+
+        const time = document.createElement('div');
+        time.className = 'history-time';
+        time.textContent = record.timeText;
+
+        const lines = record.fullText.split(/\n+/);
+        const summaryLine = document.createElement('div');
+        summaryLine.className = 'history-summary';
+        summaryLine.textContent = lines[0] || "";
+
+        const detailLine = document.createElement('div');
+        detailLine.className = 'history-detail';
+        detailLine.textContent = (lines[1] || "") + " ｜ " + (lines[2] || "");
+
+        item.appendChild(time);
+        item.appendChild(summaryLine);
+        item.appendChild(detailLine);
+
+        item.addEventListener('click', () => {
+          // 點歷史：先關掉紀錄彈窗，再重顯詩籤
+          const historyModal = document.getElementById('historyModal');
+          if (historyModal) historyModal.classList.add('hidden');
+
+          const lotCard = document.getElementById('currentLotCard');
+          if (lotCard) lotCard.innerText = record.fullText; // 交給 observer 開窗
+        });
+
+        historyListEl.appendChild(item);
+
+        // 分隔線
+        const hr = document.createElement('div');
+        hr.className = 'history-divider';
+        historyListEl.appendChild(hr);
+      });
+    }
+
+    /* === DOM 準備好之後，掛上事件 === */
+    document.addEventListener('DOMContentLoaded', () => {
+      const boBtn = document.getElementById('boBtn');
+      const offerBtn = document.getElementById('offerBtn');
+      const historyBtn = document.getElementById('historyBtn');
+      const igBtn = document.getElementById('igBtn');
+      const statusText = document.getElementById('statusText');
+      const lotCard = document.getElementById('currentLotCard');
+      const lotModal = document.getElementById('lotModal');
+      const lotText = document.getElementById('lotText');
+      const historyModal = document.getElementById('historyModal');
+
+      /* --- 擲筊：每次都 +1 功德；90% 聖筊會直接抽籤 --- */
+      if (boBtn) {
+        boBtn.addEventListener('click', () => {
+          window.addMerit(1); // 無論結果都 +1
+
+          const holy = Math.random() < 0.9; // 聖筊機率 90%
+          if (holy) {
+            if (statusText)
+              statusText.textContent =
+                "聖筊！愛吃熊准許你抽籤～詩籤已經幫你準備好了。";
+            // 直接抽籤
+            drawLot(false);
+          } else {
+            if (statusText)
+              statusText.textContent =
+                "這次不是聖筊，再擲一次問問愛吃熊吧～";
+          }
+        });
+      }
+
+      /* --- 上供品：+1 功德 + 熊熊祝福 --- */
       if (offerBtn) {
-        offerBtn.disabled = false;
-        offerBtn.classList.remove('disabled');
         offerBtn.addEventListener('click', () => {
           window.addMerit(1);
           showBearBlessing();
         });
       }
 
-      /* 追蹤 IG：開啟 IG 連結 */
+      /* --- 抽籤紀錄按鈕 --- */
+      if (historyBtn && historyModal) {
+        historyBtn.addEventListener('click', () => {
+          renderHistory();
+          historyModal.classList.remove('hidden');
+        });
+      }
+
+      /* --- 追蹤愛吃熊：開 IG 網頁 --- */
       if (igBtn) {
         igBtn.addEventListener('click', () => {
           window.open('https://instagram.com/luckygbear', '_blank');
         });
       }
 
-      /* 抽籤紀錄按鈕：script.js 會負責打開 #historyModal */
-      if (historyBtn) historyBtn.classList.remove('hidden');
-      if (boBtn) boBtn.classList.remove('hidden');
-
-      /* --- 詩籤卡變化 -> 顯示詩籤彈窗 --- */
-      const lotCard = document.getElementById('currentLotCard');
-      const lotModal = document.getElementById('lotModal');
-      const lotText = document.getElementById('lotText');
-      const historyModal = document.getElementById('historyModal');
-
+      /* --- 監聽 lotCard 變化 → 顯示詩籤彈窗（並刪掉那句「點這裡可再次查看完整詩籤」） --- */
       if (lotCard && lotModal && lotText) {
         const observer = new MutationObserver(() => {
           const rawText = lotCard.innerText.trim();
           if (!rawText) return;
 
-          // 關掉抽籤紀錄視窗，避免遮住詩籤
+          // 把抽籤紀錄關掉，避免擋住
           if (historyModal) historyModal.classList.add('hidden');
 
-          // 解析原本的詩籤文字
           let lines = rawText.split(/\n+/).map(l => l.trim()).filter(Boolean);
 
-          // 把「(點這裡可再次查看完整詩籤)」這句從內容移除
+          // 把「(點這裡可再次查看完整詩籤)」這類提示文字移除
           lines = lines.filter(line => !line.includes("點這裡可再次查看完整詩籤"));
 
           const title = lines[0] || "今日美食籤";
-          const dish = lines[1] || "好料一份";
-          const detailLines = lines.slice(2);
-          const detailHtml = detailLines
+          const detailLine1 = lines[1] || "";
+          const detailLine2 = lines[2] || "";
+          const detailHtml = [detailLine1, detailLine2]
+            .filter(Boolean)
             .map(l => l.replace(/ /g, "&nbsp;"))
             .join("<br>");
 
+          // 從標題中抓 dish 名字當第一句
+          // 例如：「第三籤．甜甜補勇氣｜甜甜飽」
+          let dishShort = detailLine1 || "好吃的一餐";
           const poemLines = [
-            `${dish}香氣暖心房`,
+            `${dishShort}香氣暖心房`,
             "慢慢入口不慌不忙",
             "照顧肚子也是力量",
             "好好吃飯勇氣滿滿"
@@ -287,10 +513,19 @@
 
           lotModal.classList.remove('hidden');
           lotCard.classList.add('hidden');
+
+          // 狀態文字改為：熊熊已給你今日吃貨詩籤
+          if (statusText) {
+            statusText.textContent =
+              "熊熊食神已給你今日的吃貨詩籤，可以慢慢品味，也可以再擲筊問下一餐。";
+          }
         });
 
         observer.observe(lotCard, { childList: true, subtree: true });
       }
+
+      // 一開始就把歷史預先整理好
+      renderHistory();
     });
   </script>
 </body>
