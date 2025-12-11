@@ -1349,7 +1349,239 @@
     explain: "象徵你的生活節奏會變得更順。",
     bear: "熊熊提醒：加辣更有層次～"
   });
-  
+    // ========= 第 6 / 6 份：抽籤功能邏輯 & 紀錄 =========
+
+  const btnDraw      = document.getElementById("btnDraw");
+  const btnHistory   = document.getElementById("btnHistory");
+  const loadingEl    = document.getElementById("loading") || { style: {} };
+
+  const tabTravel    = document.getElementById("tabTravel");
+  const tabFood      = document.getElementById("tabFood");
+
+  const modalResultTitle = document.getElementById("modalResultTitle");
+  const modalResultMeta  = document.getElementById("modalResultMeta");
+  const modalResultDesc  = document.getElementById("modalResultDesc");
+  const modalResultExtra = document.getElementById("modalResultExtra");
+  const modalResultBear  = document.getElementById("modalResultBear");
+
+  let currentTab = "travel"; // travel or food
+  let historyRecords = [];
+
+  // 取得今天日期（YYYY-MM-DD）
+  function getTodayStr() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  // 載入歷史紀錄 & 今日次數
+  function loadHistory() {
+    const raw = localStorage.getItem("travelFoodHistory");
+    historyRecords = raw ? JSON.parse(raw) : [];
+
+    const todayStr = getTodayStr();
+    todayTravelCount = 0;
+    todayFoodCount = 0;
+
+    historyRecords.forEach(r => {
+      if (r.date === todayStr) {
+        if (r.type === "旅遊") todayTravelCount++;
+        if (r.type === "美食") todayFoodCount++;
+      }
+    });
+
+    updateCounts();
+  }
+
+  function saveHistory() {
+    // 只保留最近 80 筆，避免太肥
+    const trimmed = historyRecords.slice(0, 80);
+    localStorage.setItem("travelFoodHistory", JSON.stringify(trimmed));
+  }
+
+  function addHistory(record) {
+    historyRecords.unshift(record);
+    saveHistory();
+  }
+
+  // 繪製紀錄列表
+  function renderHistoryList() {
+    if (!historyRecords.length) {
+      historyList.innerHTML =
+        '<div class="history-empty">目前還沒有紀錄唷～可以先抽一張籤看看 🐻</div>';
+      return;
+    }
+
+    historyList.innerHTML = historyRecords
+      .map((r, idx) => {
+        const regionPart = r.region ? `｜地區：${r.region}` : "";
+        return `
+          <div class="history-item" data-idx="${idx}">
+            <div class="history-title">[${r.type}] ${r.title}</div>
+            <div class="history-meta">${r.date}${regionPart}</div>
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  // 點擊紀錄，重新查看籤詩
+  historyList.addEventListener("click", (e) => {
+    const item = e.target.closest(".history-item");
+    if (!item) return;
+    const idx = Number(item.dataset.idx);
+    const r = historyRecords[idx];
+    if (!r) return;
+
+    modalResultTitle.textContent = r.title;
+    modalResultMeta.textContent  = r.meta;
+    modalResultDesc.textContent  = r.desc;
+    modalResultExtra.textContent = r.extra;
+    modalResultBear.textContent  = r.bear;
+
+    openModal(modalResult);
+  });
+
+  // 分頁切換：去哪玩 / 吃什麼
+  function setTab(tab) {
+    currentTab = tab;
+    if (tab === "travel") {
+      tabTravel.classList.add("active");
+      tabFood.classList.remove("active");
+      btnDraw.textContent = "抽旅遊籤 ✨";
+    } else {
+      tabFood.classList.add("active");
+      tabTravel.classList.remove("active");
+      btnDraw.textContent = "抽美食籤 🍙";
+    }
+  }
+
+  tabTravel.addEventListener("click", () => setTab("travel"));
+  tabFood.addEventListener("click", () => setTab("food"));
+
+  // 抽旅遊籤
+  function drawTravel() {
+    if (!travelSpots.length) {
+      alert("旅遊資料還在路上，等等再試一次～");
+      return;
+    }
+
+    showBearTalk();
+    if (loadingEl.style) loadingEl.style.display = "flex";
+
+    setTimeout(() => {
+      if (loadingEl.style) loadingEl.style.display = "none";
+
+      // 依地區過濾
+      let pool = travelSpots;
+      if (selectedRegion !== "全台") {
+        const filtered = travelSpots.filter(s => s.region === selectedRegion);
+        if (filtered.length) pool = filtered;
+      }
+
+      const spot = pool[Math.floor(Math.random() * pool.length)];
+      const todayStr = getTodayStr();
+      todayTravelCount++;
+      updateCounts();
+
+      const meta  = `地區：${spot.region}｜出遊對象：${selectedTarget}｜天數：${selectedDays} 天`;
+      const extra = `建議玩法：${spot.suggest}\n推薦美食：${spot.food}`;
+      const bear  = `🐻 熊熊說：${spot.bear}`;
+
+      modalResultTitle.textContent = spot.title;
+      modalResultMeta.textContent  = meta;
+      modalResultDesc.textContent  = spot.desc;
+      modalResultExtra.textContent = extra;
+      modalResultBear.textContent  = bear;
+
+      openModal(modalResult);
+
+      addHistory({
+        type: "旅遊",
+        date: todayStr,
+        title: spot.title,
+        region: spot.region,
+        meta,
+        desc: spot.desc,
+        extra,
+        bear
+      });
+    }, 900);
+  }
+
+  // 抽美食籤
+  function drawFood() {
+    if (!foodSpots.length) {
+      alert("美食資料還在烹煮中，等等再試一次～");
+      return;
+    }
+
+    showBearTalk();
+    if (loadingEl.style) loadingEl.style.display = "flex";
+
+    setTimeout(() => {
+      if (loadingEl.style) loadingEl.style.display = "none";
+
+      const food = foodSpots[Math.floor(Math.random() * foodSpots.length)];
+      const todayStr = getTodayStr();
+      todayFoodCount++;
+      updateCounts();
+
+      const meta  = `熱量：約 ${food.kcal} 大卡｜建議運動：約 ${food.sport} 分鐘`;
+      const extra = `美食籤解說：${food.explain}`;
+      const bear  = `🐻 熊熊提醒：${food.bear}`;
+
+      modalResultTitle.textContent = `【美食籤】${food.title}`;
+      modalResultMeta.textContent  = meta;
+      modalResultDesc.textContent  = food.desc;
+      modalResultExtra.textContent = extra;
+      modalResultBear.textContent  = bear;
+
+      openModal(modalResult);
+
+      addHistory({
+        type: "美食",
+        date: todayStr,
+        title: food.title,
+        region: "",
+        meta,
+        desc: food.desc,
+        extra,
+        bear
+      });
+    }, 900);
+  }
+
+  // 抽籤按鈕：依照目前分頁決定抽哪一種
+  btnDraw.addEventListener("click", () => {
+    if (currentTab === "travel") {
+      drawTravel();
+    } else {
+      drawFood();
+    }
+  });
+
+  // 查看紀錄按鈕
+  btnHistory.addEventListener("click", () => {
+    renderHistoryList();
+    openModal(modalHistory);
+  });
+
+  // 點擊背景關閉 Modal（可選）
+  [modalResult, modalHistory].forEach(backdrop => {
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) {
+        backdrop.classList.remove("show");
+      }
+    });
+  });
+
+  // 初始化
+  setTab("travel");
+  loadHistory();
+  updateCounts();
+
+</script>
+</body>
+</html>
 
   /* 使用者選擇狀態 */
   let selectedRegion = "全台";
