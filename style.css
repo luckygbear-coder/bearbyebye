@@ -136,17 +136,16 @@ body {
   }
 }
 
-/* === 浮動圓形按鈕（右邊中間） === */
+/* 浮動按鈕：改成在「好好吃喔」橫批下面、置中一排 */
 .floating-buttons {
   position: absolute;
-  right: 12px;
-  top: 50%;
-  bottom: auto;
-  transform: translateY(-50%);
+  left: 50%;
+  bottom: 18px;              /* 距離底部一點點，可以再微調 */
+  transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;       /* 改成橫向排列 */
   gap: 10px;
-  z-index: 10;
+  z-index: 10;               /* 一定蓋在背景圖上 */
 }
 
 .circle-btn {
