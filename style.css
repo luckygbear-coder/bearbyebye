@@ -193,11 +193,9 @@ body {
   margin-bottom: 8px;
 }
 
-/* === 抽籤小 pill 按鈕 === */
+/* === 抽籤小 pill 按鈕（這版隱藏） === */
 .draw-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 12px;
+  display: none;
 }
 
 .pill-btn {
@@ -215,10 +213,6 @@ body {
   cursor: pointer;
 }
 
-.draw-btn {
-  min-width: 110px;
-}
-
 /* === 下方四顆奶油色圓形大按鈕 === */
 .round-button-row {
   display: flex;
@@ -226,6 +220,7 @@ body {
   flex-wrap: wrap;
   gap: 14px;
   margin-bottom: 8px;
+  margin-top: 12px;
 }
 
 .round-btn {
@@ -260,7 +255,7 @@ body {
   font-size: 14px;
 }
 
-/* === Modal 詩籤彈窗 === */
+/* === Modal 共用 === */
 .modal {
   position: fixed;
   inset: 0;
@@ -341,4 +336,58 @@ body {
   color: #fffaf0;
   font-size: 15px;
   cursor: pointer;
+}
+
+/* === 抽籤紀錄視窗 === */
+.history-modal-content {
+  max-height: 70vh; /* 再低一點，看起來像 3 筆 */
+}
+
+#historyList {
+  max-height: 320px;  /* 大概 3 筆高度 */
+  overflow-y: auto;
+}
+
+.history-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #b15532;
+  margin-bottom: 8px;
+}
+
+.history-empty {
+  font-size: 14px;
+  color: #7b4a31;
+}
+
+.history-item {
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.history-item:hover {
+  background: #ffefd7;
+}
+
+.history-time {
+  font-size: 12px;
+  color: #a5754d;
+  margin-bottom: 2px;
+}
+
+.history-summary {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.history-detail {
+  font-size: 13px;
+  color: #6b3f2b;
+}
+
+.history-divider {
+  height: 1px;
+  background: #e9c9a0;
+  margin: 6px 0;
 }
