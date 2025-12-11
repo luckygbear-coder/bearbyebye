@@ -1,116 +1,155 @@
-/* ======= 全域設定 ======= */
-body {
+/* ======= 全域設定：高度鎖住不要滑動 ======= */
+html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+
+body {
   background: #fff3d8;
   font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden; /* 不要上下滑動 */
+}
+
+/* 讓內容在一個高度內排好 */
+.app-wrap {
+  max-width: 480px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 10px 14px 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ======= Header 區塊 ======= */
 
 .header-wrap {
   text-align: left;
-  padding: 14px 14px 4px 14px;
+  padding: 4px 0 6px;
+  flex-shrink: 0;
 }
 
 /* 主標題 */
 .page-title {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
   color: #7a4329;
   font-weight: 700;
 }
 
 /* 副標題 */
 .page-subtitle {
-  margin: 4px 0 14px 0;
-  font-size: 13px;
+  margin: 2px 0 10px 0;
+  font-size: 12px;
   color: #9b5b36;
 }
 
-/* 上方兩顆按鈕（功德值 + 出遊熊） */
+/* 上方兩顆按鈕（功德值 + 去哪玩） */
 .top-buttons {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 6px;
 }
 
 /* 功德值膠囊樣式 */
 .merit-pill {
-  font-size: 13px;
+  font-size: 12px;
   color: #9b5b36;
   background: #fff7e0;
-  padding: 6px 14px;
+  padding: 4px 10px;
   border-radius: 999px;
   border: 1.5px solid #f0c57a;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   display: inline-block;
   width: fit-content;
 }
 
-/* 出遊熊按鈕（可愛圓膠囊） */
+/* 去哪玩按鈕：縮小版 */
 .travel-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
 
   text-decoration: none;
   color: #7a4329;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 
   background: #fffaf2;
-  padding: 8px 16px;
+  padding: 5px 12px;
   border-radius: 999px;
   border: 1.5px solid #f5d1a8;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-  transition: 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: 0.12s ease;
 }
 
-/* 點擊按鈕動畫 */
 .travel-btn:active {
   transform: scale(0.96);
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-/* 出遊熊 icon（你可換成本地圖片） */
+/* 小 icon 可以再換成你自己的圖 */
 .travel-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
-/* ======= Banner 區 ======= */
+/* ======= 中間熊熊大圖 Banner 區 ======= */
 
-.banner img {
-  width: 100%;
-  display: block;
+.main-banner-wrap {
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.main-banner {
   border-radius: 18px;
+  overflow: hidden;
   border: 2px solid #f0c57a;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-/* ======= 主要按鈕區（抽籤 / 上供品 / 紀錄 / 愛吃熊） ======= */
-
-.menu-wrapper {
-  margin-top: 14px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 6px;
+/* 限制圖片高度，避免太長導致要滑動 */
+.main-banner img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  display: block;
 }
 
-/* 圓形功能按鈕統一樣式 */
+/* ======= 說明文字 ======= */
+
+.description-text {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #7a4329;
+  text-align: center;
+  margin: 6px 0 4px;
+}
+
+/* ======= 下方四顆圓形按鈕 ======= */
+
+.menu-wrapper {
+  flex-shrink: 0;
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+
+/* 圓形功能按鈕縮小版 */
 .menu-btn {
-  width: 78px;
-  height: 78px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background: #fffaf2;
   border: 1.5px solid #f5d1a8;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
   text-align: center;
-  padding-top: 10px;
-  font-size: 13px;
+  padding-top: 6px;
+  font-size: 12px;
   color: #7a4329;
   text-decoration: none;
   display: block;
@@ -118,35 +157,36 @@ body {
 }
 
 .menu-btn img {
-  width: 32px;
-  height: 32px;
-  margin-bottom: 6px;
+  width: 26px;
+  height: 26px;
+  margin-bottom: 4px;
 }
 
 .menu-btn:active {
   transform: scale(0.95);
 }
 
-/* ======= 文字敘述 ======= */
-.description-text {
-  font-size: 13px;
-  color: #7a4329;
-  text-align: center;
-  margin: 14px 0 10px;
+/* ======= 若有下方內容卡，塞進剩餘高度，可捲在卡片內 ======= */
+
+.content-area {
+  margin-top: 6px;
+  flex: 1;
+  overflow-y: auto;   /* 如果有很多文字，只在這個區塊裡面捲動 */
 }
 
-/* ======= 下方內容卡片 ======= */
-
+/* 抽籤結果 / 說明卡片 */
 .card {
-  background: #fff;
+  background: #ffffff;
   border-radius: 16px;
-  padding: 14px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  padding: 10px 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
   border: 2px solid #f3d7a7;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #7a4329;
 }
 
-/* ======= 抽籤結果視窗（若有使用） ======= */
+/* ======= Modal（如果有使用抽籤視窗） ======= */
 
 .modal-backdrop {
   position: fixed;
@@ -165,48 +205,51 @@ body {
   border-radius: 18px;
   border: 2px solid #f3c690;
   box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  padding: 16px;
+  padding: 14px;
   max-height: 80vh;
   overflow-y: auto;
 }
 
 .modal-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #7a4329;
 }
 
 .modal-sub {
-  font-size: 12px;
+  font-size: 11px;
   color: #9b5b36;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .modal-close {
   float: right;
   background: transparent;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   color: #a25a3a;
 }
 
 .tag-row span {
   background: #ffeedd;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 8px;
   font-size: 11px;
-  margin-right: 6px;
+  margin-right: 4px;
   color: #8b4a33;
 }
 
-/* ======= 響應式調整 ======= */
+/* ======= 小螢幕再微調 ======= */
 
 @media (max-width: 380px) {
   .page-title {
-    font-size: 22px;
+    font-size: 20px;
+  }
+  .main-banner img {
+    max-height: 220px;
   }
   .menu-btn {
-    width: 70px;
-    height: 70px;
+    width: 64px;
+    height: 64px;
   }
 }
