@@ -1,49 +1,19 @@
-/* === 共用設定 === */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
+/* ======= 全域設定 ======= */
 body {
   margin: 0;
-  background: #ffe9c7;
-  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, system-ui,
-    sans-serif;
-  color: #5c3523;
+  padding: 0;
+  background: #fff3d8;
+  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.hidden {
-  display: none !important;
-}
-
-.app {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 8px 16px 40px;
-}
-
-/* === 標題區 === */
-.header {
-  text-align: center;
-  margin-top: 42px; /* 上方留空給動態島與功德值 */
-  margin-bottom: 6px;
-}
-
-.title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #b15532;
-  letter-spacing: 0.2em;
-}
-/* --- Header 區塊 --- */
+/* ======= Header 區塊 ======= */
 
 .header-wrap {
   text-align: left;
-  padding: 10px 4px;
+  padding: 14px 14px 4px 14px;
 }
 
-/* 標題 */
+/* 主標題 */
 .page-title {
   margin: 0;
   font-size: 24px;
@@ -51,26 +21,27 @@ body {
   font-weight: 700;
 }
 
+/* 副標題 */
 .page-subtitle {
-  margin: 4px 0 10px 0;
+  margin: 4px 0 14px 0;
   font-size: 13px;
   color: #9b5b36;
 }
 
-/* 上方兩顆按鈕排在同一列 */
+/* 上方兩顆按鈕（功德值 + 出遊熊） */
 .top-buttons {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
+  align-items: flex-start;
+  gap: 8px;
 }
 
-/* 功德值膠囊 */
+/* 功德值膠囊樣式 */
 .merit-pill {
   font-size: 13px;
   color: #9b5b36;
   background: #fff7e0;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 999px;
   border: 1.5px solid #f0c57a;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
@@ -78,7 +49,7 @@ body {
   width: fit-content;
 }
 
-/* 出遊熊按鈕（模仿下面四顆圓形風格） */
+/* 出遊熊按鈕（可愛圓膠囊） */
 .travel-btn {
   display: inline-flex;
   align-items: center;
@@ -91,431 +62,151 @@ body {
   font-weight: 600;
 
   background: #fffaf2;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
   border: 1.5px solid #f5d1a8;
   box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  transition: 0.15s ease;
 }
 
-/* 小太陽 icon */
+/* 點擊按鈕動畫 */
+.travel-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* 出遊熊 icon（你可換成本地圖片） */
 .travel-icon {
   width: 18px;
   height: 18px;
 }
-.subtitle {
-  font-size: 13px;
-  color: #a36b52;
-  margin-top: 4px;
-}
 
-/* === 啟動畫面 === */
-#loading-screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffefc9;
-  z-index: 10000;
-}
+/* ======= Banner 區 ======= */
 
-#loading-screen img {
+.banner img {
   width: 100%;
-  height: 100%;
-  object-fit: contain; /* 整張圖完整顯示 */
-}
-
-#loading-screen.fade-out {
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-/* === 右上功德值角標 === */
-.merit-badge {
-  position: fixed;
-  top: 8px;
-  right: 10px;
-  padding: 6px 12px;
+  display: block;
   border-radius: 18px;
-  background: rgba(255, 248, 230, 0.96);
-  border: 2px solid #f1c688;
-  font-size: 13px;
-  font-weight: 600;
-  color: #8b4d2d;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  z-index: 11000;
+  border: 2px solid #f0c57a;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-.merit-badge #merit {
-  font-size: 18px;
-  font-weight: 700;
-}
+/* ======= 主要按鈕區（抽籤 / 上供品 / 紀錄 / 愛吃熊） ======= */
 
-/* 功德 +1 飄字動畫 */
-.merit-plus {
-  position: absolute;
-  right: -6px;
-  top: -6px;
-  font-size: 16px;
-  color: #e6533c;
-  font-weight: 700;
-  animation: merit-pop 0.9s ease-out forwards;
-}
-.top-bar {
+.menu-wrapper {
+  margin-top: 14px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
+  padding: 0 6px;
 }
 
-.top-left {
-  flex: 1;
-}
-
-.top-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;          /* 功德值跟出遊熊之間的距離 */
-}
-
-/* 原來功德值樣式可以保留，如果沒有就用這個 */
-.merit-pill {
+/* 圓形功能按鈕統一樣式 */
+.menu-btn {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: #fffaf2;
+  border: 1.5px solid #f5d1a8;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  text-align: center;
+  padding-top: 10px;
   font-size: 13px;
-  color: #9b5b36;
-  background: #fff7e0;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1.5px solid #f0c57a;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-}
-
-/* 新增：出遊熊按鈕 */
-.travel-link-btn {
-  font-size: 12px;
   color: #7a4329;
   text-decoration: none;
-  background: #ffe8c9;
-  padding: 5px 10px;
-  border-radius: 999px;
-  border: 1px dashed #e0a86b;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.travel-link-btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-}
-@keyframes merit-pop {
-  0% {
-    opacity: 0;
-    transform: translateY(6px) scale(0.7);
-  }
-  20% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-18px) scale(0.9);
-  }
-}
-
-/* === 主視覺：完整熊熊圖 === */
-.temple-wrapper {
-  position: relative;
-  margin: 6px auto 8px;
-  width: 92%;
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-  background: #ffe4b8;
-}
-
-/* 抽籤等待動畫：左右晃動 */
-.temple-wrapper.shake {
-  animation: temple-shake 0.8s ease-in-out;
-}
-
-@keyframes temple-shake {
-  0%   { transform: translateX(0); }
-  15%  { transform: translateX(-6px); }
-  30%  { transform: translateX(6px); }
-  45%  { transform: translateX(-5px); }
-  60%  { transform: translateX(5px); }
-  75%  { transform: translateX(-3px); }
-  90%  { transform: translateX(3px); }
-  100% { transform: translateX(0); }
-}
-
-.temple-image {
-  width: 100%;
-  height: auto;
   display: block;
+  line-height: 1.2;
 }
 
-/* 熊熊祝福氣泡 */
-.bear-bubble {
-  position: absolute;
-  left: 50%;
-  top: 16%;
-  transform: translateX(-50%);
-  max-width: 260px;
-  padding: 10px 14px;
-  background: rgba(255, 248, 230, 0.96);
-  border-radius: 18px;
-  border: 2px solid #f1c688;
+.menu-btn img {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 6px;
+}
+
+.menu-btn:active {
+  transform: scale(0.95);
+}
+
+/* ======= 文字敘述 ======= */
+.description-text {
   font-size: 13px;
-  color: #7b4228;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 11;
-}
-
-.bear-bubble::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 10px 10px 0 10px;
-  border-style: solid;
-  border-color: #f1c688 transparent transparent transparent;
-}
-
-.bear-bubble.show {
-  animation: bear-bubble-pop 1.2s ease-out forwards;
-}
-
-@keyframes bear-bubble-pop {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, 8px) scale(0.9);
-  }
-  15% {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
-  }
-  80% {
-    opacity: 1;
-    transform: translate(-50%, -4px) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -10px) scale(0.98);
-  }
-}
-
-/* === 下方狀態文字 === */
-.status-text {
+  color: #7a4329;
   text-align: center;
-  color: #8b5336;
-  font-size: 14px;
-  margin-top: 6px;
-  margin-bottom: 8px;
+  margin: 14px 0 10px;
 }
 
-/* === 抽籤小 pill 按鈕（這版隱藏） === */
-.draw-row {
-  display: none;
-}
+/* ======= 下方內容卡片 ======= */
 
-.pill-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 18px;
-  border-radius: 999px;
-  border: 2px solid #f0c48a;
-  background: #fff6e4;
-  color: #8b4d2d;
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
-  cursor: pointer;
-}
-
-/* === 下方四顆奶油色圓形大按鈕 === */
-.round-button-row {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 8px;
-  margin-top: 12px;
-}
-
-.round-btn {
-  width: 82px;
-  height: 82px;
-  border-radius: 50%;
-  border: 2px solid #f0c48a;
-  background: radial-gradient(circle at 30% 20%, #fffaf0, #ffdcae);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: #8b4d2d;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
-  cursor: pointer;
-}
-
-.round-btn span {
-  margin-top: 4px;
-}
-
-/* 目前詩籤卡片（中繼，不會真正顯示） */
-.lot-card {
-  margin-top: 6px;
-  padding: 12px 14px;
-  background: #fff7e6;
+.card {
+  background: #fff;
   border-radius: 16px;
-  border: 2px solid #f0c48a;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-  font-size: 14px;
+  padding: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  border: 2px solid #f3d7a7;
+  margin-bottom: 20px;
 }
 
-/* === Modal 共用 === */
-.modal {
+/* ======= 抽籤結果視窗（若有使用） ======= */
+
+.modal-backdrop {
   position: fixed;
   inset: 0;
-  display: flex;
+  background: rgba(0,0,0,0.45);
+  display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 9999;
+  z-index: 999;
 }
 
-.modal-content {
-  background: #fff8ea;
-  border-radius: 20px;
-  padding: 16px 18px 18px;
-  max-width: 460px;
-  width: 90%;
+.modal {
+  max-width: 420px;
+  width: calc(100% - 36px);
+  background: #fff7ea;
+  border-radius: 18px;
+  border: 2px solid #f3c690;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  padding: 16px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
-  font-size: 14px;
 }
 
-/* 詩籤卡片樣式 */
-.lot-modal-card {
-  background: #fff3dd;
-  border-radius: 18px;
-  border: 2px solid #f0c48a;
-  padding: 10px 12px 12px;
-}
-
-.lot-modal-title {
-  text-align: center;
-  font-size: 16px;
+.modal-title {
+  font-size: 18px;
   font-weight: 700;
-  color: #b15532;
-  margin-bottom: 8px;
+  color: #7a4329;
 }
 
-.lot-modal-section {
-  margin-top: 8px;
-}
-
-.lot-section-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #a35a33;
-  margin-bottom: 4px;
-}
-
-.lot-section-body {
-  font-size: 14px;
-  line-height: 1.6;
-  color: #5c3523;
-}
-
-/* 四句小詩區塊 */
-.lot-poem {
-  border-radius: 14px;
-  background: #ffe3bf;
-  padding: 8px 10px;
-  text-align: center;
-}
-
-.lot-poem-line {
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* 關閉按鈕 */
-.close-btn {
-  margin-top: 12px;
-  display: block;
-  width: 100%;
-  padding: 8px 0;
-  border-radius: 999px;
-  border: none;
-  background: #f39a4b;
-  color: #fffaf0;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-/* === 抽籤紀錄視窗 === */
-.history-modal-content {
-  max-height: 70vh; /* 再低一點，看起來像 3 筆 */
-}
-
-#historyList {
-  max-height: 320px;  /* 大概 3 筆高度 */
-  overflow-y: auto;
-}
-
-.history-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #b15532;
-  margin-bottom: 8px;
-}
-
-.history-empty {
-  font-size: 14px;
-  color: #7b4a31;
-}
-
-.history-item {
-  padding: 6px 0;
-  cursor: pointer;
-}
-
-.history-item:hover {
-  background: #ffefd7;
-}
-
-.history-time {
+.modal-sub {
   font-size: 12px;
-  color: #a5754d;
-  margin-bottom: 2px;
+  color: #9b5b36;
+  margin-bottom: 10px;
 }
 
-.history-summary {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 2px;
+.modal-close {
+  float: right;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #a25a3a;
 }
 
-.history-detail {
-  font-size: 13px;
-  color: #6b3f2b;
+.tag-row span {
+  background: #ffeedd;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  margin-right: 6px;
+  color: #8b4a33;
 }
 
-.history-divider {
-  height: 1px;
-  background: #e9c9a0;
-  margin: 6px 0;
+/* ======= 響應式調整 ======= */
+
+@media (max-width: 380px) {
+  .page-title {
+    font-size: 22px;
+  }
+  .menu-btn {
+    width: 70px;
+    height: 70px;
+  }
 }
