@@ -238,6 +238,75 @@ body {
   margin-right: 4px;
   color: #8b4a33;
 }
+/* ---- Modal 基本 ---- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-window {
+  width: 85%;
+  max-width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #fff7e6;
+  border-radius: 18px;
+  border: 2px solid #f3c690;
+  padding: 16px 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+/* 關閉按鈕 */
+.modal-close {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  color: #7a4329;
+  cursor: pointer;
+}
+
+.modal-window h2 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #7a4329;
+}
+
+.modal-window p {
+  font-size: 15px;
+  color: #7a4329;
+  line-height: 1.6;
+}
+
+.modal-tag {
+  font-size: 13px;
+  color: #b07a50;
+  margin-top: 8px;
+}
+
+.modal-bear {
+  margin-top: 14px;
+  padding: 10px;
+  background: #fff1d6;
+  border-radius: 12px;
+  border: 1.5px dashed #e8c08d;
+  color: #7a4329;
+  font-size: 14px;
+  white-space: pre-line;
+}
+
+/* Modal 出現動作 */
+.show {
+  display: flex !important;
+}
 /* Header 區保持乾淨不跑版 */
 .header-wrap {
   padding: 10px 14px 0 14px;
