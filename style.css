@@ -125,6 +125,22 @@ body {
   background: #ffe4b8;
 }
 
+/* 抽籤等待動畫：左右晃動 */
+.temple-wrapper.shake {
+  animation: temple-shake 0.8s ease-in-out;
+}
+
+@keyframes temple-shake {
+  0%   { transform: translateX(0); }
+  15%  { transform: translateX(-6px); }
+  30%  { transform: translateX(6px); }
+  45%  { transform: translateX(-5px); }
+  60%  { transform: translateX(5px); }
+  75%  { transform: translateX(-3px); }
+  90%  { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+
 .temple-image {
   width: 100%;
   height: auto;
