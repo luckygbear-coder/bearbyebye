@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>愛吃熊旅遊靈感機</title>
+  <title>去哪玩吃什麼｜愛吃熊推薦</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
@@ -24,44 +24,40 @@
       border: 2px solid #f0c57a;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
       padding: 16px;
+      position: relative;
     }
 
-    .title-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .banner {
+      border-radius: 16px;
+      overflow: hidden;
       margin-bottom: 12px;
+      border: 2px solid #f0c57a;
     }
 
-    .bear-avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: #ffe0b5 url("images/food-bear.png") center/cover no-repeat;
-      border: 2px solid #f29f74;
-      flex-shrink: 0;
-    }
-
-    .title-text {
-      flex: 1;
+    .banner img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
     .title-text h1 {
-      margin: 0;
+      margin: 6px 0 0;
       font-size: 20px;
       color: #7a4329;
+      text-align: center;
     }
 
     .title-text p {
-      margin: 4px 0 0;
+      margin: 4px auto 10px;
       font-size: 13px;
       color: #9b5b36;
+      text-align: center;
     }
 
     /* 熊熊氣泡（點擊換一句話） */
     .bubble {
       position: relative;
-      margin-top: 10px;
+      margin-top: 4px;
       background: #fff;
       border-radius: 14px;
       padding: 10px 12px;
@@ -70,7 +66,6 @@
       color: #6a3b3b;
       cursor: pointer;
     }
-
     .bubble::after {
       content: "";
       position: absolute;
@@ -80,7 +75,6 @@
       border-style: solid;
       border-color: #f7cfa4 transparent transparent transparent;
     }
-
     .bubble::before {
       content: "";
       position: absolute;
@@ -91,8 +85,46 @@
       border-color: #fff transparent transparent transparent;
     }
 
+    /* 分頁 tab */
+    .tabs {
+      margin-top: 14px;
+      display: flex;
+      background: #ffe6c5;
+      padding: 4px;
+      border-radius: 999px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      padding: 8px 0;
+      font-size: 14px;
+      background: transparent;
+      color: #9b5b36;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.15s ease;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #7a4329;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    }
+
+    .tab-panel {
+      margin-top: 12px;
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
     .section-title {
-      margin: 16px 0 8px;
+      margin: 12px 0 6px;
       font-size: 15px;
       color: #7a4329;
       font-weight: 700;
@@ -115,11 +147,9 @@
       cursor: pointer;
       transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
     }
-
     .chip span {
       margin-right: 4px;
     }
-
     .chip.active {
       background: #ffcf84;
       color: #5c321c;
@@ -128,13 +158,12 @@
       border-color: #e39743;
     }
 
-    /* 天數選擇 */
+    /* 天數選擇（旅遊用） */
     .days-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
-
     .day-chip {
       padding: 6px 10px;
       border-radius: 999px;
@@ -145,7 +174,6 @@
       cursor: pointer;
       transition: 0.1s ease;
     }
-
     .day-chip.active {
       background: #ffd79a;
       color: #4b2612;
@@ -154,15 +182,14 @@
       transform: translateY(-1px);
     }
 
-    /* 抽靈感按鈕 */
+    /* 抽籤按鈕 & 計數 */
     .action-wrap {
-      margin-top: 16px;
+      margin-top: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
     }
-
     .btn-main {
       flex: 1;
       border: none;
@@ -177,7 +204,6 @@
       cursor: pointer;
       transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
-
     .btn-main:active {
       transform: translateY(1px);
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
@@ -195,12 +221,11 @@
       gap: 4px;
       white-space: nowrap;
     }
-
     .counter-pill span {
       font-size: 15px;
     }
 
-    /* +1 動畫字樣 */
+    /* +1 動畫字樣（通用） */
     .plus-one {
       position: absolute;
       right: 24px;
@@ -212,27 +237,24 @@
       transform: translateY(8px);
       pointer-events: none;
     }
-
     .plus-one.show {
       animation: riseFade 0.9s ease-out forwards;
     }
-
     @keyframes riseFade {
       0% { opacity: 0; transform: translateY(8px); }
       20% { opacity: 1; }
       100% { opacity: 0; transform: translateY(-20px); }
     }
 
-    /* 結果區 */
+    /* 結果卡片 */
     .result-card {
-      margin-top: 16px;
+      margin-top: 14px;
       background: #fff7ea;
       border-radius: 18px;
       border: 2px solid #f3c690;
       padding: 14px;
       box-shadow: 0 5px 14px rgba(0,0,0,0.18);
     }
-
     .result-header {
       display: flex;
       justify-content: space-between;
@@ -240,13 +262,11 @@
       margin-bottom: 6px;
       gap: 8px;
     }
-
     .result-header h2 {
       margin: 0;
       font-size: 18px;
       color: #7a4329;
     }
-
     .badge-region {
       font-size: 12px;
       background: #ffe0b5;
@@ -254,20 +274,17 @@
       padding: 4px 8px;
       color: #6b3a25;
     }
-
     .result-meta {
       font-size: 13px;
       color: #8b5a3a;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
-
     .tag-row {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-bottom: 8px;
     }
-
     .tag {
       font-size: 11px;
       padding: 4px 8px;
@@ -275,7 +292,6 @@
       background: #ffeedd;
       color: #8b4a33;
     }
-
     .bear-tip-title {
       font-size: 13px;
       font-weight: 700;
@@ -283,7 +299,6 @@
       margin-top: 4px;
       margin-bottom: 4px;
     }
-
     .bear-tip-text {
       font-size: 13px;
       color: #6a3b3b;
@@ -293,7 +308,7 @@
 
     /* 等待動畫 */
     .loading {
-      margin-top: 16px;
+      margin-top: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -301,7 +316,6 @@
       font-size: 13px;
       color: #9b5b36;
     }
-
     .dot {
       width: 6px;
       height: 6px;
@@ -309,10 +323,8 @@
       background: #ff9f6b;
       animation: bounce 0.8s infinite alternate;
     }
-
     .dot:nth-child(2) { animation-delay: 0.15s; }
     .dot:nth-child(3) { animation-delay: 0.3s; }
-
     @keyframes bounce {
       from { transform: translateY(0); opacity: 0.5; }
       to { transform: translateY(-6px); opacity: 1; }
@@ -320,7 +332,7 @@
 
     /* 歷史紀錄 */
     .history-card {
-      margin-top: 14px;
+      margin-top: 12px;
       padding: 10px 12px;
       border-radius: 14px;
       border: 1.5px dashed #e0b88d;
@@ -330,177 +342,209 @@
       font-size: 12px;
       color: #7a4329;
     }
-
     .history-item {
       padding: 6px 0;
       border-bottom: 1px dashed #f1d4aa;
     }
-
     .history-item:last-child {
       border-bottom: none;
     }
-
     .history-item-title {
       font-weight: 700;
       margin-bottom: 2px;
     }
-
     .history-item-meta {
       font-size: 11px;
       color: #9b5b36;
     }
-
     .history-empty {
       font-size: 12px;
       color: #b08a62;
     }
 
     @media (max-width: 360px) {
-      .title-text h1 {
-        font-size: 18px;
-      }
-      .bear-avatar {
-        width: 56px;
-        height: 56px;
-      }
+      .title-text h1 { font-size: 18px; }
     }
   </style>
 </head>
 <body>
   <div class="app-wrap">
-    <div class="card" style="position: relative;">
-      <div class="title-row">
-        <div class="bear-avatar"></div>
-        <div class="title-text">
-          <h1>愛吃熊旅遊靈感機</h1>
-          <p>選一個地區和天數，讓愛吃熊幫你抽出下一趟小旅行 🧳</p>
-        </div>
+    <div class="card">
+      <!-- 封面圖：travel.png -->
+      <div class="banner">
+        <!-- 如果圖片不在 images/ 底下，請改路徑 -->
+        <img src="images/travel.png" alt="愛吃熊台灣出遊">
+      </div>
+
+      <div class="title-text">
+        <h1>去哪玩吃什麼</h1>
+        <p>讓愛吃熊幫你抽出今天的旅遊籤 & 美食籤 🍱🧳</p>
       </div>
 
       <div class="bubble" id="bubble">
-        🐻 點我一下，聽聽今天愛吃熊的旅遊小語～
+        🐻 點我一下，聽聽今天愛吃熊的小提示～
       </div>
 
-      <div class="section-title">1️⃣ 想去哪一帶玩？</div>
-      <div class="chip-row" id="regionChips">
-        <button class="chip active" data-region="all"><span>🎲</span>全台隨機</button>
-        <button class="chip" data-region="north"><span>🐻</span>北部</button>
-        <button class="chip" data-region="central"><span>🌾</span>中部</button>
-        <button class="chip" data-region="south"><span>🌴</span>南部</button>
-        <button class="chip" data-region="east"><span>🏞️</span>東部</button>
-        <button class="chip" data-region="islands"><span>🌊</span>外島</button>
+      <!-- 分頁切換 -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="travel">抽旅遊籤 🧳</button>
+        <button class="tab-btn" data-tab="food">抽美食籤 🍙</button>
       </div>
 
-      <div class="section-title">2️⃣ 想玩幾天呢？</div>
-      <div class="days-row" id="daysRow">
-        <button class="day-chip active" data-days="1">1 天小散步</button>
-        <button class="day-chip" data-days="2">2 天輕旅行</button>
-        <button class="day-chip" data-days="3">3 天小度假</button>
-        <button class="day-chip" data-days="4">4 天以上長一點</button>
-        <button class="day-chip" data-days="auto">不知道，請愛吃熊決定</button>
-      </div>
+      <!-- 旅遊籤 Panel -->
+      <div class="tab-panel active" id="panel-travel">
+        <div class="section-title">1️⃣ 想去哪一帶玩？</div>
+        <div class="chip-row" id="regionChipsTravel">
+          <button class="chip active" data-region="all"><span>🎲</span>全台隨機</button>
+          <button class="chip" data-region="north"><span>🐻</span>北部</button>
+          <button class="chip" data-region="central"><span>🌾</span>中部</button>
+          <button class="chip" data-region="south"><span>🌴</span>南部</button>
+          <button class="chip" data-region="east"><span>🏞️</span>東部</button>
+          <button class="chip" data-region="islands"><span>🌊</span>外島</button>
+        </div>
 
-      <div class="action-wrap">
-        <button class="btn-main" id="drawBtn">幫我抽旅遊靈感 ✨</button>
-        <div class="counter-pill">
-          <span>📍</span>
-          今天已抽 <span id="countNum">0</span> 次
+        <div class="section-title">2️⃣ 想玩幾天呢？</div>
+        <div class="days-row" id="daysRowTravel">
+          <button class="day-chip active" data-days="1">1 天小散步</button>
+          <button class="day-chip" data-days="2">2 天輕旅行</button>
+          <button class="day-chip" data-days="3">3 天小度假</button>
+          <button class="day-chip" data-days="4">4 天以上長一點</button>
+          <button class="day-chip" data-days="auto">不知道，請愛吃熊決定</button>
+        </div>
+
+        <div class="action-wrap">
+          <button class="btn-main" id="drawTravelBtn">幫我抽旅遊靈感 ✨</button>
+          <div class="counter-pill">
+            <span>📍</span>
+            今日旅遊籤 <span id="countTravel">0</span> 次
+          </div>
+        </div>
+
+        <div class="loading" id="loadingTravel" style="display:none;">
+          愛吃熊翻找旅遊點子中…
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+
+        <div class="result-card" id="resultTravel" style="display:none;">
+          <div class="result-header">
+            <h2 id="travelName">景點名稱</h2>
+            <div class="badge-region" id="travelRegion">地區</div>
+          </div>
+          <div class="result-meta" id="travelCity"></div>
+          <div class="result-meta" id="travelDays"></div>
+          <div class="tag-row" id="travelTags"></div>
+          <div class="bear-tip-title">🐻 愛吃熊暖心提醒</div>
+          <div class="bear-tip-text" id="travelTip"></div>
+        </div>
+
+        <div class="history-card">
+          <div style="font-weight:700; margin-bottom:4px;">📝 最近 3 次旅遊靈感</div>
+          <div id="historyTravel" class="history-empty">
+            還沒有紀錄，先讓愛吃熊幫你抽一張旅遊籤吧～
+          </div>
         </div>
       </div>
 
-      <div class="plus-one" id="plusOne">+1 🎒</div>
-
-      <div id="loading" class="loading" style="display:none;">
-        愛吃熊翻找旅遊點子中…
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-
-      <div id="resultArea" class="result-card" style="display:none;">
-        <div class="result-header">
-          <h2 id="spotName">景點名稱</h2>
-          <div class="badge-region" id="spotRegion">地區</div>
+      <!-- 美食籤 Panel -->
+      <div class="tab-panel" id="panel-food">
+        <div class="section-title">1️⃣ 想吃哪一帶的美食？</div>
+        <div class="chip-row" id="regionChipsFood">
+          <button class="chip active" data-region="all"><span>🎲</span>全台隨機</button>
+          <button class="chip" data-region="north"><span>🍜</span>北部</button>
+          <button class="chip" data-region="central"><span>🍰</span>中部</button>
+          <button class="chip" data-region="south"><span>🍢</span>南部</button>
+          <button class="chip" data-region="east"><span>🍱</span>東部</button>
+          <button class="chip" data-region="islands"><span>🦐</span>外島</button>
         </div>
-        <div class="result-meta" id="spotCity"></div>
-        <div class="result-meta" id="spotDays"></div>
-        <div class="tag-row" id="tagRow"></div>
-        <div class="bear-tip-title">🐻 愛吃熊暖心提醒</div>
-        <div class="bear-tip-text" id="bearTip"></div>
-      </div>
 
-      <div class="history-card">
-        <div style="font-weight:700; margin-bottom:4px;">📝 最近 3 次旅遊靈感</div>
-        <div id="historyList" class="history-empty">
-          還沒有紀錄，先讓愛吃熊幫你抽一張旅遊籤吧～
+        <div class="action-wrap">
+          <button class="btn-main" id="drawFoodBtn">幫我抽美食籤 😋</button>
+          <div class="counter-pill">
+            <span>🍴</span>
+            今日美食籤 <span id="countFood">0</span> 次
+          </div>
+        </div>
+
+        <div class="loading" id="loadingFood" style="display:none;">
+          愛吃熊在想今天要吃什麼…
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+
+        <div class="result-card" id="resultFood" style="display:none;">
+          <div class="result-header">
+            <h2 id="foodName">美食主題</h2>
+            <div class="badge-region" id="foodRegion">地區</div>
+          </div>
+          <div class="result-meta" id="foodCity"></div>
+          <div class="tag-row" id="foodTags"></div>
+          <div class="bear-tip-title">🐻 愛吃熊小提醒</div>
+          <div class="bear-tip-text" id="foodTip"></div>
+        </div>
+
+        <div class="history-card">
+          <div style="font-weight:700; margin-bottom:4px;">📝 最近 3 次美食靈感</div>
+          <div id="historyFood" class="history-empty">
+            還沒有紀錄，讓愛吃熊先幫你抽一張美食籤吧～
+          </div>
         </div>
       </div>
+
+      <!-- 通用 +1 動畫 -->
+      <div class="plus-one" id="plusOne">+1 ✨</div>
     </div>
   </div>
 
   <script>
-    // 旅遊景點資料（可以之後再慢慢補）
+    // 旅遊景點資料
     const attractions = [
       // 北部
       {
         name: "九份老街 & 金瓜石山城",
-        region: "north",
-        regionLabel: "北部",
+        region: "north", regionLabel: "北部",
         city: "新北市瑞芳區",
-        minDays: 1,
-        maxDays: 2,
+        minDays: 1, maxDays: 2,
         tags: ["山城巷弄", "老街美食", "夜景"],
         tip: "建議先到金瓜石走走，再傍晚上九份吃晚餐看夜景。山上溫差大，可以帶件薄外套喔。"
       },
       {
         name: "陽明山國家公園",
-        region: "north",
-        regionLabel: "北部",
+        region: "north", regionLabel: "北部",
         city: "台北市北投區",
-        minDays: 1,
-        maxDays: 2,
+        minDays: 1, maxDays: 2,
         tags: ["賞花步道", "溫泉", "近郊散步"],
         tip: "可以排一日：早上步道散步，下午泡溫泉、吃火鍋。鞋子選好走的，讓腳也一起度假。"
       },
       {
         name: "淡水 & 漁人碼頭",
-        region: "north",
-        regionLabel: "北部",
+        region: "north", regionLabel: "北部",
         city: "新北市淡水區",
-        minDays: 1,
-        maxDays: 1,
+        minDays: 1, maxDays: 1,
         tags: ["河岸夕陽", "老街美食", "輕鬆散步"],
-        tip: "下午再去淡水，邊散步邊吃小吃，看夕陽慢慢變色，讓心情也跟著放鬆下來。"
+        tip: "下午到淡水，邊散步邊吃小吃，看夕陽慢慢變色，讓心情也跟著放鬆下來。"
       },
 
       // 中部
       {
         name: "日月潭環湖小旅行",
-        region: "central",
-        regionLabel: "中部",
+        region: "central", regionLabel: "中部",
         city: "南投縣魚池鄉",
-        minDays: 2,
-        maxDays: 3,
+        minDays: 2, maxDays: 3,
         tags: ["湖景單車", "纜車", "慢活度假"],
         tip: "可以租腳踏車慢慢環湖，搭配船票與纜車，一次收集不一樣的日月潭風景。行李越輕，心也越輕。"
       },
       {
         name: "清境農場 & 合歡山觀星",
-        region: "central",
-        regionLabel: "中部",
+        region: "central", regionLabel: "中部",
         city: "南投縣仁愛鄉",
-        minDays: 2,
-        maxDays: 3,
+        minDays: 2, maxDays: 3,
         tags: ["青青草原", "高山星空", "涼爽避暑"],
         tip: "白天看羊咩咩吃草，晚上看滿天星星。山上溫度偏低，記得帶外套與保暖襪子。"
       },
       {
         name: "台中市區 & 彩虹眷村",
-        region: "central",
-        regionLabel: "中部",
+        region: "central", regionLabel: "中部",
         city: "台中市南屯區周邊",
-        minDays: 1,
-        maxDays: 2,
+        minDays: 1, maxDays: 2,
         tags: ["文創聚落", "咖啡廳", "親子友善"],
         tip: "安排輕鬆的城市散步：彩虹眷村、審計新村、草悟道。餓了就停下來吃一點，再走一點。"
       },
@@ -508,31 +552,25 @@
       // 南部
       {
         name: "墾丁海邊藍天假期",
-        region: "south",
-        regionLabel: "南部",
+        region: "south", regionLabel: "南部",
         city: "屏東縣恆春鎮",
-        minDays: 2,
-        maxDays: 4,
+        minDays: 2, maxDays: 4,
         tags: ["沙灘戲水", "國家公園", "海風吹風"],
         tip: "早上玩水、下午吹海風、晚上看星星。記得防曬與補充水份，曬黑沒關係，開心最重要。"
       },
       {
         name: "高雄駁二 & 愛河散步",
-        region: "south",
-        regionLabel: "南部",
+        region: "south", regionLabel: "南部",
         city: "高雄市鹽埕區",
-        minDays: 1,
-        maxDays: 2,
+        minDays: 1, maxDays: 2,
         tags: ["港都市景", "文創展覽", "夜景散步"],
         tip: "白天逛駁二、晚上到愛河走走，找個位置坐下來看城市的燈光，也看看最近的自己。"
       },
       {
         name: "台南巷弄美食之旅",
-        region: "south",
-        regionLabel: "南部",
+        region: "south", regionLabel: "南部",
         city: "台南市中西區周邊",
-        minDays: 2,
-        maxDays: 3,
+        minDays: 2, maxDays: 3,
         tags: ["小吃天堂", "古蹟老屋", "慢步旅行"],
         tip: "一次吃不完沒關係，這座城市會等你回來。旅途中，記得對一起吃東西的人說聲謝謝。"
       },
@@ -540,31 +578,25 @@
       // 東部
       {
         name: "花蓮太魯閣峽谷之旅",
-        region: "east",
-        regionLabel: "東部",
+        region: "east", regionLabel: "東部",
         city: "花蓮縣秀林鄉",
-        minDays: 2,
-        maxDays: 3,
+        minDays: 2, maxDays: 3,
         tags: ["峽谷步道", "山海景緻", "自然療癒"],
         tip: "步道多為石階與山路，鞋子要穩，腳步放慢。每吸一口氣，都把煩惱先放在山下。"
       },
       {
         name: "花東縱谷小火車",
-        region: "east",
-        regionLabel: "東部",
+        region: "east", regionLabel: "東部",
         city: "花蓮–台東一帶",
-        minDays: 3,
-        maxDays: 4,
+        minDays: 3, maxDays: 4,
         tags: ["稻田風景", "小鎮旅館", "騎腳踏車"],
         tip: "可以挑一兩個小鎮多待一天，讓自己有真正發呆的時間。發呆，也是很重要的行程。"
       },
       {
         name: "台東海線放空之旅",
-        region: "east",
-        regionLabel: "東部",
+        region: "east", regionLabel: "東部",
         city: "台東縣成功鎮・長濱鄉一帶",
-        minDays: 2,
-        maxDays: 3,
+        minDays: 2, maxDays: 3,
         tags: ["海岸公路", "看日出", "咖啡小店"],
         tip: "早起看一次海邊日出，提醒自己：新的開始其實每天都有。"
       },
@@ -572,64 +604,162 @@
       // 外島
       {
         name: "澎湖跳島海風旅行",
-        region: "islands",
-        regionLabel: "外島",
+        region: "islands", regionLabel: "外島",
         city: "澎湖縣馬公市一帶",
-        minDays: 3,
-        maxDays: 4,
+        minDays: 3, maxDays: 4,
         tags: ["海上活動", "玄武岩地形", "夜間看星星"],
         tip: "行程不要塞太滿，留一些時間只是坐著看海，跟自己好好聊天。"
       },
       {
         name: "小琉球海龜慢活日常",
-        region: "islands",
-        regionLabel: "外島",
+        region: "islands", regionLabel: "外島",
         city: "屏東縣琉球鄉",
-        minDays: 2,
-        maxDays: 3,
+        minDays: 2, maxDays: 3,
         tags: ["浮潛看海龜", "環島機車", "小島步調"],
         tip: "跟海龜一樣慢慢游、慢慢呼吸。記得保持距離，不打擾牠們的生活，就是最溫柔的相遇。"
       },
       {
         name: "綠島溫泉與夜觀鹿",
-        region: "islands",
-        regionLabel: "外島",
+        region: "islands", regionLabel: "外島",
         city: "台東縣綠島鄉",
-        minDays: 2,
-        maxDays: 3,
+        minDays: 2, maxDays: 3,
         tags: ["海岸風景", "海底世界", "海邊溫泉"],
         tip: "可以安排夜觀梅花鹿、白天潛水或浮潛。回到民宿洗完澡後，寫一行今天最感謝的事送給自己。"
       }
     ];
 
-    // 熊熊隨機小語（旅遊版）
+    // 美食資料
+    const foods = [
+      // 北部
+      {
+        name: "台北永康街小吃＋芒果冰",
+        region: "north", regionLabel: "北部",
+        city: "台北市大安區永康街一帶",
+        tags: ["小吃散步", "冰品甜點", "捷運可達"],
+        tip: "可以從捷運東門站走起，先吃牛肉麵、再來一碗芒果冰，最後帶杯飲料去公園坐著聊天。"
+      },
+      {
+        name: "基隆廟口夜市大亂吃",
+        region: "north", regionLabel: "北部",
+        city: "基隆市仁愛區",
+        tags: ["夜市", "海鮮", "在地小吃"],
+        tip: "建議先選好想吃的 3–4 攤，不要每攤都排隊，留一點肚子給突然出現的驚喜攤位。"
+      },
+
+      // 中部
+      {
+        name: "逢甲夜市創意美食",
+        region: "central", regionLabel: "中部",
+        city: "台中市西屯區",
+        tags: ["夜市", "創意小吃", "學生最愛"],
+        tip: "先逛一圈再開始買，可以避免第一攤就吃太飽。和朋友輪流點不同的東西分著吃最划算。"
+      },
+      {
+        name: "勤美綠園道咖啡廳下午茶",
+        region: "central", regionLabel: "中部",
+        city: "台中市西區",
+        tags: ["咖啡甜點", "文青路線", "散步放空"],
+        tip: "找一間有大片落地窗的咖啡廳，讓自己光明正大地什麼事都不做，只要慢慢吃蛋糕就好。"
+      },
+
+      // 南部
+      {
+        name: "台南巷弄早餐＋古早味小吃",
+        region: "south", regionLabel: "南部",
+        city: "台南市中西區",
+        tags: ["早午餐", "古早味", "小吃天堂"],
+        tip: "台南適合從早餐就開始吃，牛肉湯、鍋燒意麵、魚湯輪流來。吃完記得走進巷子裡晃一圈。"
+      },
+      {
+        name: "高雄鹽埕區老店美食",
+        region: "south", regionLabel: "南部",
+        city: "高雄市鹽埕區",
+        tags: ["老字號", "冰品", "港邊散步"],
+        tip: "冰品和麵店可以錯開時間吃，別忘了去愛河或港邊散步，讓肚子有點空位裝甜點。"
+      },
+
+      // 東部
+      {
+        name: "花蓮東大門夜市吃一圈",
+        region: "east", regionLabel: "東部",
+        city: "花蓮市區",
+        tags: ["夜市", "原住民風味", "遊戲攤位"],
+        tip: "可以先鎖定幾攤排隊的人多的店，但不要全部都吃炸物。留一份胃給好吃的麻糬或冰。"
+      },
+      {
+        name: "台東都蘭小酒館 & 咖啡",
+        region: "east", regionLabel: "東部",
+        city: "台東縣都蘭一帶",
+        tags: ["海邊小店", "輕食", "音樂氣氛"],
+        tip: "黃昏時先到海邊看海，再走進小店吃點東西、聽音樂。心情放鬆比吃很多還重要。"
+      },
+
+      // 外島
+      {
+        name: "澎湖海鮮大餐＋仙人掌冰",
+        region: "islands", regionLabel: "外島",
+        city: "澎湖縣馬公市",
+        tags: ["海鮮", "在地甜點", "島嶼風味"],
+        tip: "新鮮海鮮建議多人分享，大家一起分食比較能吃到更多種類。最後一定要來一支仙人掌冰。"
+      },
+      {
+        name: "小琉球海龜島早餐巡禮",
+        region: "islands", regionLabel: "外島",
+        city: "屏東縣琉球鄉",
+        tags: ["島上早餐店", "手搖飲", "機車慢遊"],
+        tip: "早起騎車繞島，看到喜歡的早餐店就停下來。邊吃邊看海，今天就算過得很充實了。"
+      }
+    ];
+
+    // 熊熊隨機小語（通用）
     const bubbleMessages = [
       "🐻 熊熊說：不是一定要走很遠，能讓你覺得放鬆的地方，就是好地方。",
       "🐻 熊熊說：行程排一點空白，讓驚喜有機會插隊進來呀。",
       "🐻 熊熊說：累了就慢一點，旅行不是比速度，而是看你有沒有好好感受。",
-      "🐻 熊熊說：跟在乎的人一起吃一頓飯，就是很棒的旅遊行程。",
-      "🐻 熊熊說：就算只是一日小散步，也是在為自己充電喔。"
+      "🐻 熊熊說：一起吃飯的時光，比吃到什麼更重要。",
+      "🐻 熊熊說：就算只是一日小散步＋路邊小吃，也是在為自己充電喔。"
     ];
 
+    // DOM 取得
     const bubble = document.getElementById("bubble");
-    const regionChips = document.querySelectorAll("#regionChips .chip");
-    const dayChips = document.querySelectorAll("#daysRow .day-chip");
-    const drawBtn = document.getElementById("drawBtn");
-    const loadingEl = document.getElementById("loading");
-    const resultArea = document.getElementById("resultArea");
-    const countNum = document.getElementById("countNum");
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const panelTravel = document.getElementById("panel-travel");
+    const panelFood = document.getElementById("panel-food");
     const plusOne = document.getElementById("plusOne");
-    const historyList = document.getElementById("historyList");
 
-    const spotName = document.getElementById("spotName");
-    const spotRegion = document.getElementById("spotRegion");
-    const spotCity = document.getElementById("spotCity");
-    const spotDays = document.getElementById("spotDays");
-    const tagRow = document.getElementById("tagRow");
-    const bearTip = document.getElementById("bearTip");
+    // 旅遊 DOM
+    const regionChipsTravel = document.querySelectorAll("#regionChipsTravel .chip");
+    const daysChipsTravel = document.querySelectorAll("#daysRowTravel .day-chip");
+    const drawTravelBtn = document.getElementById("drawTravelBtn");
+    const loadingTravel = document.getElementById("loadingTravel");
+    const resultTravel = document.getElementById("resultTravel");
+    const travelName = document.getElementById("travelName");
+    const travelRegion = document.getElementById("travelRegion");
+    const travelCity = document.getElementById("travelCity");
+    const travelDays = document.getElementById("travelDays");
+    const travelTags = document.getElementById("travelTags");
+    const travelTip = document.getElementById("travelTip");
+    const historyTravel = document.getElementById("historyTravel");
+    const countTravel = document.getElementById("countTravel");
 
-    let drawCount = 0;
-    let history = [];
+    // 美食 DOM
+    const regionChipsFood = document.querySelectorAll("#regionChipsFood .chip");
+    const drawFoodBtn = document.getElementById("drawFoodBtn");
+    const loadingFood = document.getElementById("loadingFood");
+    const resultFood = document.getElementById("resultFood");
+    const foodName = document.getElementById("foodName");
+    const foodRegion = document.getElementById("foodRegion");
+    const foodCity = document.getElementById("foodCity");
+    const foodTags = document.getElementById("foodTags");
+    const foodTip = document.getElementById("foodTip");
+    const historyFood = document.getElementById("historyFood");
+    const countFood = document.getElementById("countFood");
+
+    // 狀態
+    let travelCount = 0;
+    let foodCount = 0;
+    let travelHistory = [];
+    let foodHistory = [];
 
     // 點氣泡換句話
     bubble.addEventListener("click", () => {
@@ -637,131 +767,223 @@
       bubble.textContent = msg;
     });
 
-    // 區域 chip 切換
-    regionChips.forEach(chip => {
+    // 分頁切換
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        tabButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const tab = btn.dataset.tab;
+        if (tab === "travel") {
+          panelTravel.classList.add("active");
+          panelFood.classList.remove("active");
+        } else {
+          panelFood.classList.add("active");
+          panelTravel.classList.remove("active");
+        }
+      });
+    });
+
+    // 區域 chip 切換（旅遊）
+    regionChipsTravel.forEach(chip => {
       chip.addEventListener("click", () => {
-        regionChips.forEach(c => c.classList.remove("active"));
+        regionChipsTravel.forEach(c => c.classList.remove("active"));
         chip.classList.add("active");
       });
     });
 
-    // 天數 chip 切換
-    dayChips.forEach(chip => {
+    // 天數 chip 切換（旅遊）
+    daysChipsTravel.forEach(chip => {
       chip.addEventListener("click", () => {
-        dayChips.forEach(c => c.classList.remove("active"));
+        daysChipsTravel.forEach(c => c.classList.remove("active"));
         chip.classList.add("active");
       });
     });
 
-    // 取得目前選擇
-    function getSelectedRegion() {
-      const active = document.querySelector("#regionChips .chip.active");
+    // 區域 chip 切換（美食）
+    regionChipsFood.forEach(chip => {
+      chip.addEventListener("click", () => {
+        regionChipsFood.forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+      });
+    });
+
+    function getSelectedRegionTravel() {
+      const active = document.querySelector("#regionChipsTravel .chip.active");
+      return active ? active.dataset.region : "all";
+    }
+    function getSelectedDaysTravel() {
+      const active = document.querySelector("#daysRowTravel .day-chip.active");
+      return active ? active.dataset.days : "1";
+    }
+    function getSelectedRegionFood() {
+      const active = document.querySelector("#regionChipsFood .chip.active");
       return active ? active.dataset.region : "all";
     }
 
-    function getSelectedDays() {
-      const active = document.querySelector("#daysRow .day-chip.active");
-      return active ? active.dataset.days : "1";
+    // 共用 +1 動畫
+    function triggerPlusOne(symbolText) {
+      plusOne.textContent = "+1 " + symbolText;
+      plusOne.classList.remove("show");
+      void plusOne.offsetWidth;
+      plusOne.classList.add("show");
     }
 
-    // 抽景點主流程
-    drawBtn.addEventListener("click", () => {
-      const region = getSelectedRegion();
-      let days = getSelectedDays();
+    // 抽旅遊籤
+    drawTravelBtn.addEventListener("click", () => {
+      const region = getSelectedRegionTravel();
+      let days = getSelectedDaysTravel();
 
-      // 自動決定天數
       if (days === "auto") {
         const randomDays = [1,2,3,4][Math.floor(Math.random() * 4)];
         days = String(randomDays);
       }
-
       const daysNum = parseInt(days, 10);
 
-      // 建立候選清單
       let pool = attractions;
       if (region !== "all") {
         pool = attractions.filter(a => a.region === region);
       }
 
-      // 先用天數篩選，找 minDays~maxDays 包含的
       let filtered = pool.filter(a => daysNum >= a.minDays && daysNum <= a.maxDays);
-      // 如果剛好沒有符合，就退回整個 pool 隨機
       if (filtered.length === 0) filtered = pool;
 
-      // 抽一個
       const picked = filtered[Math.floor(Math.random() * filtered.length)];
 
-      // 顯示等待動畫，模擬「抽籤」感
-      resultArea.style.display = "none";
-      loadingEl.style.display = "flex";
-      drawBtn.disabled = true;
+      resultTravel.style.display = "none";
+      loadingTravel.style.display = "flex";
+      drawTravelBtn.disabled = true;
 
       setTimeout(() => {
-        loadingEl.style.display = "none";
-        showResult(picked, daysNum);
-        drawBtn.disabled = false;
-        addCount();
-        updateHistory(picked, daysNum);
-      }, 900); // 0.9 秒抽籤感
+        loadingTravel.style.display = "none";
+        drawTravelBtn.disabled = false;
+        showTravelResult(picked, daysNum);
+        travelCount++;
+        countTravel.textContent = travelCount;
+        triggerPlusOne("🧳");
+        updateTravelHistory(picked, daysNum);
+      }, 900);
     });
 
-    function showResult(spot, daysNum) {
-      spotName.textContent = spot.name;
-      spotRegion.textContent = spot.regionLabel;
-      spotCity.textContent = `📍 位在：${spot.city}`;
-      let dayText = `建議停留：${spot.minDays}–${spot.maxDays} 天`;
+    function showTravelResult(spot, daysNum) {
+      travelName.textContent = spot.name;
+      travelRegion.textContent = spot.regionLabel;
+      travelCity.textContent = `📍 位在：${spot.city}`;
 
-      if (daysNum) {
+      let dayText = `建議停留：${spot.minDays}–${spot.maxDays} 天`;
+      if (!isNaN(daysNum)) {
         dayText += `（你現在想玩約 ${daysNum} 天）`;
       }
-      spotDays.textContent = dayText;
+      travelDays.textContent = dayText;
 
-      tagRow.innerHTML = "";
+      travelTags.innerHTML = "";
       spot.tags.forEach(t => {
         const span = document.createElement("span");
         span.className = "tag";
-        span.textContent = `#${t}`;
-        tagRow.appendChild(span);
+        span.textContent = "#" + t;
+        travelTags.appendChild(span);
       });
 
-      bearTip.textContent = spot.tip;
-      resultArea.style.display = "block";
+      travelTip.textContent = spot.tip;
+      resultTravel.style.display = "block";
     }
 
-    function addCount() {
-      drawCount += 1;
-      countNum.textContent = drawCount;
-      plusOne.classList.remove("show");
-      // 重新觸發動畫
-      void plusOne.offsetWidth;
-      plusOne.classList.add("show");
-    }
-
-    function updateHistory(spot, daysNum) {
+    function updateTravelHistory(spot, daysNum) {
       const record = {
         name: spot.name,
         regionLabel: spot.regionLabel,
         daysText: `${spot.minDays}–${spot.maxDays} 天（你想 ${daysNum} 天）`
       };
-      history.unshift(record);
-      if (history.length > 3) history.pop();
+      travelHistory.unshift(record);
+      if (travelHistory.length > 3) travelHistory.pop();
 
-      if (!history.length) {
-        historyList.className = "history-empty";
-        historyList.textContent = "還沒有紀錄，先讓愛吃熊幫你抽一張旅遊籤吧～";
+      if (!travelHistory.length) {
+        historyTravel.className = "history-empty";
+        historyTravel.textContent = "還沒有紀錄，先讓愛吃熊幫你抽一張旅遊籤吧～";
         return;
       }
 
-      historyList.className = "";
-      historyList.innerHTML = "";
-      history.forEach(item => {
+      historyTravel.className = "";
+      historyTravel.innerHTML = "";
+      travelHistory.forEach(item => {
         const div = document.createElement("div");
         div.className = "history-item";
         div.innerHTML = `
           <div class="history-item-title">📍 ${item.name}</div>
           <div class="history-item-meta">${item.regionLabel} · 建議 ${item.daysText}</div>
         `;
-        historyList.appendChild(div);
+        historyTravel.appendChild(div);
+      });
+    }
+
+    // 抽美食籤
+    drawFoodBtn.addEventListener("click", () => {
+      const region = getSelectedRegionFood();
+      let pool = foods;
+      if (region !== "all") {
+        pool = foods.filter(f => f.region === region);
+      }
+      if (!pool.length) pool = foods;
+
+      const picked = pool[Math.floor(Math.random() * pool.length)];
+
+      resultFood.style.display = "none";
+      loadingFood.style.display = "flex";
+      drawFoodBtn.disabled = true;
+
+      setTimeout(() => {
+        loadingFood.style.display = "none";
+        drawFoodBtn.disabled = false;
+        showFoodResult(picked);
+        foodCount++;
+        countFood.textContent = foodCount;
+        triggerPlusOne("🍴");
+        updateFoodHistory(picked);
+      }, 900);
+    });
+
+    function showFoodResult(food) {
+      foodName.textContent = food.name;
+      foodRegion.textContent = food.regionLabel;
+      foodCity.textContent = `🍽 推薦地點：${food.city}`;
+
+      foodTags.innerHTML = "";
+      food.tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag";
+        span.textContent = "#" + t;
+        foodTags.appendChild(span);
+      });
+
+      foodTip.textContent = food.tip;
+      resultFood.style.display = "block";
+    }
+
+    function updateFoodHistory(food) {
+      const record = {
+        name: food.name,
+        regionLabel: food.regionLabel,
+        city: food.city
+      };
+      foodHistory.unshift(record);
+      if (foodHistory.length > 3) foodHistory.pop();
+
+      if (!foodHistory.length) {
+        historyFood.className = "history-empty";
+        historyFood.textContent = "還沒有紀錄，讓愛吃熊先幫你抽一張美食籤吧～";
+        return;
+      }
+
+      historyFood.className = "";
+      historyFood.innerHTML = "";
+      foodHistory.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+          <div class="history-item-title">🍴 ${item.name}</div>
+          <div class="history-item-meta">${item.regionLabel} · ${item.city}</div>
+        `;
+        historyFood.appendChild(div);
       });
     }
   </script>
