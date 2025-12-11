@@ -900,6 +900,456 @@
   });
   /* ====== 美食籤資料陣列（第 5 / 6、6 / 6 會塞資料） ====== */
   const foodSpots = [];
+    // ========= 第 5 / 6 份：美食籤 50 種 =========
+
+  /* 美食資料格式：
+     title：名稱
+     desc：詩籤式描述
+     kcal：熱量（估算）
+     sport：建議運動（分鐘）
+     explain：美食籤解說
+     bear：熊熊提醒
+  */
+
+  /* ==========================
+       台灣必吃 50 美食籤
+     ========================== */
+
+  foodSpots.push({
+    title: "珍珠奶茶",
+    desc: "香濃滑順，甜在心裡的台灣代表。",
+    kcal: 350,
+    sport: 40,
+    explain: "今天需要一點甜甜的能量，讓心情回到最佳狀態！",
+    bear: "熊熊提醒：半糖少冰一樣很好喝喔～"
+  });
+
+  foodSpots.push({
+    title: "滷肉飯",
+    desc: "暖心又扎實，吃下去就是家鄉的味道。",
+    kcal: 420,
+    sport: 50,
+    explain: "最近可能有點累，這碗暖暖的力量正好屬於你。",
+    bear: "熊熊提醒：吃完散散步最剛好～"
+  });
+
+  foodSpots.push({
+    title: "雞排",
+    desc: "外酥內嫩，香味十分，魅力無法擋。",
+    kcal: 520,
+    sport: 60,
+    explain: "有時候需要一點奢侈的快樂，沒關係的！",
+    bear: "熊熊提醒：記得跟朋友分著吃，也能一起快樂！"
+  });
+
+  foodSpots.push({
+    title: "牛肉麵",
+    desc: "湯頭濃郁，暖心暖胃的大確幸。",
+    kcal: 600,
+    sport: 70,
+    explain: "最近很努力，這碗暖心的麵是給你的獎勵。",
+    bear: "熊熊提醒：喝湯前先吹一下，小心燙嘴～"
+  });
+
+  foodSpots.push({
+    title: "鹽酥雞",
+    desc: "鹹香酥脆，一口接一口停不下來。",
+    kcal: 520,
+    sport: 60,
+    explain: "生活需要小確幸，今天就允許自己享受一下吧！",
+    bear: "熊熊提醒：多點青菜比較均衡喔～"
+  });
+
+  foodSpots.push({
+    title: "小籠包",
+    desc: "湯汁爆滿，咬下去是幸福流出來。",
+    kcal: 320,
+    sport: 36,
+    explain: "這籤象徵你近期會有小小的好消息～",
+    bear: "熊熊提醒：小心湯汁不要噴到隔壁熊～"
+  });
+
+  foodSpots.push({
+    title: "蔥油餅",
+    desc: "外脆內香，樸實卻迷人的傳統味。",
+    kcal: 350,
+    sport: 40,
+    explain: "簡單的幸福正在靠近你。",
+    bear: "熊熊提醒：加蛋更好吃，但熱量也會變噢～"
+  });
+
+  foodSpots.push({
+    title: "蚵仔煎",
+    desc: "酥軟甜鹹，最台灣的小吃組合。",
+    kcal: 380,
+    sport: 45,
+    explain: "這籤象徵創意靈感會突然出現！",
+    bear: "熊熊提醒：醬料是靈魂，記得一定要加～"
+  });
+
+  foodSpots.push({
+    title: "米粉湯",
+    desc: "樸實溫暖，最懂台灣胃的小吃。",
+    kcal: 280,
+    sport: 30,
+    explain: "你最近需要好好照顧自己，多休息一下。",
+    bear: "熊熊提醒：搭配滷味就是完美組合！"
+  });
+
+  foodSpots.push({
+    title: "鐵板燒",
+    desc: "香味四溢，看著煎炒就是一種療癒。",
+    kcal: 550,
+    sport: 65,
+    explain: "表示你準備迎接新的挑戰，而且會順利！",
+    bear: "熊熊提醒：多點青菜會更均衡～"
+  });
+
+
+  /* ======= 甜點類 ======= */
+
+  foodSpots.push({
+    title: "草莓大福",
+    desc: "酸甜夢幻，一咬下去就是戀愛的滋味。",
+    kcal: 210,
+    sport: 25,
+    explain: "象徵你近期會收到溫暖的心意。",
+    bear: "熊熊提醒：季節限定更珍貴～"
+  });
+
+  foodSpots.push({
+    title: "芒果冰",
+    desc: "清涼甘甜，是夏天的救贖！",
+    kcal: 260,
+    sport: 30,
+    explain: "你值得好好放鬆一下，夏天的甜就是獎勵。",
+    bear: "熊熊提醒：芒果太好吃要小心吃太快頭痛～"
+  });
+
+  foodSpots.push({
+    title: "豆花",
+    desc: "柔軟綿密，入口即化，是心的慰藉。",
+    kcal: 180,
+    sport: 20,
+    explain: "你需要一點溫柔，豆花正是最剛好的慰藉。",
+    bear: "熊熊提醒：加花生或珍珠都很搭～"
+  });
+
+  foodSpots.push({
+    title: "仙草凍",
+    desc: "清爽退火，是夏天的涼感救星。",
+    kcal: 150,
+    sport: 15,
+    explain: "象徵煩惱正在慢慢消退，你會越來越清爽。",
+    bear: "熊熊提醒：加鮮奶超好喝～"
+  });
+
+  foodSpots.push({
+    title: "雞蛋糕",
+    desc: "香氣濃郁，外脆內軟，是童年的味道。",
+    kcal: 260,
+    sport: 30,
+    explain: "你需要重新找回小時候的快樂。",
+    bear: "熊熊提醒：剛出爐最香，小心燙口喔！"
+  });
+
+
+  /* ======= 飲料類 ======= */
+
+  foodSpots.push({
+    title: "冬瓜檸檬",
+    desc: "清爽酸甜，最適合夏天的涼感組合。",
+    kcal: 160,
+    sport: 18,
+    explain: "最近會有一件事讓你突然心情變好！",
+    bear: "熊熊提醒：少冰更能喝到冬瓜香～"
+  });
+
+  foodSpots.push({
+    title: "青草茶",
+    desc: "退火消暑，透心涼的好朋友。",
+    kcal: 120,
+    sport: 12,
+    explain: "提醒你最近要照顧身體，多休息。",
+    bear: "熊熊提醒：微甜剛剛好～"
+  });
+
+  foodSpots.push({
+    title: "黑糖珍奶",
+    desc: "濃郁黑糖香，是誘惑滿分的罪惡之味。",
+    kcal: 420,
+    sport: 50,
+    explain: "象徵你渴望被好好對待，是時候獎勵自己。",
+    bear: "熊熊提醒：減糖也很好喝喔！"
+  });
+
+
+  /* ======= 水果類 ======= */
+
+  foodSpots.push({
+    title: "鳳梨",
+    desc: "酸甜活力，是熱帶的陽光味道。",
+    kcal: 90,
+    sport: 10,
+    explain: "象徵好運即將到來，甜甜的發展會出現。",
+    bear: "熊熊提醒：吃太多會刺刺的，記得喝點水～"
+  });
+
+  foodSpots.push({
+    title: "釋迦",
+    desc: "香甜濃郁，是東台灣的幸福象徵。",
+    kcal: 110,
+    sport: 12,
+    explain: "你正在變得更有魅力，吸引到好事靠近。",
+    bear: "熊熊提醒：很甜喔，吃少少也能幸福～"
+  });
+
+  foodSpots.push({
+    title: "香蕉",
+    desc: "香氣濃厚，補充能量最方便。",
+    kcal: 100,
+    sport: 12,
+    explain: "象徵你接下來的事情會越來越順！",
+    bear: "熊熊提醒：運動前吃最剛好！"
+  });
+
+  foodSpots.push({
+    title: "芭樂",
+    desc: "脆脆甜甜，是最台味的健康水果。",
+    kcal: 60,
+    sport: 8,
+    explain: "你需要調整步調，讓生活更平衡。",
+    bear: "熊熊提醒：加梅粉更好吃，但要少量喔～"
+  });
+
+  foodSpots.push({
+    title: "蘋果",
+    desc: "清脆甜美，是每天都適合的好味道。",
+    kcal: 80,
+    sport: 10,
+    explain: "象徵穩定與安全感，你最近會很順利。",
+    bear: "熊熊提醒：一天一蘋果，醫生遠離我～"
+  });
+
+
+  /* ======= 更多台灣美食 ======= */
+
+  foodSpots.push({
+    title: "雞肉飯",
+    desc: "清爽不膩，嘉義的靈魂代表。",
+    kcal: 380,
+    sport: 45,
+    explain: "象徵你會用輕鬆自然的方式完成一件事。",
+    bear: "熊熊提醒：肉燥或半熟蛋都超搭～"
+  });
+
+  foodSpots.push({
+    title: "大腸包小腸",
+    desc: "鹹香Q彈，是夜市的靈魂組合。",
+    kcal: 520,
+    sport: 60,
+    explain: "你會遇到合拍的夥伴，一起完成計畫。",
+    bear: "熊熊提醒：醬料要均勻才不會太鹹～"
+  });
+
+  foodSpots.push({
+    title: "臭豆腐",
+    desc: "臭到香的極致，酥脆多汁！",
+    kcal: 380,
+    sport: 45,
+    explain: "象徵你正在蛻變，變得更好更強。",
+    bear: "熊熊提醒：配泡菜最對味～"
+  });
+
+  foodSpots.push({
+    title: "牛排館排餐",
+    desc: "份量十足，是努力後的獎勵！",
+    kcal: 700,
+    sport: 80,
+    explain: "你值得被好好款待，別再虧待自己了。",
+    bear: "熊熊提醒：七分熟剛剛好，多汁不乾柴～"
+  });
+
+  foodSpots.push({
+    title: "火鍋",
+    desc: "暖呼呼的幸福感，超療癒！",
+    kcal: 650,
+    sport: 75,
+    explain: "象徵聚會與交流，你會遇到重要的人。",
+    bear: "熊熊提醒：菜多一點，身體更開心～"
+  });
+
+  foodSpots.push({
+    title: "壽司",
+    desc: "清爽新鮮，一口一個剛剛好。",
+    kcal: 320,
+    sport: 36,
+    explain: "你的生活將迎來更平衡、舒服的節奏。",
+    bear: "熊熊提醒：不要沾太多醬油喔～"
+  });
+
+  foodSpots.push({
+    title: "湯包",
+    desc: "皮薄多汁，是幸福爆在嘴裡的瞬間。",
+    kcal: 300,
+    sport: 30,
+    explain: "代表好消息會悄悄降臨。",
+    bear: "熊熊提醒：小心燙，幸福不要太急～"
+  });
+
+  foodSpots.push({
+    title: "鹽水雞",
+    desc: "清爽低脂的宵夜救星。",
+    kcal: 260,
+    sport: 30,
+    explain: "象徵你正在做出更健康的選擇，太棒了！",
+    bear: "熊熊提醒：青菜多一點更完美～"
+  });
+
+  foodSpots.push({
+    title: "刈包",
+    desc: "肥瘦交融，一口幸福的台式漢堡。",
+    kcal: 450,
+    sport: 55,
+    explain: "象徵你正在找到人生的『剛剛好』。",
+    bear: "熊熊提醒：花生粉一定要加啦～"
+  });
+
+  foodSpots.push({
+    title: "油飯",
+    desc: "香氣四溢，是傳統台味的代表。",
+    kcal: 380,
+    sport: 45,
+    explain: "事情會越來越踏實、有成果。",
+    bear: "熊熊提醒：加一點甜辣醬更香！"
+  });
+
+  foodSpots.push({
+    title: "涼麵",
+    desc: "夏天最清爽的好選擇。",
+    kcal: 300,
+    sport: 32,
+    explain: "代表你會成功度過一個難關。",
+    bear: "熊熊提醒：多加小黃瓜營養更均衡～"
+  });
+
+  foodSpots.push({
+    title: "肉羹湯",
+    desc: "濃郁湯頭，是台灣的安心味道。",
+    kcal: 260,
+    sport: 30,
+    explain: "象徵有人會在背後默默支持你。",
+    bear: "熊熊提醒：加一點烏醋更提味！"
+  });
+
+  foodSpots.push({
+    title: "章魚燒",
+    desc: "外酥內軟，幸福在嘴裡爆開。",
+    kcal: 320,
+    sport: 36,
+    explain: "象徵幸福會一顆一顆地靠近你。",
+    bear: "熊熊提醒：小心剛做好的超燙～"
+  });
+
+  foodSpots.push({
+    title: "蘿蔔糕",
+    desc: "煎得金黃，外酥內嫩。",
+    kcal: 280,
+    sport: 30,
+    explain: "你將迎來新的開始，步調會變輕鬆。",
+    bear: "熊熊提醒：加蛋更香，但熱量也會++ 喔～"
+  });
+
+  foodSpots.push({
+    title: "甜不辣",
+    desc: "Q 彈又入味，台式下午茶首選。",
+    kcal: 220,
+    sport: 24,
+    explain: "象徵你的努力逐漸會有成果。",
+    bear: "熊熊提醒：湯要記得喝完，精華都在裡面～"
+  });
+
+  foodSpots.push({
+    title: "關東煮",
+    desc: "清爽又暖心，任何時候都適合吃。",
+    kcal: 180,
+    sport: 20,
+    explain: "象徵你會遇到暖心的人。",
+    bear: "熊熊提醒：海帶、白蘿蔔超級健康～"
+  });
+
+  foodSpots.push({
+    title: "粽子",
+    desc: "香氣十足，是節慶的幸福味。",
+    kcal: 420,
+    sport: 50,
+    explain: "象徵你會完成一件重要的事。",
+    bear: "熊熊提醒：吃完散步一下最剛好～"
+  });
+
+  foodSpots.push({
+    title: "炒飯",
+    desc: "鍋氣十足，是幸福的味道。",
+    kcal: 520,
+    sport: 60,
+    explain: "象徵你即將迎來收穫期。",
+    bear: "熊熊提醒：配湯更完美！"
+  });
+
+  foodSpots.push({
+    title: "咖哩飯",
+    desc: "濃濃香料味，讓人超有食慾。",
+    kcal: 560,
+    sport: 65,
+    explain: "象徵你的生活會變得更有活力。",
+    bear: "熊熊提醒：微辣剛剛好～"
+  });
+
+  foodSpots.push({
+    title: "海鮮煎餅",
+    desc: "酥脆又滿滿海味。",
+    kcal: 450,
+    sport: 55,
+    explain: "你將迎來驚喜的小幸運。",
+    bear: "熊熊提醒：剛煎好超燙，吹一下再吃～"
+  });
+
+  foodSpots.push({
+    title: "台式早餐：蛋餅",
+    desc: "每天都要吃的幸福感！",
+    kcal: 320,
+    sport: 36,
+    explain: "開始新的一天充滿能量！",
+    bear: "熊熊提醒：加起司超好吃～"
+  });
+
+  foodSpots.push({
+    title: "蘿蔔湯",
+    desc: "清甜暖心，是最舒服的味道。",
+    kcal: 120,
+    sport: 12,
+    explain: "提醒你要照顧自己的身體。",
+    bear: "熊熊提醒：暖暖的湯最治癒～"
+  });
+
+  foodSpots.push({
+    title: "酥皮濃湯",
+    desc: "酥皮香甜、熱湯濃郁，是幸福的開場白。",
+    kcal: 380,
+    sport: 45,
+    explain: "象徵你會迎來一件開心的事。",
+    bear: "熊熊提醒：酥皮要慢慢吃，不然會掉滿地喔～"
+  });
+
+  foodSpots.push({
+    title: "義大利麵",
+    desc: "滑順又香濃，是聚會的好選擇。",
+    kcal: 580,
+    sport: 65,
+    explain: "象徵你的生活節奏會變得更順。",
+    bear: "熊熊提醒：加辣更有層次～"
+  });
+  
 
   /* 使用者選擇狀態 */
   let selectedRegion = "全台";
