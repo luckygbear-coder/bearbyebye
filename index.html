@@ -2,537 +2,103 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
+  <title>愛吃熊美食占卜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>愛吃熊</title>
-
-  <!-- PWA / Icon 設定 -->
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/icon-512.png">
-  <meta name="theme-color" content="#f4a63a">
-
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <!-- 啟動畫面：進來時先看到熊熊整張圖 -->
-  <div id="loading-screen">
-    <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
-  </div>
+  <div class="app-wrap">
 
-<!-- ======= Header 區塊（重新調整） ======= -->
-<div class="header-wrap">
+    <!-- Header：標題 ＋ 副標 ＋ 功德值 -->
+    <div class="header-row">
+      <div class="title-block">
+        <h1>愛吃熊美食占卜</h1>
+        <p>不是正在吃美食，就是在吃美食的路上</p>
+      </div>
+      <div class="merit-pill">
+        功德值 <span id="meritValue">0</span>
+      </div>
+    </div>
 
-<a href="travel.html" class="menu-btn">
-  <img src="images/travel.png">
-  熊熊去哪玩
-</a>
+    <!-- 熊熊美食插畫卡片 -->
+    <div class="main-card">
+      <div class="main-illust">
+        <!-- 換成你的美食熊圖片 -->
+        <img src="images/food-bear.png" alt="愛吃熊美食占卜">
+      </div>
+    </div>
 
-  <p class="page-subtitle">不是正在吃美食，就是在吃美食的路上</p>
-
-  <!-- 保留功德值 -->
-  <div class="merit-pill">
-    功德值 <span id="meritValue">0</span>
-  </div>
-
-</div>
-    </header>
-
-    <!-- 主視覺：完整熊熊原圖（不裁切） -->
-    <section class="temple-wrapper">
-      <img src="images/bear-loading-couplet.png"
-           alt="愛吃熊與美食"
-           class="temple-image" />
-      <!-- 熊熊祝福對話氣泡（上供品用） -->
-      <div id="bearBubble" class="bear-bubble"></div>
-    </section>
-
-    <!-- 狀態提示文字 -->
-    <p id="statusText" class="status-text">
+    <!-- 提示文字 -->
+    <p class="hint-text">
       請按「抽詩籤」，讓愛吃熊幫你決定今天要吃什麼。
     </p>
 
-    <!-- 抽籤小按鈕這版不用，保留結構 -->
-    <section class="draw-row hidden">
-      <button id="drawBtn" class="pill-btn draw-btn">
-        🧧 抽籤
-      </button>
-    </section>
+    <!-- 四顆圓形按鈕：最後一顆是去哪玩 -->
+    <div class="menu-row">
+      <!-- 抽詩籤 -->
+      <a href="javascript:void(0)" class="menu-btn" id="btnDraw">
+        <div class="menu-circle">
+          <img src="images/icon-draw.png" alt="抽詩籤">
+          <div class="menu-label">抽詩籤</div>
+        </div>
+      </a>
 
-    <!-- 下方四顆奶油色圓形大按鈕 -->
-    <section class="round-button-row">
-      <button id="boBtn" class="round-btn">
-        🧧<span>抽詩籤</span>
-      </button>
+      <!-- 上供品 -->
+      <a href="javascript:void(0)" class="menu-btn" id="btnOffer">
+        <div class="menu-circle">
+          <img src="images/icon-offer.png" alt="上供品">
+          <div class="menu-label">上供品</div>
+        </div>
+      </a>
 
-      <button id="offerBtn" class="round-btn">
-        🍱<span>上供品</span>
-      </button>
+      <!-- 抽籤紀錄 -->
+      <a href="javascript:void(0)" class="menu-btn" id="btnHistory">
+        <div class="menu-circle">
+          <img src="images/icon-history.png" alt="抽籤紀錄">
+          <div class="menu-label">抽籤紀錄</div>
+        </div>
+      </a>
 
-      <button id="historyBtn" class="round-btn">
-        📘<span>抽籤紀錄</span>
-      </button>
+      <!-- 去哪玩（連到旅遊頁） -->
+      <a href="travel.html" class="menu-btn" id="btnTravel">
+        <div class="menu-circle">
+          <img src="images/travel.png" alt="去哪玩">
+          <div class="menu-label">去哪玩</div>
+        </div>
+      </a>
+    </div>
 
-      <button id="igBtn" class="round-btn">
-        📸<span>愛吃熊</span>
-      </button>
-    </section>
+    <!-- Loading 動畫 -->
+    <div class="loading" id="loading">
+      愛吃熊正在幫你抽籤…
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
 
-    <!-- 目前詩籤卡片（中繼容器，實際顯示改為彈窗） -->
-    <section id="currentLotCard" class="lot-card hidden"></section>
+    <!-- +1 功德值動畫文字 -->
+    <div class="plus-one" id="plusOne">+1</div>
+
   </div>
 
-  <!-- 詩籤彈窗（大一點＋詩籤排版） -->
-  <div id="lotModal" class="modal hidden"
-       onclick="if (event.target === this) window.closeAllModals();">
-    <div class="modal-content">
-      <div id="lotText"></div>
-      <button id="closeLot" class="close-btn"
-              onclick="window.closeAllModals();">
-        關閉
-      </button>
+  <!-- 籤詩結果視窗 -->
+  <div class="modal-backdrop" id="modalResult">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeResult()">✕</button>
+      <h2 id="modalResultTitle"></h2>
+      <p id="modalResultMain"></p>
+      <p class="modal-tag" id="modalResultTag"></p>
+      <p class="modal-bear" id="modalResultBear"></p>
     </div>
   </div>
 
-  <!-- 抽籤紀錄彈窗 -->
-  <div id="historyModal" class="modal hidden"
-       onclick="if (event.target === this) window.closeAllModals();">
-    <div class="modal-content history-modal-content">
-      <div id="historyList"></div>
-      <button id="closeHistory" class="close-btn"
-              onclick="window.closeAllModals();">
-        關閉
-      </button>
+  <!-- 抽籤紀錄視窗 -->
+  <div class="modal-backdrop" id="modalHistory">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeHistory()">✕</button>
+      <h2>近期籤詩紀錄</h2>
+      <div id="historyListModal"></div>
     </div>
   </div>
 
-  <!-- ====== 全部邏輯都寫在這裡，不再需要外部 script.js ====== -->
-  <script>
-    /* === 啟動畫面淡出 === */
-    function hideLoadingScreen() {
-      const loading = document.getElementById('loading-screen');
-      if (!loading) return;
-      loading.classList.add('fade-out');
-      setTimeout(() => loading.remove(), 700);
-    }
-
-    window.addEventListener('load', hideLoadingScreen);
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(hideLoadingScreen, 1800);
-    });
-
-    /* === 功德值 +1 動畫 === */
-    window.addMerit = function (delta) {
-      if (!delta || delta <= 0) return;
-
-      const badgeValue = document.getElementById('merit');
-      if (!badgeValue) return;
-
-      const current = parseInt(badgeValue.textContent || '0', 10);
-      const next = current + delta;
-      badgeValue.textContent = next;
-
-      const badge = document.querySelector('.merit-badge');
-      if (!badge) return;
-
-      const plus = document.createElement('span');
-      plus.className = 'merit-plus';
-      plus.textContent = '+' + delta;
-      badge.appendChild(plus);
-
-      setTimeout(() => plus.remove(), 900);
-    };
-
-    /* === 愛吃熊祝福語（供品用） === */
-    const BEAR_BLESSINGS = [
-      "愛吃熊送你一口好心情，記得慢慢吃、好好吃。",
-      "你今天辛苦了，給自己一份好吃的，就會更有力量喔！",
-      "肚子被照顧好，心情也會跟著變甜甜的。",
-      "願每一餐都能安慰你，愛吃熊陪你一起吃好料。",
-      "好好吃飯不是奢侈，是一種對自己的溫柔。",
-      "吃飽的人最可愛，願你今天也是可愛的。",
-      "愛吃熊祝福你：每一口都剛剛好、每一步都順順的。",
-      "不用勉強微笑，先吃好吃的，笑容就會自然跑出來。",
-      "給自己一口溫暖，世界就會變得沒那麼可怕。",
-      "願你的肚子飽飽、心也暖暖，今天辛苦的都值得。",
-      "愛吃熊提醒你：好好吃飯，是最簡單的幸福魔法。",
-      "願你每一餐都能療癒自己，而不是勉強自己。",
-      "你值得被好好餵飽，也值得被好好對待。",
-      "吃東西時請放鬆，剩下的事交給明天的你就好。",
-      "願好的味道陪著你，把壞心情一點一點融化掉。",
-      "愛吃熊給你一個抱抱，再給你一份好吃的。",
-      "願你的碗裡永遠裝著安心、期待與小小的快樂。",
-      "如果覺得累，那就先吃好吃的，愛吃熊會陪著你。"
-    ];
-
-    /* === 愛吃熊小提醒（詩籤視窗用）=== */
-    const BEAR_ADVICE = [
-      "今天先照顧好肚子，再去面對那些讓你緊張的事情就好。",
-      "慢慢吃、慢慢想，不用一次把所有答案都找出來。",
-      "如果覺得心裡亂，就先從一頓好好吃的餐開始整理生活。",
-      "允許自己挑一個真的想吃的，而不是「應該吃」的東西。",
-      "吃飯時專心享受味道，就是在好好陪伴自己。",
-      "你已經很努力了，給自己一點喜歡的食物當小獎勵吧。"
-    ];
-
-    function getRandomAdvice() {
-      return BEAR_ADVICE[
-        Math.floor(Math.random() * BEAR_ADVICE.length)
-      ];
-    }
-
-    /* === 詩籤資料（可以之後自己增加 / 替換） === */
-    const LOTS = [
-      {
-        no: "第一籤",
-        title: "暖湯救餓龍",
-        mood: "暖暖飽",
-        food: "味噌湯麵一碗",
-        kcal: 480,
-        minutes: 20
-      },
-      {
-        no: "第二籤",
-        title: "暖湯好人緣",
-        mood: "暖暖飽",
-        food: "暖呼呼湯麵一碗",
-        kcal: 560,
-        minutes: 22
-      },
-      {
-        no: "第三籤",
-        title: "甜甜補勇氣",
-        mood: "甜甜飽",
-        food: "黑糖珍珠奶茶（半糖少冰）",
-        kcal: 420,
-        minutes: 25
-      },
-      {
-        no: "第八籤",
-        title: "奶茶小確幸",
-        mood: "幸福飽",
-        food: "鮮奶茶一杯＋小點心",
-        kcal: 320,
-        minutes: 20
-      },
-      {
-        no: "第九籤",
-        title: "水果小點心",
-        mood: "微微飽",
-        food: "綜合水果盤一份",
-        kcal: 120,
-        minutes: 10
-      },
-      {
-        no: "第十二籤",
-        title: "轉彎牛肉麵",
-        mood: "暖暖飽",
-        food: "牛肉麵一碗",
-        kcal: 680,
-        minutes: 27
-      },
-      {
-        no: "第十三籤",
-        title: "便當慢慢嚐",
-        mood: "需要休息",
-        food: "家常便當一份（多菜少炸）",
-        kcal: 720,
-        minutes: 29
-      },
-      {
-        no: "第十五籤",
-        title: "小辣醒腦湯",
-        mood: "微辣飽",
-        food: "小辣酸辣湯一碗",
-        kcal: 350,
-        minutes: 19
-      },
-      {
-        no: "第十九籤",
-        title: "火鍋暖家人",
-        mood: "團圓飽",
-        food: "蔬菜多多火鍋一鍋（大家一起分）",
-        kcal: 750,
-        minutes: 30
-      },
-      {
-        no: "第二十二籤",
-        title: "水果休息站",
-        mood: "補充元氣",
-        food: "一盤切好的水果＋熱茶",
-        kcal: 110,
-        minutes: 9
-      }
-    ];
-
-    /* === localStorage 抽籤紀錄 === */
-    const STORAGE_KEY = "eatBearLotsHistory";
-
-    function loadHistory() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return [];
-        const arr = JSON.parse(raw);
-        if (Array.isArray(arr)) return arr;
-        return [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function saveHistory(list) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-    }
-
-    /* === 顯示熊熊祝福氣泡（上供品按鈕） === */
-    function showBearBlessing() {
-      const bubble = document.getElementById('bearBubble');
-      if (!bubble) return;
-
-      const msg =
-        BEAR_BLESSINGS[Math.floor(Math.random() * BEAR_BLESSINGS.length)];
-      bubble.textContent = msg;
-
-      bubble.classList.remove('show');
-      void bubble.offsetWidth; // 強制重繪
-      bubble.classList.add('show');
-    }
-
-    /* === 關閉所有彈窗 === */
-    window.closeAllModals = function () {
-      document.getElementById('lotModal')?.classList.add('hidden');
-      document.getElementById('historyModal')?.classList.add('hidden');
-    };
-
-    /* === 抽籤：從 LOTS 中隨機選一張 === */
-    function drawLot(isFromHistory, historyRecord) {
-      const lotCard = document.getElementById('currentLotCard');
-      if (!lotCard) return;
-
-      let lot, timeText;
-      if (isFromHistory && historyRecord) {
-        // 從歷史紀錄重看
-        lotCard.innerText = historyRecord.fullText;
-        return;
-      } else {
-        lot =
-          LOTS[Math.floor(Math.random() * LOTS.length)];
-      }
-
-      const now = new Date();
-      const yyyy = now.getFullYear();
-      const MM = String(now.getMonth() + 1).padStart(2, "0");
-      const dd = String(now.getDate()).padStart(2, "0");
-      const hh = String(now.getHours()).padStart(2, "0");
-      const mm = String(now.getMinutes()).padStart(2, "0");
-      timeText = `${yyyy}/${MM}/${dd} ${hh}:${mm}`;
-
-      const fullText =
-        `${lot.no}．${lot.title}｜${lot.mood}\n` +
-        `${lot.food}\n` +
-        `約 ${lot.kcal} kcal｜建議小運動 ${lot.minutes} 分鐘`;
-
-      // 寫入中繼區（這行會觸發 MutationObserver → 打開詩籤彈窗）
-      lotCard.innerText = fullText;
-
-      // 存進歷史
-      const history = loadHistory();
-      history.push({
-        time: now.getTime(),
-        timeText,
-        fullText
-      });
-      saveHistory(history);
-      renderHistory();
-    }
-
-    /* === 抽籤紀錄畫面 === */
-    function renderHistory() {
-      const historyListEl = document.getElementById('historyList');
-      if (!historyListEl) return;
-
-      const history = loadHistory().sort((a, b) => b.time - a.time);
-
-      historyListEl.innerHTML = "";
-
-      const title = document.createElement('div');
-      title.className = 'history-title';
-      title.textContent = "📘 抽籤紀錄";
-      historyListEl.appendChild(title);
-
-      if (history.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'history-empty';
-        empty.textContent = "目前還沒有抽籤紀錄。";
-        historyListEl.appendChild(empty);
-        return;
-      }
-
-      history.forEach((record) => {
-        const item = document.createElement('div');
-        item.className = 'history-item';
-
-        const time = document.createElement('div');
-        time.className = 'history-time';
-        time.textContent = record.timeText;
-
-        const lines = record.fullText.split(/\n+/);
-        const summaryLine = document.createElement('div');
-        summaryLine.className = 'history-summary';
-        summaryLine.textContent = lines[0] || "";
-
-        const detailLine = document.createElement('div');
-        detailLine.className = 'history-detail';
-        detailLine.textContent = (lines[1] || "") + " ｜ " + (lines[2] || "");
-
-        item.appendChild(time);
-        item.appendChild(summaryLine);
-        item.appendChild(detailLine);
-
-        item.addEventListener('click', () => {
-          // 點歷史：先關掉紀錄彈窗，再重顯詩籤
-          const historyModal = document.getElementById('historyModal');
-          if (historyModal) historyModal.classList.add('hidden');
-
-          const lotCard = document.getElementById('currentLotCard');
-          if (lotCard) lotCard.innerText = record.fullText; // 交給 observer 開窗
-        });
-
-        historyListEl.appendChild(item);
-
-        // 分隔線
-        const hr = document.createElement('div');
-        hr.className = 'history-divider';
-        historyListEl.appendChild(hr);
-      });
-    }
-
-    /* === DOM 準備好之後，掛上事件 === */
-    document.addEventListener('DOMContentLoaded', () => {
-      const boBtn = document.getElementById('boBtn');
-      const offerBtn = document.getElementById('offerBtn');
-      const historyBtn = document.getElementById('historyBtn');
-      const igBtn = document.getElementById('igBtn');
-      const statusText = document.getElementById('statusText');
-      const lotCard = document.getElementById('currentLotCard');
-      const lotModal = document.getElementById('lotModal');
-      const lotText = document.getElementById('lotText');
-      const historyModal = document.getElementById('historyModal');
-      const temple = document.querySelector('.temple-wrapper');
-
-      /* --- 抽詩籤：每次都 +1 功德，先有抽籤動畫再出籤 --- */
-      if (boBtn) {
-        boBtn.addEventListener('click', () => {
-          window.addMerit(1); // 每次抽籤都 +1 功德
-
-          if (statusText)
-            statusText.textContent = "愛吃熊正在幫你翻籤筒，稍等一下下～";
-
-          if (temple) {
-            temple.classList.remove('shake');
-            void temple.offsetWidth; // 強制重繪
-            temple.classList.add('shake');
-          }
-
-          // 等動畫晃一下再出籤
-          setTimeout(() => {
-            drawLot(false);
-            if (temple) temple.classList.remove('shake');
-          }, 900);
-        });
-      }
-
-      /* --- 上供品：+1 功德 + 熊熊祝福 --- */
-      if (offerBtn) {
-        offerBtn.addEventListener('click', () => {
-          window.addMerit(1);
-          showBearBlessing();
-        });
-      }
-
-      /* --- 抽籤紀錄按鈕 --- */
-      if (historyBtn && historyModal) {
-        historyBtn.addEventListener('click', () => {
-          renderHistory();
-          historyModal.classList.remove('hidden');
-        });
-      }
-
-      /* --- 愛吃熊 IG：開 IG 網頁 --- */
-      if (igBtn) {
-        igBtn.addEventListener('click', () => {
-          window.open('https://instagram.com/luckygbear', '_blank');
-        });
-      }
-
-      /* --- 監聽 lotCard 變化 → 顯示詩籤彈窗（並刪掉那句「點這裡可再次查看完整詩籤」） --- */
-      if (lotCard && lotModal && lotText) {
-        const observer = new MutationObserver(() => {
-          const rawText = lotCard.innerText.trim();
-          if (!rawText) return;
-
-          // 把抽籤紀錄關掉，避免擋住
-          if (historyModal) historyModal.classList.add('hidden');
-
-          let lines = rawText.split(/\n+/).map(l => l.trim()).filter(Boolean);
-
-          // 把「(點這裡可再次查看完整詩籤)」這類提示文字移除
-          lines = lines.filter(line => !line.includes("點這裡可再次查看完整詩籤"));
-
-          const title = lines[0] || "今日美食籤";
-          const detailLine1 = lines[1] || "";
-          const detailLine2 = lines[2] || "";
-          const detailHtml = [detailLine1, detailLine2]
-            .filter(Boolean)
-            .map(l => l.replace(/ /g, "&nbsp;"))
-            .join("<br>");
-
-          let dishShort = detailLine1 || "好吃的一餐";
-          const poemLines = [
-            `${dishShort}香氣暖心房`,
-            "慢慢入口不慌不忙",
-            "照顧肚子也是力量",
-            "好好吃飯勇氣滿滿"
-          ];
-
-          const advice = getRandomAdvice();
-
-          lotText.innerHTML = `
-            <div class="lot-modal-card">
-              <div class="lot-modal-title">${title}</div>
-
-              <div class="lot-modal-section lot-poem">
-                ${poemLines
-                  .map(l => `<div class="lot-poem-line">${l}</div>`)
-                  .join("")}
-              </div>
-
-              <div class="lot-modal-section">
-                <div class="lot-section-label">今日吃貨指引</div>
-                <div class="lot-section-body">${detailHtml}</div>
-              </div>
-
-              <div class="lot-modal-section">
-                <div class="lot-section-label">愛吃熊小提醒</div>
-                <div class="lot-section-body">${advice}</div>
-              </div>
-            </div>
-          `;
-
-          lotModal.classList.remove('hidden');
-          lotCard.classList.add('hidden');
-
-          if (statusText) {
-            statusText.textContent =
-              "愛吃熊食神已給你今日的吃貨詩籤，可以慢慢品味，也可以再抽下一餐。";
-          }
-        });
-
-        observer.observe(lotCard, { childList: true, subtree: true });
-      }
-
-      // 一開始就把歷史預先整理好
-      renderHistory();
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
