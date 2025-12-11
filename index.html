@@ -9,64 +9,44 @@
 <body>
   <div class="app-wrap">
 
-    <!-- Header：標題 ＋ 副標 ＋ 功德值 -->
-    <div class="header-row">
+    <!-- Header：標題＋副標＋IG按鈕＋功德值 -->
+    <header class="header-row">
       <div class="title-block">
         <h1>愛吃熊美食占卜</h1>
-        <p>不是正在吃美食，就是在吃美食的路上</p>
+        <p class="subtitle">
+          不是正在吃美食，就是在吃美食的路上
+          <a href="https://www.instagram.com/luckygbear"
+             target="_blank"
+             class="ig-btn">
+            追蹤IG 陪熊熊吃美食 @luckygbear
+          </a>
+        </p>
       </div>
       <div class="merit-pill">
         功德值 <span id="meritValue">0</span>
       </div>
-    </div>
+    </header>
 
     <!-- 熊熊美食插畫卡片 -->
-    <div class="main-card">
+    <section class="main-card">
       <div class="main-illust">
         <!-- 換成你的美食熊圖片 -->
-        <img src="images/bear.png" alt="愛吃熊美食占卜">
+        <img src="images/food-bear.png" alt="愛吃熊美食占卜">
       </div>
-    </div>
+    </section>
 
     <!-- 提示文字 -->
     <p class="hint-text">
       請按「抽詩籤」，讓愛吃熊幫你決定今天要吃什麼。
     </p>
 
-    <!-- 四顆圓形按鈕：最後一顆是去哪玩 -->
-    <div class="menu-row">
-      <!-- 抽詩籤 -->
-      <a href="javascript:void(0)" class="menu-btn" id="btnDraw">
-        <div class="menu-circle">
-          <img src="images/icon-draw.png" alt="抽詩籤">
-          <div class="menu-label">抽詩籤</div>
-        </div>
-      </a>
-
-      <!-- 上供品 -->
-      <a href="javascript:void(0)" class="menu-btn" id="btnOffer">
-        <div class="menu-circle">
-          <img src="images/icon-offer.png" alt="上供品">
-          <div class="menu-label">上供品</div>
-        </div>
-      </a>
-
-      <!-- 抽籤紀錄 -->
-      <a href="javascript:void(0)" class="menu-btn" id="btnHistory">
-        <div class="menu-circle">
-          <img src="images/icon-history.png" alt="抽籤紀錄">
-          <div class="menu-label">抽籤紀錄</div>
-        </div>
-      </a>
-
-      <!-- 去哪玩（連到旅遊頁） -->
-      <a href="travel.html" class="menu-btn" id="btnTravel">
-        <div class="menu-circle">
-          <img src="images/travel.png" alt="去哪玩">
-          <div class="menu-label">去哪玩</div>
-        </div>
-      </a>
-    </div>
+    <!-- 四個奶油色按鈕 -->
+    <nav class="menu-row">
+      <button class="menu-pill" id="btnDraw">抽詩籤</button>
+      <button class="menu-pill" id="btnOffer">上供品</button>
+      <button class="menu-pill" id="btnHistory">抽籤紀錄</button>
+      <a href="travel.html" class="menu-pill link-pill" id="btnTravel">去哪玩</a>
+    </nav>
 
     <!-- Loading 動畫 -->
     <div class="loading" id="loading">
@@ -84,9 +64,11 @@
     <div class="modal-window">
       <button class="modal-close" onclick="closeResult()">✕</button>
       <h2 id="modalResultTitle"></h2>
-      <p id="modalResultMain"></p>
-      <p class="modal-tag" id="modalResultTag"></p>
-      <p class="modal-bear" id="modalResultBear"></p>
+      <p id="modalResultPoem" class="modal-poem"></p>
+      <p id="modalResultExplain"></p>
+      <p id="modalResultCal" class="modal-meta"></p>
+      <p id="modalResultExercise" class="modal-meta"></p>
+      <p id="modalResultBear" class="modal-bear"></p>
     </div>
   </div>
 
@@ -96,6 +78,15 @@
       <button class="modal-close" onclick="closeHistory()">✕</button>
       <h2>近期籤詩紀錄</h2>
       <div id="historyListModal"></div>
+    </div>
+  </div>
+
+  <!-- 上供品熊熊小語視窗 -->
+  <div class="modal-backdrop" id="modalOffer">
+    <div class="modal-window small">
+      <button class="modal-close" onclick="closeOffer()">✕</button>
+      <h2>上供品成功！</h2>
+      <p id="modalOfferText"></p>
     </div>
   </div>
 
