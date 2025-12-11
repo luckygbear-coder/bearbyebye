@@ -238,7 +238,56 @@ body {
   margin-right: 4px;
   color: #8b4a33;
 }
+/* Header 區保持乾淨不跑版 */
+.header-wrap {
+  padding: 10px 14px 0 14px;
+  text-align: left;
+}
 
+/* 新主按鈕：追蹤 IG */
+.big-main-btn {
+  display: inline-block;
+  width: 100%;
+  background: #fffaf2;
+  border: 2px solid #f3d3a4;
+  padding: 12px 0;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 18px;
+  color: #7a4329;
+  font-weight: bold;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.big-main-btn:active {
+  transform: scale(0.97);
+}
+
+/* 副標 */
+.page-subtitle {
+  font-size: 14px;
+  color: #9b5b36;
+  margin: 4px 0 8px 0;
+}
+
+/* 功德值 */
+.merit-pill {
+  font-size: 13px;
+  color: #9b5b36;
+  background: #fff7e0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1.5px solid #f0c57a;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: inline-block;
+}
+
+/* 底下四顆按鈕的 UI 一樣不用動 */
+.menu-btn img {
+  width: 32px;
+}
 /* ======= 小螢幕再微調 ======= */
 
 @media (max-width: 380px) {
