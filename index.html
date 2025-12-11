@@ -34,7 +34,7 @@
           功德值 <span id="merit">0</span>
         </div>
 
-        <!-- 浮動圓形按鈕：貼在右下 -->
+        <!-- 浮動圓形按鈕：貼在右邊中間 -->
         <div class="floating-buttons">
           <button id="boBtn" class="circle-btn circle-main">
             🙏<span>擲筊</span>
@@ -52,7 +52,7 @@
             🍱<span>供品</span>
           </button>
 
-          <!-- 清空按鈕：給 script.js 用，但畫面隱藏 -->
+          <!-- 清空按鈕：保留給 script.js 用，但畫面隱藏 -->
           <button id="resetBtn" class="circle-btn danger hidden">
             ♻️<span>清空</span>
           </button>
@@ -63,12 +63,12 @@
       <div id="bearBubble" class="bear-bubble"></div>
     </section>
 
-    <!-- 狀態提示文字 -->
+    <!-- 狀態提示文字（已移除聖筊機率說明） -->
     <p id="statusText" class="status-text">
-      請先擲筊，一次聖筊就可以抽籤（聖筊機率 90%）
+      請先擲筊，一次聖筊就可以抽籤。
     </p>
 
-    <!-- 如果 script.js 有用到目前詩籤卡片，就保留一個空容器 -->
+    <!-- 目前詩籤卡片：只當中繼容器，實際顯示改為彈窗 -->
     <section id="currentLotCard" class="lot-card hidden"></section>
   </div>
 
@@ -99,7 +99,7 @@
   <!-- 你的原本遊戲邏輯（擲筊 / 抽籤 / 寫紀錄） -->
   <script src="script.js"></script>
 
-  <!-- 啟動畫面、功德動畫、愛吃熊祝福、供品邏輯 -->
+  <!-- 啟動畫面、功德動畫、愛吃熊祝福、供品邏輯、籤詩彈窗 -->
   <script>
     /* --- 啟動畫面淡出 --- */
     function hideLoadingScreen() {
@@ -181,19 +181,43 @@
       if (historyModal) historyModal.classList.add('hidden');
     };
 
-    /* --- 啟用上供品按鈕：不扣功德，按一下 +1 & 祝福 --- */
+    /* --- DOM 載入後的額外處理 --- */
     document.addEventListener('DOMContentLoaded', () => {
+      /* 1. 上供品：永遠可以按，按一次 +1 功德 + 祝福 */
       const offerBtn = document.getElementById('offerBtn');
-      if (!offerBtn) return;
+      if (offerBtn) {
+        offerBtn.disabled = false;
+        offerBtn.classList.remove('disabled');
+        offerBtn.addEventListener('click', () => {
+          window.addMerit(1);
+          showBearBlessing();
+        });
+      }
 
-      // 確保不會被標記 disabled
-      offerBtn.disabled = false;
-      offerBtn.classList.remove('disabled');
-
-      offerBtn.addEventListener('click', () => {
-        window.addMerit(1);   // 上供品 +1 功德
-        showBearBlessing();   // 顯示愛吃熊祝福
+      /* 2. 確保重要按鈕一定可見 */
+      ["boBtn", "historyBtn", "offerBtn"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('hidden');
       });
+
+      /* 3. 監聽目前詩籤卡片內容變化 -> 自動跳出彈窗顯示 */
+      const lotCard = document.getElementById('currentLotCard');
+      const lotModal = document.getElementById('lotModal');
+      const lotText = document.getElementById('lotText');
+
+      if (lotCard && lotModal && lotText) {
+        const observer = new MutationObserver(() => {
+          const html = lotCard.innerHTML.trim();
+          if (!html) return;
+
+          // 把原本塞在下面卡片的內容轉移到彈窗
+          lotText.innerHTML = html;
+          lotModal.classList.remove('hidden');
+          lotCard.classList.add('hidden');
+        });
+
+        observer.observe(lotCard, { childList: true, subtree: true });
+      }
     });
   </script>
 </body>
