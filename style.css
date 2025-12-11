@@ -20,13 +20,13 @@ body {
 .app {
   max-width: 480px;
   margin: 0 auto;
-  padding: 8px 16px 40px;  /* 整體往上收一點 */
+  padding: 8px 16px 40px;
 }
 
 /* === 標題區 === */
 .header {
   text-align: center;
-  margin-top: 28px;  /* 留一些空間給右上角功德值 */
+  margin-top: 42px; /* 上方留空給角標按鈕 */
   margin-bottom: 6px;
 }
 
@@ -41,6 +41,18 @@ body {
   font-size: 13px;
   color: #a36b52;
   margin-top: 4px;
+}
+
+/* 標題整塊可點進 IG */
+.ig-header-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.ig-header-link:hover {
+  opacity: 0.9;
+  cursor: pointer;
 }
 
 /* === 啟動畫面 === */
@@ -65,7 +77,29 @@ body {
   transition: opacity 0.6s ease;
 }
 
-/* === 功德值角標：整個畫面的右上角 === */
+/* === 左上／右上角標按鈕 === */
+.top-pill {
+  position: fixed;
+  top: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  z-index: 11000;
+}
+
+.left-pill {
+  left: 10px;
+  background: #fff7e6;
+  color: #8b5336;
+}
+
+/* === 右上：功德值角標 === */
 .merit-badge {
   position: fixed;
   top: 8px;
@@ -112,6 +146,42 @@ body {
     opacity: 0;
     transform: translateY(-18px) scale(0.9);
   }
+}
+
+/* === 右下角：IG 浮動貼紙 === */
+.ig-sticker {
+  position: fixed;
+  right: 14px;
+  bottom: 20px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffcf96, #ffe9c7);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #8b4d2d;
+  z-index: 9000;
+}
+
+.ig-sticker-icon {
+  font-size: 18px;
+}
+
+.ig-sticker-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.ig-sticker-small {
+  font-size: 11px;
+}
+
+.ig-sticker-handle {
+  font-size: 13px;
+  font-weight: 700;
 }
 
 /* === 熊熊主視覺（背景鋪滿） === */
@@ -193,47 +263,45 @@ body {
   color: #8b5336;
   font-size: 14px;
   margin-top: 6px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
-/* === 下方按鈕區 === */
+/* === 下方圓形按鈕 === */
 .button-row {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 14px;
   margin-bottom: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
-/* 三個大按鈕 */
-.main-btn {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 150px;
-  padding: 10px 0;
-  border-radius: 999px;
+.round-btn {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
   border: none;
-  font-size: 15px;
-  font-weight: 600;
-  color: #fffaf3;
-  background: linear-gradient(135deg, #f0a64d, #f6c07c);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
-}
-
-/* 次要按鈕：紀錄 */
-.button-row.secondary {
-  margin-top: 2px;
-}
-
-.sub-btn {
-  flex: 0 0 auto;
-  padding: 8px 18px;
-  border-radius: 999px;
-  border: 1px solid #d79b60;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-size: 14px;
-  color: #8b5336;
-  background: #fff7e6;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+  font-weight: 600;
+  color: #fff7ea;
+}
+
+.round-btn span {
+  margin-top: 4px;
+}
+
+/* 紅色大顆：擲筊 / 上供品 */
+.round-main {
+  background: radial-gradient(circle at 30% 20%, #ffd1c0, #d5563d);
+}
+
+/* 中間橘色：抽籤 */
+.round-mid {
+  background: radial-gradient(circle at 30% 20%, #ffe1b8, #f19b3f);
 }
 
 /* 目前詩籤卡片（只做中繼，不會真的顯示） */
@@ -260,16 +328,63 @@ body {
 
 .modal-content {
   background: #fff8ea;
-  border-radius: 16px;
-  padding: 14px 16px 16px;
-  max-width: 420px;
-  width: 88%;
+  border-radius: 20px;
+  padding: 16px 18px 18px;
+  max-width: 460px;
+  width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
   font-size: 14px;
 }
 
+/* 詩籤卡片樣式 */
+.lot-modal-card {
+  background: #fff3dd;
+  border-radius: 18px;
+  border: 2px solid #f0c48a;
+  padding: 10px 12px 12px;
+}
+
+.lot-modal-title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #b15532;
+  margin-bottom: 8px;
+}
+
+.lot-modal-section {
+  margin-top: 8px;
+}
+
+.lot-section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #a35a33;
+  margin-bottom: 4px;
+}
+
+.lot-section-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #5c3523;
+}
+
+/* 四句小詩 */
+.lot-poem {
+  border-radius: 14px;
+  background: #ffe3bf;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.lot-poem-line {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 關閉按鈕 */
 .close-btn {
   margin-top: 12px;
   display: block;
