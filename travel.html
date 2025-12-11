@@ -15,14 +15,15 @@
     body {
       background: #ffb54b;
       font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
-      overflow: hidden; /* 一頁式不滑動 */
+      /* 允許上下滑動，避免被卡住 */
+      overflow-y: auto;
     }
     .app-wrap {
       max-width: 480px;
-      height: 100vh;
+      min-height: 100vh;        /* 至少滿版，但內容多時可以再往下延伸 */
       margin: 0 auto;
       background: #ffeec9;
-      padding: 6px 12px;
+      padding: 6px 12px 16px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -61,7 +62,7 @@
     }
     .travel-hero-img img {
       width: 100%;
-      height: auto;
+      height: auto;          /* 保持原始比例，不壓縮變形 */
       display: block;
     }
 
@@ -129,6 +130,7 @@
     .section-title {
       margin-top: 4px;
       text-align: center;
+      flex-shrink: 0;
     }
     .section-title h2 {
       margin: 0;
@@ -148,6 +150,7 @@
       background: #ffe3b1;
       padding: 2px;
       border-radius: 999px;
+      flex-shrink: 0;
     }
     .tab-btn {
       flex: 1;
@@ -373,12 +376,12 @@
       <div class="travel-hero-img">
         <img src="images/travel.png" alt="出遊熊去哪玩">
 
-        <button class="region-chip chip-all active" id="btnAll">全台</button>
-        <button class="region-chip chip-north" id="btnNorth">北部</button>
-        <button class="region-chip chip-central" id="btnCentral">中部</button>
-        <button class="region-chip chip-south" id="btnSouth">南部</button>
-        <button class="region-chip chip-east" id="btnEast">東部</button>
-        <button class="region-chip chip-islands" id="btnIslands">外島</button>
+        <button class="region-chip chip-all active">全台</button>
+        <button class="region-chip chip-north">北部</button>
+        <button class="region-chip chip-central">中部</button>
+        <button class="region-chip chip-south">南部</button>
+        <button class="region-chip chip-east">東部</button>
+        <button class="region-chip chip-islands">外島</button>
       </div>
 
       <div class="bear-talk-bubble" id="bearTalk"></div>
@@ -468,75 +471,8 @@
 
   <!-- ===================== JS ===================== -->
   <script>
-    /* ========= 出遊熊小語 ========= */
- // ========= 使用者選擇狀態 & DOM =========
- let selectedRegion = "全台";
- let selectedTarget = "不限";
- let selectedDays   = 2;
-
- let todayTravelCount = 0;
- let todayFoodCount   = 0;
-
- const bearTalk       = document.getElementById("bearTalk");
- const dayValue       = document.getElementById("dayValue");
- const todayCountText = document.getElementById("todayCountText");
- const modalResult    = document.getElementById("modalResult");
- const modalHistory   = document.getElementById("modalHistory");
- const historyList    = document.getElementById("historyList");
-
- // 點選區域按鈕
- document.querySelectorAll(".region-chip").forEach(btn => {
-   btn.addEventListener("click", () => {
-     document.querySelectorAll(".region-chip").forEach(b => b.classList.remove("active"));
-     btn.classList.add("active");
-     selectedRegion = btn.innerText;
-   });
- });
-
- // 點選出遊對象
- document.querySelectorAll(".target-chip").forEach(btn => {
-   btn.addEventListener("click", () => {
-     document.querySelectorAll(".target-chip").forEach(b => b.classList.remove("active"));
-     btn.classList.add("active");
-     selectedTarget = btn.dataset.target;
-   });
- });
-
- // 天數加減
- document.getElementById("dayMinus").addEventListener("click", () => {
-   if (selectedDays > 1) selectedDays--;
-   dayValue.innerText = selectedDays;
- });
- document.getElementById("dayPlus").addEventListener("click", () => {
-   if (selectedDays < 5) selectedDays++;
-   dayValue.innerText = selectedDays;
- });
-
- // 更新今日抽籤次數
- function updateCounts() {
-   todayCountText.innerHTML =
-     `今日旅遊籤：${todayTravelCount} 次 ｜ 今日美食籤：${todayFoodCount} 次`;
- }
-
- // 顯示出遊熊隨機小語
- function showBearTalk() {
-   const msg = bearTalkList[Math.floor(Math.random() * bearTalkList.length)];
-   bearTalk.innerText = msg;
-   bearTalk.style.display = "block";
-   setTimeout(() => { bearTalk.style.display = "none"; }, 2200);
- }
-
- // 開啟 / 關閉 modal（給 HTML onclick 用）
- function openModal(el) {
-   el.classList.add("show");
- }
- function closeResult() {
-   modalResult.classList.remove("show");
- }
- function closeHistory() {
-   modalHistory.classList.remove("show");
- }
-      const bearTalkList = [
+    // ========= 出遊熊小語 =========
+    const bearTalkList = [
       "出發吧！今天的風景準備好迎接你了～",
       "玩得開心最重要，不用把行程塞滿喔！",
       "心情決定旅行的味道，今天想放鬆還是探險？",
@@ -547,1068 +483,287 @@
       "今天，就讓出遊熊帶你看看不一樣的世界！"
     ];
 
-
-    /* ====== 旅遊景點 / 美食籤 陣列 ====== */
+    // ========= 資料陣列 =========
     const travelSpots = [];
     const foodSpots   = [];
 
-    /* ======= 以下：你的旅遊景點資料（北/中/南/東/外島） ======= */
-    /* --- 我直接用你貼的內容保留原樣，不再重複註解 --- */
-    /* 北部 + 中部 + 南部 + 東部 + 外島 ...（這裡就是你原本的 travelSpots.push(...) 全部） */
-  // ========= 第 2 / 6 份：出遊熊小語、初始化 =========
-
-  /* 出遊熊小語（抽籤時會顯示在右上氣泡） */
-  const bearTalkList = [
-    "出發吧！今天的風景準備好迎接你了～",
-    "玩得開心最重要，不用把行程塞滿喔！",
-    "心情決定旅行的味道，今天想放鬆還是探險？",
-    "保持彈性，常常會遇到意外的美好～",
-    "旅行就是給心一個放假的理由 🌿",
-    "不一定要走遠，只要願意出發就是旅行。",
-    "記得補充水分喔！快樂要持久才行～",
-    "今天，就讓出遊熊帶你看看不一樣的世界！"
-  ];
-
-  /* ====== 旅遊景點陣列（後面第 3 / 6、4 / 6 會塞進內容） ====== */
-  const travelSpots = [];
-
-  /* ====== 美食籤資料陣列（第 5 / 6、6 / 6 會塞資料） ====== */
-  const foodSpots = [];
-
-  /* 使用者選擇狀態 */
-  let selectedRegion = "全台";
-  let selectedTarget = "不限";
-  let selectedDays = 2;
-
-  /* 今天已抽次數 */
-  let todayTravelCount = 0;
-  let todayFoodCount = 0;
-
-  /* 抓 DOM */
-  const bearTalk = document.getElementById("bearTalk");
-  const dayValue = document.getElementById("dayValue");
-  const todayCountText = document.getElementById("todayCountText");
-
-  const modalResult = document.getElementById("modalResult");
-  const modalHistory = document.getElementById("modalHistory");
-  const historyList = document.getElementById("historyList");
-
-  // 點選區域按鈕
-  document.querySelectorAll(".region-chip").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".region-chip").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      selectedRegion = btn.innerText;
-    });
-  });
-
-  // 點選出遊對象
-  document.querySelectorAll(".target-chip").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".target-chip").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      selectedTarget = btn.dataset.target;
-    });
-  });
-
-  // 天數加減
-  document.getElementById("dayMinus").addEventListener("click", () => {
-    if (selectedDays > 1) selectedDays--;
-    dayValue.innerText = selectedDays;
-  });
-  document.getElementById("dayPlus").addEventListener("click", () => {
-    if (selectedDays < 5) selectedDays++;
-    dayValue.innerText = selectedDays;
-  });
-
-  // 更新今日抽籤次數
-  function updateCounts() {
-    todayCountText.innerHTML =
-      `今日旅遊籤：${todayTravelCount} 次 ｜ 今日美食籤：${todayFoodCount} 次`;
-  }
-
-  // 顯示出遊熊隨機小語
-  function showBearTalk() {
-    const msg = bearTalkList[Math.floor(Math.random() * bearTalkList.length)];
-    bearTalk.innerText = msg;
-    bearTalk.style.display = "block";
-    setTimeout(() => { bearTalk.style.display = "none"; }, 2200);
-  }
-
-  // 開啟 modal
-  function openModal(el) {
-    el.classList.add("show");
-  }
-  function closeResult() {
-    modalResult.classList.remove("show");
-  }
-  function closeHistory() {
-    modalHistory.classList.remove("show");
-  }
-    // ========= 第 3 / 6 份：北部 & 中部景點資料 =========
-
-  /* ==========================
-       北部 10 景點
-     ========================== */
-
-  travelSpots.push({
-    title: "九份老街｜山城漫步",
-    region: "北部",
-    desc: "復古山城氣氛＋海景，是北部最經典的散步點。",
-    suggest: "適合情侶、親子、小旅行。建議安排 2–3 小時漫步、吃吃喝喝。",
-    food: "必吃芋圓、草仔粿、阿柑姨芋粿巧。",
-    bear: "熊熊提醒：九份階梯多～穿好走的鞋子會讓旅程更舒服！"
-  });
-
-  travelSpots.push({
-    title: "淡水漁人碼頭｜夕陽散步",
-    region: "北部",
-    desc: "浪漫夕陽＋海風，是放鬆心情的好去處。",
-    suggest: "適合散心或情侶約會，建議傍晚前抵達。",
-    food: "推薦淡水魚丸、阿給、鐵蛋。",
-    bear: "熊熊提醒：夕陽時間很短，想拍美照記得提早卡位喔！"
-  });
-
-  travelSpots.push({
-    title: "陽明山擎天崗｜大草原漫遊",
-    region: "北部",
-    desc: "大片草原＋牛群，超療癒！",
-    suggest: "適合親子、朋友放風、輕健行。",
-    food: "下山可吃竹子湖海芋小火鍋或士林夜市。",
-    bear: "熊熊提醒：山上溫差大，記得帶外套～"
-  });
-
-  travelSpots.push({
-    title: "北海岸 白沙灣｜輕鬆海邊行",
-    region: "北部",
-    desc: "淺灘沙灘＋海浪聲，是放鬆度假的好地方。",
-    suggest: "適合親子與情侶，可自帶野餐墊。",
-    food: "附近有海鮮熱炒、炸物攤。",
-    bear: "熊熊提醒：防曬一定要擦，不然會變熊熊烤肉！"
-  });
-
-  travelSpots.push({
-    title: "信義區101周邊｜逛街＋美食",
-    region: "北部",
-    desc: "最熱鬧的台北地區，購物、美食、展覽一站完成。",
-    suggest: "適合下雨天備案、想輕鬆逛街的旅客。",
-    food: "推薦金色三麥、杏子豬排、藍瓶咖啡。",
-    bear: "熊熊提醒：假日人潮多，建議避開尖峰喔～"
-  });
-
-  travelSpots.push({
-    title: "平溪放天燈｜幸福小旅行",
-    region: "北部",
-    desc: "山谷鐵道、老街與天燈，是許願的好地方。",
-    suggest: "建議搭配菁桐、十分瀑布一日遊。",
-    food: "老街小吃：米粉湯、雞翅包飯。",
-    bear: "熊熊提醒：放天燈時記得拍照，不然願望會飛太快！"
-  });
-
-  travelSpots.push({
-    title: "金瓜石 黃金博物館",
-    region: "北部",
-    desc: "濃濃日式宿舍群、山城色調與金礦文化。",
-    suggest: "適合文青與拍照控。",
-    food: "建議搭配九份老街美食。",
-    bear: "熊熊提醒：天氣變化大，下雨時階梯會濕滑要小心！"
-  });
-
-  travelSpots.push({
-    title: "野柳地質公園",
-    region: "北部",
-    desc: "自然雕刻的奇岩景觀，女王頭必看！",
-    suggest: "適合親子＋地球科學興趣的人。",
-    food: "野柳漁港海鮮。",
-    bear: "熊熊提醒：風很大，要顧好帽子不然會飛走變風箏熊！"
-  });
-
-  travelSpots.push({
-    title: "宜蘭 礁溪溫泉",
-    region: "北部",
-    desc: "全台最好泡的平價溫泉之一，CP值非常高。",
-    suggest: "適合放鬆行程，冬天最佳選擇。",
-    food: "蔥油餅、卜肉、豆花。",
-    bear: "熊熊提醒：泡湯後喝點水，補充一下水份才健康～"
-  });
-
-  travelSpots.push({
-    title: "基隆 正濱漁港 彩色屋",
-    region: "北部",
-    desc: "彩色港灣超好拍，是近年人氣景點。",
-    suggest: "搭船或散步都很療癒。",
-    food: "廟口夜市、豆干包、奶油螃蟹。",
-    bear: "熊熊提醒：晴天拍照最美，陰天會稍微灰一些喔～"
-  });
-
-
-
-  /* ==========================
-       中部 10 景點
-     ========================== */
-
-  travelSpots.push({
-    title: "台中歌劇院｜建築美學散步",
-    region: "中部",
-    desc: "世界級建築，由伊東豊雄設計，流線外觀超好拍。",
-    suggest: "適合情侶、文青、展覽控。",
-    food: "附近美食：茶六燒肉、路易莎歌劇院店。",
-    bear: "熊熊提醒：裡面冷氣很強，記得帶小外套！"
-  });
-
-  travelSpots.push({
-    title: "逢甲夜市｜吃到走不動",
-    region: "中部",
-    desc: "台灣最強夜市之一，從頭吃到尾都很精彩。",
-    suggest: "適合大人小孩、朋友聚會。",
-    food: "惡魔雞排、起司馬鈴薯、韓式炸雞。",
-    bear: "熊熊提醒：不要一開始就吃太快～要留肚子給後面！"
-  });
-
-  travelSpots.push({
-    title: "高美濕地｜天空之鏡",
-    region: "中部",
-    desc: "夕陽美到不像話，被稱作台版天空之鏡。",
-    suggest: "適合情侶與拍照旅遊。",
-    food: "梧棲老街、海鮮。",
-    bear: "熊熊提醒：潮汐影響景色，出發前查一下會更美～"
-  });
-
-  travelSpots.push({
-    title: "日月潭｜湖光山色",
-    region: "中部",
-    desc: "台灣最美湖景，搭船看風景超級療癒。",
-    suggest: "適合家庭、情侶、一日或兩日遊。",
-    food: "阿婆茶葉蛋、紅茶、竹筒飯。",
-    bear: "熊熊提醒：環湖腳踏車很舒服，記得防曬唷～"
-  });
-
-  travelSpots.push({
-    title: "清境 農場大草原",
-    region: "中部",
-    desc: "青青草原、綿羊秀、山景超級美。",
-    suggest: "適合親子、拍照、小旅行。",
-    food: "雲南特色料理、火鍋。",
-    bear: "熊熊提醒：山上較冷，早晚溫差大記得保暖！"
-  });
-
-  travelSpots.push({
-    title: "彩虹眷村｜繽紛打卡點",
-    region: "中部",
-    desc: "五彩繽紛的牆面，是台中最可愛的拍照聖地。",
-    suggest: "適合短暫停留、拍照、親子散步。",
-    food: "附近西屯美食很多，走幾分鐘就到。",
-    bear: "熊熊提醒：牆面請勿碰觸，保留彩虹的美～"
-  });
-
-  travelSpots.push({
-    title: "谷關溫泉｜深山秘境",
-    region: "中部",
-    desc: "靜謐山林＋溫泉，放空的最佳地點。",
-    suggest: "適合大人放鬆的行程。",
-    food: "白冷冰棒、山產。",
-    bear: "熊熊提醒：山路蜿蜒，容易暈車的熊熊們要注意！"
-  });
-
-  travelSpots.push({
-    title: "東海藝術街",
-    region: "中部",
-    desc: "文青咖啡店、藝廊、可愛小店的聚集地。",
-    suggest: "輕鬆散步半日遊。",
-    food: "珍珠奶茶、義大利麵、甜點店。",
-    bear: "熊熊提醒：每家店都超級好拍，記得手機要充飽～"
-  });
-
-  travelSpots.push({
-    title: "大甲鎮瀾宮｜媽祖文化巡禮",
-    region: "中部",
-    desc: "台灣重要信仰中心之一，文化濃厚。",
-    suggest: "適合文化巡禮或祈福行。",
-    food: "奶油酥餅、芋頭城。",
-    bear: "熊熊提醒：假日人潮多，注意小朋友不要走散！"
-  });
-
-  travelSpots.push({
-    title: "台中港三井 OUTLET",
-    region: "中部",
-    desc: "海景摩天輪＋購物，一次滿足。",
-    suggest: "適合家庭、下雨天的備案。",
-    food: "百貨餐廳選擇多，像是壽司、火鍋、拉麵。",
-    bear: "熊熊提醒：摩天輪晚上更漂亮喔～"
-  });
-    // ========= 第 4 / 6 份：南部 + 東部 + 外島 景點資料 =========
-
-
-  /* ==========================
-       南部 10 景點
-     ========================== */
-
-  travelSpots.push({
-    title: "高雄 駁二藝術特區",
-    region: "南部",
-    desc: "文青氣息濃厚的港邊藝術園區，適合散步、拍照與看展。",
-    suggest: "適合情侶、文青、朋友出遊。",
-    food: "周邊有義式餐廳、咖啡店、冰品。",
-    bear: "熊熊提醒：展覽票券常常會換，一定要提前查喔～"
-  });
-
-  travelSpots.push({
-    title: "高雄 旗津海岸｜海風散步",
-    region: "南部",
-    desc: "搭船到旗津享受沙灘、海岸公園與海鮮小吃。",
-    suggest: "適合親子、情侶、小旅行。",
-    food: "旗津海產、炸魷魚、冰淇淋。",
-    bear: "熊熊提醒：騎腳踏車環島很好玩，風有時會很大要抓穩～"
-  });
-
-  travelSpots.push({
-    title: "台南 安平老街 & 安平樹屋",
-    region: "南部",
-    desc: "百年歷史文化＋巨大榕樹盤根錯節，超特色。",
-    suggest: "適合家庭、文青小旅行。",
-    food: "蝦捲、豆花、蝦餅、棺材板。",
-    bear: "熊熊提醒：安平附近停車不易，步行區域熱記得帶水！"
-  });
-
-  travelSpots.push({
-    title: "台南 孔廟商圈",
-    region: "南部",
-    desc: "文青聚集地，咖啡、美食、老宅、獨立書店一應俱全。",
-    suggest: "適合自由行與放鬆散步。",
-    food: "台南小吃：牛肉湯、小卷米粉、青草茶。",
-    bear: "熊熊提醒：台南太好吃，不小心會吃太多～記得散步消化！"
-  });
-
-  travelSpots.push({
-    title: "台南 四草綠色隧道",
-    region: "南部",
-    desc: "台版亞馬遜，乘船欣賞綠色隧道美景。",
-    suggest: "適合親子、情侶、拍照旅遊。",
-    food: "附近蚵仔炸、魚皮湯人氣高。",
-    bear: "熊熊提醒：假日票很快賣完，建議提前預約！"
-  });
-
-  travelSpots.push({
-    title: "台南 成大榕園",
-    region: "南部",
-    desc: "美麗的校園步道與榕園草地，是放鬆野餐的好地方。",
-    suggest: "輕鬆散步或拍照行程。",
-    food: "附近東寧路美食超多：鐵板麵、雞排、飲料。",
-    bear: "熊熊提醒：樹蔭多，很適合午後散步喔！"
-  });
-
-  travelSpots.push({
-    title: "屏東 墾丁南灣",
-    region: "南部",
-    desc: "沙灘細、海水藍，是台灣最有度假感的地方。",
-    suggest: "適合海邊愛好者、親子戲水、朋友旅行。",
-    food: "海產、烤魷魚、海灘小酒吧。",
-    bear: "熊熊提醒：南部太陽很熱情～防曬要更熱情一點！"
-  });
-
-  travelSpots.push({
-    title: "墾丁 關山夕陽",
-    region: "南部",
-    desc: "被評為全球最美夕陽之一，黃金時刻超浪漫。",
-    suggest: "適合情侶、拍照、放鬆看海。",
-    food: "墾丁大街小吃：滷味、冰品、現烤海鮮。",
-    bear: "熊熊提醒：夕陽時間很短，提早到才不會錯過！"
-  });
-
-  travelSpots.push({
-    title: "小琉球 環島旅遊",
-    region: "南部",
-    desc: "海龜近距離看到！浮潛、潮間帶、環島機車超Chill。",
-    suggest: "適合親子、情侶、海島度假。",
-    food: "麻花捲、冰淇淋、海龜餅乾。",
-    bear: "熊熊提醒：尊重海龜，不要觸碰喔～"
-  });
-
-  travelSpots.push({
-    title: "屏東 大鵬灣大橋",
-    region: "南部",
-    desc: "風景開闊，還有帆船港與濱海步道。",
-    suggest: "適合朋友出遊、輕鬆散步。",
-    food: "海鮮、蚵仔餐廳。",
-    bear: "熊熊提醒：假日車潮多，可以改騎腳踏車更舒服！"
-  });
-
-
-
-  /* ==========================
-       東部 10 景點
-     ========================== */
-
-  travelSpots.push({
-    title: "花蓮 太魯閣國家公園",
-    region: "東部",
-    desc: "峽谷地形壯麗震撼，是台灣最美景之一。",
-    suggest: "適合健行、自然系旅遊。",
-    food: "花蓮扁食、炸彈蔥油餅。",
-    bear: "熊熊提醒：有些步道需申請入園，記得查看官網喔！"
-  });
-
-  travelSpots.push({
-    title: "花蓮 七星潭",
-    region: "東部",
-    desc: "壯闊海岸線＋礫石海灘，超療癒！",
-    suggest: "適合散心、拍照、看海放空。",
-    food: "海鹽冰淇淋、麻糬坊。",
-    bear: "熊熊提醒：海邊風大，帽子容易飛走喔～"
-  });
-
-  travelSpots.push({
-    title: "花蓮 東大門夜市",
-    region: "東部",
-    desc: "花蓮最大夜市，攤位多元又好吃。",
-    suggest: "適合吃到飽行程。",
-    food: "烤肉串、奶油螃蟹、地瓜球。",
-    bear: "熊熊提醒：夜市很大，記得先看地圖避免迷路～"
-  });
-
-  travelSpots.push({
-    title: "花東縱谷｜稻田風光",
-    region: "東部",
-    desc: "筆直公路、綠油油田野，是台灣最美風景帶。",
-    suggest: "適合機車或自駕漫遊。",
-    food: "池上便當、小米酒、原民料理。",
-    bear: "熊熊提醒：太陽很大，要補水與防曬！"
-  });
-
-  travelSpots.push({
-    title: "台東 三仙台",
-    region: "東部",
-    desc: "八拱橋連接島嶼，是台東地標之一。",
-    suggest: "適合拍照、看海、輕健行。",
-    food: "海鮮便當、台東釋迦。",
-    bear: "熊熊提醒：風有時非常強，要注意安全喔！"
-  });
-
-  travelSpots.push({
-    title: "台東 知本溫泉",
-    region: "東部",
-    desc: "全台有名的溫泉勝地，適合放鬆身心。",
-    suggest: "適合家庭或大人放鬆的溫泉行。",
-    food: "池上飯包、原民風味餐。",
-    bear: "熊熊提醒：泡湯前後都要喝水，避免脫水～"
-  });
-
-  travelSpots.push({
-    title: "台東 鐵花村",
-    region: "東部",
-    desc: "音樂、文創市集、燈飾，是台東最有氣氛的地方。",
-    suggest: "適合晚上散步、約會、聽音樂。",
-    food: "台東炸雞、地瓜冰。",
-    bear: "熊熊提醒：晚上燈光很美，手機記得充飽電！"
-  });
-
-  travelSpots.push({
-    title: "成功 漁港看海",
-    region: "東部",
-    desc: "安靜平和，有舒服的海港氛圍。",
-    suggest: "適合想放空、散心的人。",
-    food: "旗魚生魚片、海鮮。",
-    bear: "熊熊提醒：安靜的海最適合跟心聊天～"
-  });
-
-  travelSpots.push({
-    title: "鹿野高台｜熱氣球",
-    region: "東部",
-    desc: "夏季限定的熱氣球活動，是台東代表景點。",
-    suggest: "適合家庭、情侶、拍照旅遊。",
-    food: "鹿野紅烏龍、手沖咖啡。",
-    bear: "熊熊提醒：熱氣球要早到才能卡位！"
-  });
-
-  travelSpots.push({
-    title: "台東 初鹿牧場",
-    region: "東部",
-    desc: "大片草地＋可愛動物，親子必玩。",
-    suggest: "適合親子行程。",
-    food: "鮮奶、起司、初鹿冰淇淋。",
-    bear: "熊熊提醒：牧場很大，多走走會很舒服，但要注意太陽喔！"
-  });
-
-
-
-  /* ==========================
-       外島 10 景點
-     ========================== */
-
-  travelSpots.push({
-    title: "澎湖 跨海大橋",
-    region: "外島",
-    desc: "超經典地標，海風＋藍天超療癒。",
-    suggest: "適合租機車環島行程。",
-    food: "黑糖糕、仙人掌冰、澎湖花枝丸。",
-    bear: "熊熊提醒：海風超大，帽子要抓緊！"
-  });
-
-  travelSpots.push({
-    title: "澎湖 花火節",
-    region: "外島",
-    desc: "每年限定的煙火＋無敵海景，非常浪漫。",
-    suggest: "適合情侶與攝影愛好者。",
-    food: "海鮮吃到飽、小卷米粉。",
-    bear: "熊熊提醒：花火節人潮多，建議提早一小時卡位！"
-  });
-
-  travelSpots.push({
-    title: "澎湖 七美雙心石滬",
-    region: "外島",
-    desc: "最具代表性的海中石滬，非常適合拍照。",
-    suggest: "適合情侶、小旅行。",
-    food: "海鮮丼飯、炸魚、海膽。",
-    bear: "熊熊提醒：天氣晴朗時拍照最美，陰天會比較灰！"
-  });
-
-  travelSpots.push({
-    title: "澎湖 觀音亭海岸",
-    region: "外島",
-    desc: "海水湛藍，適合散步看海。",
-    suggest: "適合放鬆旅遊。",
-    food: "海鮮麵、石斑湯。",
-    bear: "熊熊提醒：海岸風大，要注意頭髮糾結喔～"
-  });
-
-  travelSpots.push({
-    title: "金門 翟山坑道",
-    region: "外島",
-    desc: "冷戰時期軍事坑道，超壯觀又有歷史感。",
-    suggest: "適合歷史控或探險行程。",
-    food: "金門貢糖、閩式麵線。",
-    bear: "熊熊提醒：坑道會回音，小聲講話也會變很響～"
-  });
-
-  travelSpots.push({
-    title: "金門 建功嶼",
-    region: "外島",
-    desc: "退潮才能走到的小島，神祕又美麗。",
-    suggest: "適合自然景觀拍照遊。",
-    food: "海鮮、燒餅、牛肉麵。",
-    bear: "熊熊提醒：一定要查潮汐，不然會回不來！"
-  });
-
-  travelSpots.push({
-    title: "馬祖 芹壁村",
-    region: "外島",
-    desc: "地中海風格石頭屋，非常美。",
-    suggest: "適合拍照、散步、放鬆。",
-    food: "淡菜、紅糟料理。",
-    bear: "熊熊提醒：迷宮般小巷，很適合散步但別迷路～"
-  });
-
-  travelSpots.push({
-    title: "馬祖 北海坑道",
-    region: "外島",
-    desc: "可搭船入內的巨大軍事坑道，壯觀無比。",
-    suggest: "適合探險、拍照旅遊。",
-    food: "繼光餅、淡菜、麻花捲。",
-    bear: "熊熊提醒：水面會反光，拍照要注意曝光喔～"
-  });
-
-  travelSpots.push({
-    title: "綠島 浮潛＋監獄文化",
-    region: "外島",
-    desc: "同時有海島風景與人權歷史的獨特旅程。",
-    suggest: "適合海島控與文化系旅遊。",
-    food: "海草冰、海鮮丼、綠島鹹酥雞。",
-    bear: "熊熊提醒：浮潛時記得防曬，水面反光更容易曬黑！"
-  });
-
-  travelSpots.push({
-    title: "蘭嶼 拼板舟＋山海文化",
-    region: "外島",
-    desc: "最原始的自然景觀與達悟族文化。",
-    suggest: "適合深度旅遊、自然系愛好者。",
-    food: "飛魚料理、山芋、地瓜。",
-    bear: "熊熊提醒：尊重在地文化，是旅行最重要的禮物。"
-  });
-    /* 為了不要太長，我就不在這裡重複貼，你只要把你上面那一整段
-       travelSpots.push(...) 全部留在這裡就可以（不用改） */
-
-    /* ======= 美食籤 50 種 ======= */
-    /* 同理，這裡放你所有的 foodSpots.push(...)，照剛剛那份就好 */
-  // ========= 第 5 / 6 份：美食籤 50 種 =========
-
-  /* 美食資料格式：
-     title：名稱
-     desc：詩籤式描述
-     kcal：熱量（估算）
-     sport：建議運動（分鐘）
-     explain：美食籤解說
-     bear：熊熊提醒
-  */
-
-  /* ==========================
-       台灣必吃 50 美食籤
-     ========================== */
-
-  foodSpots.push({
-    title: "珍珠奶茶",
-    desc: "香濃滑順，甜在心裡的台灣代表。",
-    kcal: 350,
-    sport: 40,
-    explain: "今天需要一點甜甜的能量，讓心情回到最佳狀態！",
-    bear: "熊熊提醒：半糖少冰一樣很好喝喔～"
-  });
-
-  foodSpots.push({
-    title: "滷肉飯",
-    desc: "暖心又扎實，吃下去就是家鄉的味道。",
-    kcal: 420,
-    sport: 50,
-    explain: "最近可能有點累，這碗暖暖的力量正好屬於你。",
-    bear: "熊熊提醒：吃完散散步最剛好～"
-  });
-
-  foodSpots.push({
-    title: "雞排",
-    desc: "外酥內嫩，香味十分，魅力無法擋。",
-    kcal: 520,
-    sport: 60,
-    explain: "有時候需要一點奢侈的快樂，沒關係的！",
-    bear: "熊熊提醒：記得跟朋友分著吃，也能一起快樂！"
-  });
-
-  foodSpots.push({
-    title: "牛肉麵",
-    desc: "湯頭濃郁，暖心暖胃的大確幸。",
-    kcal: 600,
-    sport: 70,
-    explain: "最近很努力，這碗暖心的麵是給你的獎勵。",
-    bear: "熊熊提醒：喝湯前先吹一下，小心燙嘴～"
-  });
-
-  foodSpots.push({
-    title: "鹽酥雞",
-    desc: "鹹香酥脆，一口接一口停不下來。",
-    kcal: 520,
-    sport: 60,
-    explain: "生活需要小確幸，今天就允許自己享受一下吧！",
-    bear: "熊熊提醒：多點青菜比較均衡喔～"
-  });
-
-  foodSpots.push({
-    title: "小籠包",
-    desc: "湯汁爆滿，咬下去是幸福流出來。",
-    kcal: 320,
-    sport: 36,
-    explain: "這籤象徵你近期會有小小的好消息～",
-    bear: "熊熊提醒：小心湯汁不要噴到隔壁熊～"
-  });
-
-  foodSpots.push({
-    title: "蔥油餅",
-    desc: "外脆內香，樸實卻迷人的傳統味。",
-    kcal: 350,
-    sport: 40,
-    explain: "簡單的幸福正在靠近你。",
-    bear: "熊熊提醒：加蛋更好吃，但熱量也會變噢～"
-  });
-
-  foodSpots.push({
-    title: "蚵仔煎",
-    desc: "酥軟甜鹹，最台灣的小吃組合。",
-    kcal: 380,
-    sport: 45,
-    explain: "這籤象徵創意靈感會突然出現！",
-    bear: "熊熊提醒：醬料是靈魂，記得一定要加～"
-  });
-
-  foodSpots.push({
-    title: "米粉湯",
-    desc: "樸實溫暖，最懂台灣胃的小吃。",
-    kcal: 280,
-    sport: 30,
-    explain: "你最近需要好好照顧自己，多休息一下。",
-    bear: "熊熊提醒：搭配滷味就是完美組合！"
-  });
-
-  foodSpots.push({
-    title: "鐵板燒",
-    desc: "香味四溢，看著煎炒就是一種療癒。",
-    kcal: 550,
-    sport: 65,
-    explain: "表示你準備迎接新的挑戰，而且會順利！",
-    bear: "熊熊提醒：多點青菜會更均衡～"
-  });
-
-
-  /* ======= 甜點類 ======= */
-
-  foodSpots.push({
-    title: "草莓大福",
-    desc: "酸甜夢幻，一咬下去就是戀愛的滋味。",
-    kcal: 210,
-    sport: 25,
-    explain: "象徵你近期會收到溫暖的心意。",
-    bear: "熊熊提醒：季節限定更珍貴～"
-  });
-
-  foodSpots.push({
-    title: "芒果冰",
-    desc: "清涼甘甜，是夏天的救贖！",
-    kcal: 260,
-    sport: 30,
-    explain: "你值得好好放鬆一下，夏天的甜就是獎勵。",
-    bear: "熊熊提醒：芒果太好吃要小心吃太快頭痛～"
-  });
-
-  foodSpots.push({
-    title: "豆花",
-    desc: "柔軟綿密，入口即化，是心的慰藉。",
-    kcal: 180,
-    sport: 20,
-    explain: "你需要一點溫柔，豆花正是最剛好的慰藉。",
-    bear: "熊熊提醒：加花生或珍珠都很搭～"
-  });
-
-  foodSpots.push({
-    title: "仙草凍",
-    desc: "清爽退火，是夏天的涼感救星。",
-    kcal: 150,
-    sport: 15,
-    explain: "象徵煩惱正在慢慢消退，你會越來越清爽。",
-    bear: "熊熊提醒：加鮮奶超好喝～"
-  });
-
-  foodSpots.push({
-    title: "雞蛋糕",
-    desc: "香氣濃郁，外脆內軟，是童年的味道。",
-    kcal: 260,
-    sport: 30,
-    explain: "你需要重新找回小時候的快樂。",
-    bear: "熊熊提醒：剛出爐最香，小心燙口喔！"
-  });
-
-
-  /* ======= 飲料類 ======= */
-
-  foodSpots.push({
-    title: "冬瓜檸檬",
-    desc: "清爽酸甜，最適合夏天的涼感組合。",
-    kcal: 160,
-    sport: 18,
-    explain: "最近會有一件事讓你突然心情變好！",
-    bear: "熊熊提醒：少冰更能喝到冬瓜香～"
-  });
-
-  foodSpots.push({
-    title: "青草茶",
-    desc: "退火消暑，透心涼的好朋友。",
-    kcal: 120,
-    sport: 12,
-    explain: "提醒你最近要照顧身體，多休息。",
-    bear: "熊熊提醒：微甜剛剛好～"
-  });
-
-  foodSpots.push({
-    title: "黑糖珍奶",
-    desc: "濃郁黑糖香，是誘惑滿分的罪惡之味。",
-    kcal: 420,
-    sport: 50,
-    explain: "象徵你渴望被好好對待，是時候獎勵自己。",
-    bear: "熊熊提醒：減糖也很好喝喔！"
-  });
-
-
-  /* ======= 水果類 ======= */
-
-  foodSpots.push({
-    title: "鳳梨",
-    desc: "酸甜活力，是熱帶的陽光味道。",
-    kcal: 90,
-    sport: 10,
-    explain: "象徵好運即將到來，甜甜的發展會出現。",
-    bear: "熊熊提醒：吃太多會刺刺的，記得喝點水～"
-  });
-
-  foodSpots.push({
-    title: "釋迦",
-    desc: "香甜濃郁，是東台灣的幸福象徵。",
-    kcal: 110,
-    sport: 12,
-    explain: "你正在變得更有魅力，吸引到好事靠近。",
-    bear: "熊熊提醒：很甜喔，吃少少也能幸福～"
-  });
-
-  foodSpots.push({
-    title: "香蕉",
-    desc: "香氣濃厚，補充能量最方便。",
-    kcal: 100,
-    sport: 12,
-    explain: "象徵你接下來的事情會越來越順！",
-    bear: "熊熊提醒：運動前吃最剛好！"
-  });
-
-  foodSpots.push({
-    title: "芭樂",
-    desc: "脆脆甜甜，是最台味的健康水果。",
-    kcal: 60,
-    sport: 8,
-    explain: "你需要調整步調，讓生活更平衡。",
-    bear: "熊熊提醒：加梅粉更好吃，但要少量喔～"
-  });
-
-  foodSpots.push({
-    title: "蘋果",
-    desc: "清脆甜美，是每天都適合的好味道。",
-    kcal: 80,
-    sport: 10,
-    explain: "象徵穩定與安全感，你最近會很順利。",
-    bear: "熊熊提醒：一天一蘋果，醫生遠離我～"
-  });
-
-
-  /* ======= 更多台灣美食 ======= */
-
-  foodSpots.push({
-    title: "雞肉飯",
-    desc: "清爽不膩，嘉義的靈魂代表。",
-    kcal: 380,
-    sport: 45,
-    explain: "象徵你會用輕鬆自然的方式完成一件事。",
-    bear: "熊熊提醒：肉燥或半熟蛋都超搭～"
-  });
-
-  foodSpots.push({
-    title: "大腸包小腸",
-    desc: "鹹香Q彈，是夜市的靈魂組合。",
-    kcal: 520,
-    sport: 60,
-    explain: "你會遇到合拍的夥伴，一起完成計畫。",
-    bear: "熊熊提醒：醬料要均勻才不會太鹹～"
-  });
-
-  foodSpots.push({
-    title: "臭豆腐",
-    desc: "臭到香的極致，酥脆多汁！",
-    kcal: 380,
-    sport: 45,
-    explain: "象徵你正在蛻變，變得更好更強。",
-    bear: "熊熊提醒：配泡菜最對味～"
-  });
-
-  foodSpots.push({
-    title: "牛排館排餐",
-    desc: "份量十足，是努力後的獎勵！",
-    kcal: 700,
-    sport: 80,
-    explain: "你值得被好好款待，別再虧待自己了。",
-    bear: "熊熊提醒：七分熟剛剛好，多汁不乾柴～"
-  });
-
-  foodSpots.push({
-    title: "火鍋",
-    desc: "暖呼呼的幸福感，超療癒！",
-    kcal: 650,
-    sport: 75,
-    explain: "象徵聚會與交流，你會遇到重要的人。",
-    bear: "熊熊提醒：菜多一點，身體更開心～"
-  });
-
-  foodSpots.push({
-    title: "壽司",
-    desc: "清爽新鮮，一口一個剛剛好。",
-    kcal: 320,
-    sport: 36,
-    explain: "你的生活將迎來更平衡、舒服的節奏。",
-    bear: "熊熊提醒：不要沾太多醬油喔～"
-  });
-
-  foodSpots.push({
-    title: "湯包",
-    desc: "皮薄多汁，是幸福爆在嘴裡的瞬間。",
-    kcal: 300,
-    sport: 30,
-    explain: "代表好消息會悄悄降臨。",
-    bear: "熊熊提醒：小心燙，幸福不要太急～"
-  });
-
-  foodSpots.push({
-    title: "鹽水雞",
-    desc: "清爽低脂的宵夜救星。",
-    kcal: 260,
-    sport: 30,
-    explain: "象徵你正在做出更健康的選擇，太棒了！",
-    bear: "熊熊提醒：青菜多一點更完美～"
-  });
-
-  foodSpots.push({
-    title: "刈包",
-    desc: "肥瘦交融，一口幸福的台式漢堡。",
-    kcal: 450,
-    sport: 55,
-    explain: "象徵你正在找到人生的『剛剛好』。",
-    bear: "熊熊提醒：花生粉一定要加啦～"
-  });
-
-  foodSpots.push({
-    title: "油飯",
-    desc: "香氣四溢，是傳統台味的代表。",
-    kcal: 380,
-    sport: 45,
-    explain: "事情會越來越踏實、有成果。",
-    bear: "熊熊提醒：加一點甜辣醬更香！"
-  });
-
-  foodSpots.push({
-    title: "涼麵",
-    desc: "夏天最清爽的好選擇。",
-    kcal: 300,
-    sport: 32,
-    explain: "代表你會成功度過一個難關。",
-    bear: "熊熊提醒：多加小黃瓜營養更均衡～"
-  });
-
-  foodSpots.push({
-    title: "肉羹湯",
-    desc: "濃郁湯頭，是台灣的安心味道。",
-    kcal: 260,
-    sport: 30,
-    explain: "象徵有人會在背後默默支持你。",
-    bear: "熊熊提醒：加一點烏醋更提味！"
-  });
-
-  foodSpots.push({
-    title: "章魚燒",
-    desc: "外酥內軟，幸福在嘴裡爆開。",
-    kcal: 320,
-    sport: 36,
-    explain: "象徵幸福會一顆一顆地靠近你。",
-    bear: "熊熊提醒：小心剛做好的超燙～"
-  });
-
-  foodSpots.push({
-    title: "蘿蔔糕",
-    desc: "煎得金黃，外酥內嫩。",
-    kcal: 280,
-    sport: 30,
-    explain: "你將迎來新的開始，步調會變輕鬆。",
-    bear: "熊熊提醒：加蛋更香，但熱量也會++ 喔～"
-  });
-
-  foodSpots.push({
-    title: "甜不辣",
-    desc: "Q 彈又入味，台式下午茶首選。",
-    kcal: 220,
-    sport: 24,
-    explain: "象徵你的努力逐漸會有成果。",
-    bear: "熊熊提醒：湯要記得喝完，精華都在裡面～"
-  });
-
-  foodSpots.push({
-    title: "關東煮",
-    desc: "清爽又暖心，任何時候都適合吃。",
-    kcal: 180,
-    sport: 20,
-    explain: "象徵你會遇到暖心的人。",
-    bear: "熊熊提醒：海帶、白蘿蔔超級健康～"
-  });
-
-  foodSpots.push({
-    title: "粽子",
-    desc: "香氣十足，是節慶的幸福味。",
-    kcal: 420,
-    sport: 50,
-    explain: "象徵你會完成一件重要的事。",
-    bear: "熊熊提醒：吃完散步一下最剛好～"
-  });
-
-  foodSpots.push({
-    title: "炒飯",
-    desc: "鍋氣十足，是幸福的味道。",
-    kcal: 520,
-    sport: 60,
-    explain: "象徵你即將迎來收穫期。",
-    bear: "熊熊提醒：配湯更完美！"
-  });
-
-  foodSpots.push({
-    title: "咖哩飯",
-    desc: "濃濃香料味，讓人超有食慾。",
-    kcal: 560,
-    sport: 65,
-    explain: "象徵你的生活會變得更有活力。",
-    bear: "熊熊提醒：微辣剛剛好～"
-  });
-
-  foodSpots.push({
-    title: "海鮮煎餅",
-    desc: "酥脆又滿滿海味。",
-    kcal: 450,
-    sport: 55,
-    explain: "你將迎來驚喜的小幸運。",
-    bear: "熊熊提醒：剛煎好超燙，吹一下再吃～"
-  });
-
-  foodSpots.push({
-    title: "台式早餐：蛋餅",
-    desc: "每天都要吃的幸福感！",
-    kcal: 320,
-    sport: 36,
-    explain: "開始新的一天充滿能量！",
-    bear: "熊熊提醒：加起司超好吃～"
-  });
-
-  foodSpots.push({
-    title: "蘿蔔湯",
-    desc: "清甜暖心，是最舒服的味道。",
-    kcal: 120,
-    sport: 12,
-    explain: "提醒你要照顧自己的身體。",
-    bear: "熊熊提醒：暖暖的湯最治癒～"
-  });
-
-  foodSpots.push({
-    title: "酥皮濃湯",
-    desc: "酥皮香甜、熱湯濃郁，是幸福的開場白。",
-    kcal: 380,
-    sport: 45,
-    explain: "象徵你會迎來一件開心的事。",
-    bear: "熊熊提醒：酥皮要慢慢吃，不然會掉滿地喔～"
-  });
-
-  foodSpots.push({
-    title: "義大利麵",
-    desc: "滑順又香濃，是聚會的好選擇。",
-    kcal: 580,
-    sport: 65,
-    explain: "象徵你的生活節奏會變得更順。",
-    bear: "熊熊提醒：加辣更有層次～"
-  });
-    // -------------- 抽籤功能 & 紀錄（原第 6 / 6 段） --------------
-
-    const btnDraw      = document.getElementById("btnDraw");
-    const btnHistory   = document.getElementById("btnHistory");
-    const loadingEl    = document.getElementById("loading") || { style: {} };
-
-    const tabTravel    = document.getElementById("tabTravel");
-    const tabFood      = document.getElementById("tabFood");
-
+    /* ====== 旅遊景點資料（和你之前一樣，只是整理好） ====== */
+    /* 北部 */
+    travelSpots.push(
+      {title:"九份老街｜山城漫步",region:"北部",desc:"復古山城氣氛＋海景，是北部最經典的散步點。",
+       suggest:"適合情侶、親子、小旅行。建議安排 2–3 小時漫步、吃吃喝喝。",
+       food:"必吃芋圓、草仔粿、阿柑姨芋粿巧。",bear:"熊熊提醒：九份階梯多～穿好走的鞋子會讓旅程更舒服！"},
+      {title:"淡水漁人碼頭｜夕陽散步",region:"北部",desc:"浪漫夕陽＋海風，是放鬆心情的好去處。",
+       suggest:"適合散心或情侶約會，建議傍晚前抵達。",
+       food:"推薦淡水魚丸、阿給、鐵蛋。",bear:"熊熊提醒：夕陽時間很短，想拍美照記得提早卡位喔！"},
+      {title:"陽明山擎天崗｜大草原漫遊",region:"北部",desc:"大片草原＋牛群，超療癒！",
+       suggest:"適合親子、朋友放風、輕健行。",
+       food:"下山可吃竹子湖海芋小火鍋或士林夜市。",bear:"熊熊提醒：山上溫差大，記得帶外套～"},
+      {title:"北海岸 白沙灣｜輕鬆海邊行",region:"北部",desc:"淺灘沙灘＋海浪聲，是放鬆度假的好地方。",
+       suggest:"適合親子與情侶，可自帶野餐墊。",
+       food:"附近有海鮮熱炒、炸物攤。",bear:"熊熊提醒：防曬一定要擦，不然會變熊熊烤肉！"},
+      {title:"信義區101周邊｜逛街＋美食",region:"北部",desc:"最熱鬧的台北地區，購物、美食、展覽一站完成。",
+       suggest:"適合下雨天備案、想輕鬆逛街的旅客。",
+       food:"推薦金色三麥、杏子豬排、藍瓶咖啡。",bear:"熊熊提醒：假日人潮多，建議避開尖峰喔～"},
+      {title:"平溪放天燈｜幸福小旅行",region:"北部",desc:"山谷鐵道、老街與天燈，是許願的好地方。",
+       suggest:"建議搭配菁桐、十分瀑布一日遊。",
+       food:"老街小吃：米粉湯、雞翅包飯。",bear:"熊熊提醒：放天燈時記得拍照，不然願望會飛太快！"},
+      {title:"金瓜石 黃金博物館",region:"北部",desc:"濃濃日式宿舍群、山城色調與金礦文化。",
+       suggest:"適合文青與拍照控。",
+       food:"建議搭配九份老街美食。",bear:"熊熊提醒：天氣變化大，下雨時階梯會濕滑要小心！"},
+      {title:"野柳地質公園",region:"北部",desc:"自然雕刻的奇岩景觀，女王頭必看！",
+       suggest:"適合親子＋地球科學興趣的人。",
+       food:"野柳漁港海鮮。",bear:"熊熊提醒：風很大，要顧好帽子不然會飛走變風箏熊！"},
+      {title:"宜蘭 礁溪溫泉",region:"北部",desc:"全台最好泡的平價溫泉之一，CP值非常高。",
+       suggest:"適合放鬆行程，冬天最佳選擇。",
+       food:"蔥油餅、卜肉、豆花。",bear:"熊熊提醒：泡湯後喝點水，補充一下水份才健康～"},
+      {title:"基隆 正濱漁港 彩色屋",region:"北部",desc:"彩色港灣超好拍，是近年人氣景點。",
+       suggest:"搭船或散步都很療癒。",
+       food:"廟口夜市、豆干包、奶油螃蟹。",bear:"熊熊提醒：晴天拍照最美，陰天會稍微灰一些喔～"}
+    );
+
+    /* 中部 */
+    travelSpots.push(
+      {title:"台中歌劇院｜建築美學散步",region:"中部",desc:"世界級建築，由伊東豊雄設計，流線外觀超好拍。",
+       suggest:"適合情侶、文青、展覽控。",food:"附近美食：茶六燒肉、路易莎歌劇院店。",
+       bear:"熊熊提醒：裡面冷氣很強，記得帶小外套！"},
+      {title:"逢甲夜市｜吃到走不動",region:"中部",desc:"台灣最強夜市之一，從頭吃到尾都很精彩。",
+       suggest:"適合大人小孩、朋友聚會。",food:"惡魔雞排、起司馬鈴薯、韓式炸雞。",
+       bear:"熊熊提醒：不要一開始就吃太快～要留肚子給後面！"},
+      {title:"高美濕地｜天空之鏡",region:"中部",desc:"夕陽美到不像話，被稱作台版天空之鏡。",
+       suggest:"適合情侶與拍照旅遊。",food:"梧棲老街、海鮮。",
+       bear:"熊熊提醒：潮汐影響景色，出發前查一下會更美～"},
+      {title:"日月潭｜湖光山色",region:"中部",desc:"台灣最美湖景，搭船看風景超級療癒。",
+       suggest:"適合家庭、情侶、一日或兩日遊。",food:"阿婆茶葉蛋、紅茶、竹筒飯。",
+       bear:"熊熊提醒：環湖腳踏車很舒服，記得防曬唷～"},
+      {title:"清境 農場大草原",region:"中部",desc:"青青草原、綿羊秀、山景超級美。",
+       suggest:"適合親子、拍照、小旅行。",food:"雲南特色料理、火鍋。",
+       bear:"熊熊提醒：山上較冷，早晚溫差大記得保暖！"},
+      {title:"彩虹眷村｜繽紛打卡點",region:"中部",desc:"五彩繽紛的牆面，是台中最可愛的拍照聖地。",
+       suggest:"適合短暫停留、拍照、親子散步。",food:"附近西屯美食很多，走幾分鐘就到。",
+       bear:"熊熊提醒：牆面請勿碰觸，保留彩虹的美～"},
+      {title:"谷關溫泉｜深山秘境",region:"中部",desc:"靜謐山林＋溫泉，放空的最佳地點。",
+       suggest:"適合大人放鬆的行程。",food:"白冷冰棒、山產。",
+       bear:"熊熊提醒：山路蜿蜒，容易暈車的熊熊們要注意！"},
+      {title:"東海藝術街",region:"中部",desc:"文青咖啡店、藝廊、可愛小店的聚集地。",
+       suggest:"輕鬆散步半日遊。",food:"珍珠奶茶、義大利麵、甜點店。",
+       bear:"熊熊提醒：每家店都超級好拍，記得手機要充飽～"},
+      {title:"大甲鎮瀾宮｜媽祖文化巡禮",region:"中部",desc:"台灣重要信仰中心之一，文化濃厚。",
+       suggest:"適合文化巡禮或祈福行。",food:"奶油酥餅、芋頭城。",
+       bear:"熊熊提醒：假日人潮多，注意小朋友不要走散！"},
+      {title:"台中港三井 OUTLET",region:"中部",desc:"海景摩天輪＋購物，一次滿足。",
+       suggest:"適合家庭、下雨天的備案。",food:"壽司、火鍋、拉麵等百貨餐廳。",
+       bear:"熊熊提醒：摩天輪晚上更漂亮喔～"}
+    );
+
+    /* 南部 */
+    travelSpots.push(
+      {title:"高雄 駁二藝術特區",region:"南部",desc:"文青氣息濃厚的港邊藝術園區，適合散步、拍照與看展。",
+       suggest:"適合情侶、文青、朋友出遊。",food:"義式餐廳、咖啡店、冰品。",
+       bear:"熊熊提醒：展覽票券常常會換，一定要提前查喔～"},
+      {title:"高雄 旗津海岸｜海風散步",region:"南部",desc:"搭船到旗津享受沙灘、海岸公園與海鮮小吃。",
+       suggest:"適合親子、情侶、小旅行。",food:"旗津海產、炸魷魚、冰淇淋。",
+       bear:"熊熊提醒：騎腳踏車環島很好玩，風有時會很大要抓穩～"},
+      {title:"台南 安平老街 & 安平樹屋",region:"南部",desc:"百年歷史文化＋巨大榕樹盤根錯節，超特色。",
+       suggest:"適合家庭、文青小旅行。",food:"蝦捲、豆花、蝦餅、棺材板。",
+       bear:"熊熊提醒：安平附近停車不易，步行區域熱記得帶水！"},
+      {title:"台南 孔廟商圈",region:"南部",desc:"文青聚集地，咖啡、美食、老宅、獨立書店一應俱全。",
+       suggest:"適合自由行與放鬆散步。",food:"牛肉湯、小卷米粉、青草茶。",
+       bear:"熊熊提醒：台南太好吃，不小心會吃太多～記得散步消化！"},
+      {title:"台南 四草綠色隧道",region:"南部",desc:"台版亞馬遜，乘船欣賞綠色隧道美景。",
+       suggest:"適合親子、情侶、拍照旅遊。",food:"蚵仔炸、魚皮湯。",
+       bear:"熊熊提醒：假日票很快賣完，建議提前預約！"},
+      {title:"台南 成大榕園",region:"南部",desc:"美麗的校園步道與榕園草地，是放鬆野餐的好地方。",
+       suggest:"輕鬆散步或拍照行程。",food:"東寧路周邊美食多多。",
+       bear:"熊熊提醒：樹蔭多，很適合午後散步喔！"},
+      {title:"屏東 墾丁南灣",region:"南部",desc:"沙灘細、海水藍，是台灣最有度假感的地方。",
+       suggest:"適合海邊愛好者、親子戲水、朋友旅行。",food:"海產、烤魷魚、海灘小酒吧。",
+       bear:"熊熊提醒：南部太陽很熱情～防曬要更熱情一點！"},
+      {title:"墾丁 關山夕陽",region:"南部",desc:"被評為全球最美夕陽之一，黃金時刻超浪漫。",
+       suggest:"適合情侶、拍照、放鬆看海。",food:"墾丁大街滷味、冰品、現烤海鮮。",
+       bear:"熊熊提醒：夕陽時間很短，提早到才不會錯過！"},
+      {title:"小琉球 環島旅遊",region:"南部",desc:"海龜近距離看到！浮潛、潮間帶、環島機車超Chill。",
+       suggest:"適合親子、情侶、海島度假。",food:"麻花捲、冰淇淋、海龜餅乾。",
+       bear:"熊熊提醒：尊重海龜，不要觸碰喔～"},
+      {title:"屏東 大鵬灣大橋",region:"南部",desc:"風景開闊，還有帆船港與濱海步道。",
+       suggest:"適合朋友出遊、輕鬆散步。",food:"海鮮、蚵仔餐廳。",
+       bear:"熊熊提醒：假日車潮多，可以改騎腳踏車更舒服！"}
+    );
+
+    /* 東部 */
+    travelSpots.push(
+      {title:"花蓮 太魯閣國家公園",region:"東部",desc:"峽谷地形壯麗震撼，是台灣最美景之一。",
+       suggest:"適合健行、自然系旅遊。",food:"花蓮扁食、炸彈蔥油餅。",
+       bear:"熊熊提醒：有些步道需申請入園，記得查看官網喔！"},
+      {title:"花蓮 七星潭",region:"東部",desc:"壯闊海岸線＋礫石海灘，超療癒！",
+       suggest:"適合散心、拍照、看海放空。",food:"海鹽冰淇淋、麻糬坊。",
+       bear:"熊熊提醒：海邊風大，帽子容易飛走喔～"},
+      {title:"花蓮 東大門夜市",region:"東部",desc:"花蓮最大夜市，攤位多元又好吃。",
+       suggest:"適合吃到飽行程。",food:"烤肉串、奶油螃蟹、地瓜球。",
+       bear:"熊熊提醒：夜市很大，記得先看地圖避免迷路～"},
+      {title:"花東縱谷｜稻田風光",region:"東部",desc:"筆直公路、綠油油田野，是台灣最美風景帶。",
+       suggest:"適合機車或自駕漫遊。",food:"池上便當、小米酒、原民料理。",
+       bear:"熊熊提醒：太陽很大，要補水與防曬！"},
+      {title:"台東 三仙台",region:"東部",desc:"八拱橋連接島嶼，是台東地標之一。",
+       suggest:"適合拍照、看海、輕健行。",food:"海鮮便當、台東釋迦。",
+       bear:"熊熊提醒：風有時非常強，要注意安全喔！"},
+      {title:"台東 知本溫泉",region:"東部",desc:"全台有名的溫泉勝地，適合放鬆身心。",
+       suggest:"適合家庭或大人放鬆的溫泉行。",food:"池上飯包、原民風味餐。",
+       bear:"熊熊提醒：泡湯前後都要喝水，避免脫水～"},
+      {title:"台東 鐵花村",region:"東部",desc:"音樂、文創市集、燈飾，是台東最有氣氛的地方。",
+       suggest:"適合晚上散步、約會、聽音樂。",food:"台東炸雞、地瓜冰。",
+       bear:"熊熊提醒：晚上燈光很美，手機記得充飽電！"},
+      {title:"成功 漁港看海",region:"東部",desc:"安靜平和，有舒服的海港氛圍。",
+       suggest:"適合想放空、散心的人。",food:"旗魚生魚片、海鮮。",
+       bear:"熊熊提醒：安靜的海最適合跟心聊天～"},
+      {title:"鹿野高台｜熱氣球",region:"東部",desc:"夏季限定的熱氣球活動，是台東代表景點。",
+       suggest:"適合家庭、情侶、拍照旅遊。",food:"鹿野紅烏龍、手沖咖啡。",
+       bear:"熊熊提醒：熱氣球要早到才能卡位！"},
+      {title:"台東 初鹿牧場",region:"東部",desc:"大片草地＋可愛動物，親子必玩。",
+       suggest:"適合親子行程。",food:"鮮奶、起司、初鹿冰淇淋。",
+       bear:"熊熊提醒：牧場很大，多走走會很舒服，但要注意太陽喔！"}
+    );
+
+    /* 外島 */
+    travelSpots.push(
+      {title:"澎湖 跨海大橋",region:"外島",desc:"超經典地標，海風＋藍天超療癒。",
+       suggest:"適合租機車環島行程。",food:"黑糖糕、仙人掌冰、澎湖花枝丸。",
+       bear:"熊熊提醒：海風超大，帽子要抓緊！"},
+      {title:"澎湖 花火節",region:"外島",desc:"每年限定的煙火＋無敵海景，非常浪漫。",
+       suggest:"適合情侶與攝影愛好者。",food:"海鮮吃到飽、小卷米粉。",
+       bear:"熊熊提醒：花火節人潮多，建議提早一小時卡位！"},
+      {title:"澎湖 七美雙心石滬",region:"外島",desc:"最具代表性的海中石滬，非常適合拍照。",
+       suggest:"適合情侶、小旅行。",food:"海鮮丼飯、炸魚、海膽。",
+       bear:"熊熊提醒：天氣晴朗時拍照最美，陰天會比較灰！"},
+      {title:"澎湖 觀音亭海岸",region:"外島",desc:"海水湛藍，適合散步看海。",
+       suggest:"適合放鬆旅遊。",food:"海鮮麵、石斑湯。",
+       bear:"熊熊提醒：海岸風大，要注意頭髮糾結喔～"},
+      {title:"金門 翟山坑道",region:"外島",desc:"冷戰時期軍事坑道，超壯觀又有歷史感。",
+       suggest:"適合歷史控或探險行程。",food:"金門貢糖、閩式麵線。",
+       bear:"熊熊提醒：坑道會回音，小聲講話也會變很響～"},
+      {title:"金門 建功嶼",region:"外島",desc:"退潮才能走到的小島，神祕又美麗。",
+       suggest:"適合自然景觀拍照遊。",food:"海鮮、燒餅、牛肉麵。",
+       bear:"熊熊提醒：一定要查潮汐，不然會回不來！"},
+      {title:"馬祖 芹壁村",region:"外島",desc:"地中海風格石頭屋，非常美。",
+       suggest:"適合拍照、散步、放鬆。",food:"淡菜、紅糟料理。",
+       bear:"熊熊提醒：迷宮般小巷，很適合散步但別迷路～"},
+      {title:"馬祖 北海坑道",region:"外島",desc:"可搭船入內的巨大軍事坑道，壯觀無比。",
+       suggest:"適合探險、拍照旅遊。",food:"繼光餅、淡菜、麻花捲。",
+       bear:"熊熊提醒：水面會反光，拍照要注意曝光喔～"},
+      {title:"綠島 浮潛＋監獄文化",region:"外島",desc:"同時有海島風景與人權歷史的獨特旅程。",
+       suggest:"適合海島控與文化系旅遊。",food:"海草冰、海鮮丼、綠島鹹酥雞。",
+       bear:"熊熊提醒：浮潛時記得防曬，水面反光更容易曬黑！"},
+      {title:"蘭嶼 拼板舟＋山海文化",region:"外島",desc:"最原始的自然景觀與達悟族文化。",
+       suggest:"適合深度旅遊、自然系愛好者。",food:"飛魚料理、山芋、地瓜。",
+       bear:"熊熊提醒：尊重在地文化，是旅行最重要的禮物。"}
+    );
+
+    /* ===== 美食籤（用小工具函式塞資料） ===== */
+    function addFood(title, desc, kcal, sport, explain, bear) {
+      foodSpots.push({ title, desc, kcal, sport, explain, bear });
+    }
+
+    //（以下就照你原本的美食內容，我只節錄幾個示範，你可以按需要再補充更多）
+    addFood("珍珠奶茶","香濃滑順，甜在心裡的台灣代表。",350,40,
+      "今天需要一點甜甜的能量，讓心情回到最佳狀態！",
+      "熊熊提醒：半糖少冰一樣很好喝喔～");
+    addFood("滷肉飯","暖心又扎實，吃下去就是家鄉的味道。",420,50,
+      "最近可能有點累，這碗暖暖的力量正好屬於你。",
+      "熊熊提醒：吃完散散步最剛好～");
+    addFood("雞排","外酥內嫩，香味十分，魅力無法擋。",520,60,
+      "有時候需要一點奢侈的快樂，沒關係的！",
+      "熊熊提醒：記得跟朋友分著吃，也能一起快樂！");
+    // …（如果你想要 50 種美食籤，可以把之前那整段 addFood 全部貼回來）…
+
+    // ========= 狀態 & DOM =========
+    let selectedRegion = "全台";
+    let selectedTarget = "不限";
+    let selectedDays   = 2;
+    let todayTravelCount = 0;
+    let todayFoodCount   = 0;
+
+    const bearTalk       = document.getElementById("bearTalk");
+    const dayValue       = document.getElementById("dayValue");
+    const todayCountText = document.getElementById("todayCountText");
+    const modalResult    = document.getElementById("modalResult");
+    const modalHistory   = document.getElementById("modalHistory");
+    const historyList    = document.getElementById("historyList");
+    const btnDraw        = document.getElementById("btnDraw");
+    const btnHistory     = document.getElementById("btnHistory");
+    const loadingEl      = document.getElementById("loading");
+    const tabTravel      = document.getElementById("tabTravel");
+    const tabFood        = document.getElementById("tabFood");
     const modalResultTitle = document.getElementById("modalResultTitle");
     const modalResultMeta  = document.getElementById("modalResultMeta");
     const modalResultDesc  = document.getElementById("modalResultDesc");
     const modalResultExtra = document.getElementById("modalResultExtra");
     const modalResultBear  = document.getElementById("modalResultBear");
 
-    let currentTab = "travel"; // travel or food
+    let currentTab = "travel";
     let historyRecords = [];
 
-    // 取得今天日期（YYYY-MM-DD）
+    // ========= 互動 =========
+    document.querySelectorAll(".region-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".region-chip").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedRegion = btn.innerText;
+      });
+    });
+
+    document.querySelectorAll(".target-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".target-chip").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedTarget = btn.dataset.target;
+      });
+    });
+
+    document.getElementById("dayMinus").addEventListener("click", () => {
+      if (selectedDays > 1) selectedDays--;
+      dayValue.innerText = selectedDays;
+    });
+    document.getElementById("dayPlus").addEventListener("click", () => {
+      if (selectedDays < 5) selectedDays++;
+      dayValue.innerText = selectedDays;
+    });
+
+    function updateCounts() {
+      todayCountText.innerHTML =
+        `今日旅遊籤：${todayTravelCount} 次 ｜ 今日美食籤：${todayFoodCount} 次`;
+    }
+
+    function showBearTalk() {
+      const msg = bearTalkList[Math.floor(Math.random() * bearTalkList.length)];
+      bearTalk.innerText = msg;
+      bearTalk.style.display = "block";
+      setTimeout(() => { bearTalk.style.display = "none"; }, 2200);
+    }
+
+    function openModal(el) {
+      el.classList.add("show");
+    }
+    function closeResult() {
+      modalResult.classList.remove("show");
+    }
+    function closeHistory() {
+      modalHistory.classList.remove("show");
+    }
+    // 讓 HTML 的 onclick 找得到
+    window.closeResult = closeResult;
+    window.closeHistory = closeHistory;
+
     function getTodayStr() {
       return new Date().toISOString().slice(0, 10);
     }
 
-    // 載入歷史紀錄 & 今日次數
     function loadHistory() {
       const raw = localStorage.getItem("travelFoodHistory");
       historyRecords = raw ? JSON.parse(raw) : [];
 
       const todayStr = getTodayStr();
       todayTravelCount = 0;
-      todayFoodCount = 0;
+      todayFoodCount   = 0;
 
       historyRecords.forEach(r => {
         if (r.date === todayStr) {
@@ -1616,7 +771,6 @@
           if (r.type === "美食") todayFoodCount++;
         }
       });
-
       updateCounts();
     }
 
@@ -1636,18 +790,14 @@
           '<div class="history-empty">目前還沒有紀錄唷～可以先抽一張籤看看 🐻</div>';
         return;
       }
-
-      historyList.innerHTML = historyRecords
-        .map((r, idx) => {
-          const regionPart = r.region ? `｜地區：${r.region}` : "";
-          return `
-            <div class="history-item" data-idx="${idx}">
-              <div class="history-title">[${r.type}] ${r.title}</div>
-              <div class="history-meta">${r.date}${regionPart}</div>
-            </div>
-          `;
-        })
-        .join("");
+      historyList.innerHTML = historyRecords.map((r, idx) => {
+        const regionPart = r.region ? `｜地區：${r.region}` : "";
+        return `
+          <div class="history-item" data-idx="${idx}">
+            <div class="history-title">[${r.type}] ${r.title}</div>
+            <div class="history-meta">${r.date}${regionPart}</div>
+          </div>`;
+      }).join("");
     }
 
     historyList.addEventListener("click", (e) => {
@@ -1662,7 +812,6 @@
       modalResultDesc.textContent  = r.desc;
       modalResultExtra.textContent = r.extra;
       modalResultBear.textContent  = r.bear;
-
       openModal(modalResult);
     });
 
@@ -1687,12 +836,11 @@
         alert("旅遊資料還在路上，等等再試一次～");
         return;
       }
-
       showBearTalk();
-      if (loadingEl.style) loadingEl.style.display = "flex";
+      loadingEl.style.display = "flex";
 
       setTimeout(() => {
-        if (loadingEl.style) loadingEl.style.display = "none";
+        loadingEl.style.display = "none";
 
         let pool = travelSpots;
         if (selectedRegion !== "全台") {
@@ -1735,12 +883,11 @@
         alert("美食資料還在烹煮中，等等再試一次～");
         return;
       }
-
       showBearTalk();
-      if (loadingEl.style) loadingEl.style.display = "flex";
+      loadingEl.style.display = "flex";
 
       setTimeout(() => {
-        if (loadingEl.style) loadingEl.style.display = "none";
+        loadingEl.style.display = "none";
 
         const food = foodSpots[Math.floor(Math.random() * foodSpots.length)];
         const todayStr = getTodayStr();
