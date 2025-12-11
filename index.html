@@ -29,14 +29,14 @@
 
     <!-- 熊熊美食插畫卡片 -->
     <section class="main-card">
-      <div class="main-illust">
+      <div class="main-illust" id="bearImage">
         <!-- 換成你的美食熊圖片 -->
-        <img src="images/bear.png" alt="愛吃熊美食占卜">
+        <img src="images/food-bear.png" alt="愛吃熊美食占卜">
       </div>
     </section>
 
     <!-- 提示文字 -->
-    <p class="hint-text">
+    <p class="hint-text" id="hintText">
       請按「抽詩籤」，讓愛吃熊幫你決定今天要吃什麼。
     </p>
 
@@ -44,13 +44,13 @@
     <nav class="menu-row">
       <button class="menu-pill" id="btnDraw">抽詩籤</button>
       <button class="menu-pill" id="btnOffer">上供品</button>
-      <button class="menu-pill" id="btnHistory">抽籤紀錄</button>
-      <a href="travel.html" class="menu-pill link-pill" id="btnTravel">去哪玩</a>
+      <button class="menu-pill" id="btnDiary">詩籤日記</button>
+      <a href="travel.html" class="menu-pill link-pill" id="btnTravel">要去哪玩</a>
     </nav>
 
-    <!-- Loading 動畫 -->
+    <!-- Loading 動畫（抽籤停頓時用） -->
     <div class="loading" id="loading">
-      愛吃熊正在幫你抽籤…
+      愛吃熊幫你抽籤解籤中…
       <div class="dot"></div><div class="dot"></div><div class="dot"></div>
     </div>
 
@@ -72,11 +72,11 @@
     </div>
   </div>
 
-  <!-- 抽籤紀錄視窗 -->
+  <!-- 詩籤日記視窗 -->
   <div class="modal-backdrop" id="modalHistory">
     <div class="modal-window">
       <button class="modal-close" onclick="closeHistory()">✕</button>
-      <h2>近期籤詩紀錄</h2>
+      <h2>詩籤日記</h2>
       <div id="historyListModal"></div>
     </div>
   </div>
@@ -86,7 +86,7 @@
     <div class="modal-window small">
       <button class="modal-close" onclick="closeOffer()">✕</button>
       <h2>上供品成功！</h2>
-      <p id="modalOfferText"></p>
+      <p id="modalOfferText" class="offer-bubble"></p>
     </div>
   </div>
 
