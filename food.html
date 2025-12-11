@@ -5,11 +5,11 @@
   <title>愛吃熊美食占卜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* ======= 全域 ======= */
+    /* ======= 全域樣式 ======= */
     body {
       margin: 0;
       padding: 0;
-      background: #ffb54b; /* 上方橘色會露出一點，跟你現在一樣 */
+      background: #ffb54b; /* 上方橘色狀態列下面那條 */
       font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
@@ -22,69 +22,72 @@
       box-sizing: border-box;
     }
 
-    /* ======= Header 區 ======= */
-    .header {
-      margin-bottom: 8px;
+    /* ======= Header 區：標題 + 副標 + 功德值 ======= */
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
     }
 
-    .title {
+    .title-block h1 {
+      margin: 0;
       font-size: 22px;
-      font-weight: 700;
       color: #7a4329;
-      margin: 0 0 4px 0;
+      font-weight: 700;
     }
 
-    .subtitle {
+    .title-block p {
+      margin: 4px 0 0 0;
       font-size: 13px;
       color: #9b5b36;
-      margin: 0 0 10px 0;
     }
 
     .merit-pill {
-      display: inline-block;
-      margin-top: 2px;
-      padding: 4px 12px;
-      border-radius: 999px;
-      border: 1.5px solid #f0c57a;
-      background: #fff7e0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       font-size: 13px;
       color: #9b5b36;
+      background: #fff7e0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1.5px solid #f0c57a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      white-space: nowrap;
     }
 
-    /* ======= 中間主卡片（熊熊美食圖） ======= */
+    /* ======= 熊熊大圖卡片 ======= */
     .main-card {
-      margin-top: 12px;
+      margin-top: 16px;
       background: #ffe3b1;
-      border-radius: 24px;
-      padding: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      border-radius: 26px;
+      padding: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    .main-img {
-      border-radius: 20px;
+    .main-illust {
+      border-radius: 22px;
       overflow: hidden;
     }
 
-    .main-img img {
+    .main-illust img {
       width: 100%;
       display: block;
+      height: auto;
     }
 
-    /* ======= 說明文字 ======= */
-    .description {
+    /* ======= 提示文字 ======= */
+    .hint-text {
       margin-top: 14px;
       font-size: 13px;
       color: #7a4329;
       text-align: center;
     }
 
-    /* ======= 下方圓形功能按鈕列 ======= */
+    /* ======= 下方四顆圓形功能按鈕 ======= */
     .menu-row {
       margin-top: 14px;
       display: flex;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
     }
 
     .menu-btn {
@@ -97,8 +100,8 @@
     }
 
     .menu-circle {
-      width: 76px;
-      height: 76px;
+      width: 78px;
+      height: 78px;
       margin: 0 auto 4px;
       border-radius: 50%;
       background: #fffaf2;
@@ -108,13 +111,18 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
 
     .menu-circle img {
       width: 30px;
       height: 30px;
       margin-bottom: 4px;
+      display: block;
+    }
+
+    .menu-label {
+      line-height: 1.2;
     }
 
     .menu-btn:active .menu-circle {
@@ -122,98 +130,377 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.18);
     }
 
-    .menu-label {
-      line-height: 1.2;
+    /* ======= 抽籤結果卡 ======= */
+    .result-card {
+      margin-top: 16px;
+      background: #fff7ea;
+      border-radius: 18px;
+      border: 2px solid #f3c690;
+      padding: 12px 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      display: none;
     }
 
-    /* 小螢幕微調 */
+    .result-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #7a4329;
+      margin-bottom: 4px;
+    }
+
+    .result-main {
+      font-size: 14px;
+      color: #7a4329;
+      margin-bottom: 6px;
+    }
+
+    .result-tag {
+      font-size: 12px;
+      color: #9b5b36;
+      margin-bottom: 8px;
+    }
+
+    .result-bear {
+      font-size: 13px;
+      color: #6a3b3b;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    /* ======= Loading 等待動畫 ======= */
+    .loading {
+      margin-top: 12px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #9b5b36;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ff9f6b;
+      animation: bounce 0.8s infinite alternate;
+    }
+
+    .dot:nth-child(2) { animation-delay: 0.15s; }
+    .dot:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+      from { transform: translateY(0); opacity: 0.4; }
+      to   { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ======= +1 功德值動畫 ======= */
+    .plus-one {
+      position: fixed;
+      top: 80px;
+      right: 30px;
+      font-size: 18px;
+      color: #ff7b59;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .plus-one.show {
+      animation: riseFade 0.8s ease-out forwards;
+    }
+
+    @keyframes riseFade {
+      0%   { opacity: 0; transform: translateY(8px); }
+      20%  { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
+
+    /* ======= 抽籤紀錄區 ======= */
+    .history-wrap {
+      margin-top: 12px;
+      background: #fffaf3;
+      border-radius: 14px;
+      border: 1.5px dashed #f1d4aa;
+      padding: 8px 10px;
+      display: none;
+      max-height: 120px;
+      overflow-y: auto;
+      font-size: 12px;
+      color: #7a4329;
+    }
+
+    .history-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .history-item {
+      padding: 4px 0;
+      border-bottom: 1px dashed #f1d4aa;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-time {
+      font-size: 11px;
+      color: #b08a62;
+    }
+
     @media (max-width: 380px) {
-      .title {
-        font-size: 20px;
-      }
-      .main-card {
-        margin-top: 10px;
-      }
-      .menu-circle {
-        width: 70px;
-        height: 70px;
-      }
-      .menu-circle img {
-        width: 26px;
-        height: 26px;
-      }
+      .title-block h1 { font-size: 20px; }
+      .menu-circle { width: 72px; height: 72px; }
+      .menu-circle img { width: 26px; height: 26px; }
     }
   </style>
 </head>
 <body>
   <div class="app-wrap">
 
-    <!-- Header：標題 + 副標 + 功德值 -->
-    <header class="header">
-      <h1 class="title">愛吃熊美食占卜</h1>
-      <p class="subtitle">不是正在吃美食，就是在吃美食的路上</p>
+    <!-- Header：標題 ＋ 副標 ＋ 功德值 -->
+    <div class="header-row">
+      <div class="title-block">
+        <h1>愛吃熊美食占卜</h1>
+        <p>不是正在吃美食，就是在吃美食的路上</p>
+      </div>
       <div class="merit-pill">
         功德值 <span id="meritValue">0</span>
       </div>
-    </header>
+    </div>
 
-    <!-- 熊熊美食大圖 -->
-    <section class="main-card">
-      <div class="main-img">
-        <!-- 把這個 src 換成你實際的美食熊圖片路徑 -->
+    <!-- 熊熊美食插畫卡片 -->
+    <div class="main-card">
+      <div class="main-illust">
+        <!-- 這裡改成你實際的熊熊美食圖片路徑 -->
         <img src="images/bear.png" alt="愛吃熊美食占卜">
       </div>
-    </section>
+    </div>
 
-    <!-- 文案說明 -->
-    <p class="description">
+    <!-- 提示文字 -->
+    <p class="hint-text">
       請按「抽詩籤」，讓愛吃熊幫你決定今天要吃什麼。
     </p>
 
-    <!-- 下方四顆圓形按鈕 -->
-    <nav class="menu-row">
-      <!-- 1. 抽詩籤 -->
-      <a href="#" class="menu-btn" id="btnDraw">
+    <!-- 四顆圓形按鈕：最後一顆改成「去哪玩」連到 travel.html -->
+    <div class="menu-row">
+      <!-- 抽詩籤 -->
+      <a href="javascript:void(0)" class="menu-btn" id="btnDraw">
         <div class="menu-circle">
           <img src="images/icon-draw.png" alt="抽詩籤">
           <div class="menu-label">抽詩籤</div>
         </div>
       </a>
 
-      <!-- 2. 上供品 -->
-      <a href="#" class="menu-btn" id="btnOffer">
+      <!-- 上供品 -->
+      <a href="javascript:void(0)" class="menu-btn" id="btnOffer">
         <div class="menu-circle">
           <img src="images/icon-offer.png" alt="上供品">
           <div class="menu-label">上供品</div>
         </div>
       </a>
 
-      <!-- 3. 抽籤紀錄 -->
-      <a href="#" class="menu-btn" id="btnHistory">
+      <!-- 抽籤紀錄 -->
+      <a href="javascript:void(0)" class="menu-btn" id="btnHistory">
         <div class="menu-circle">
           <img src="images/icon-history.png" alt="抽籤紀錄">
           <div class="menu-label">抽籤紀錄</div>
         </div>
       </a>
 
-      <!-- 4. 熊熊去哪玩（原本的 IG 按鈕改成這個） -->
+      <!-- 去哪玩（原本的 IG 改成這顆） -->
       <a href="travel.html" class="menu-btn" id="btnTravel">
         <div class="menu-circle">
-          <!-- 換成你喜歡的出遊熊小圖 -->
-          <img src="images/travel.png" alt="熊熊去哪玩">
-          <div class="menu-label">熊熊去哪玩</div>
+          <!-- 建議換成你做好的出遊熊小圖 -->
+          <img src="images/travel.png" alt="去哪玩">
+          <div class="menu-label">去哪玩</div>
         </div>
       </a>
-    </nav>
+    </div>
 
-    <!-- 如果你有原本的抽籤／上供品 JS，請把整個 <script> 貼在這裡 -->
-    <!--
-    <script>
-       // 這裡放你原本的程式碼，例如：
-       // document.getElementById("btnDraw").addEventListener("click", function(){ ... });
-    </script>
-    -->
+    <!-- Loading 動畫 -->
+    <div class="loading" id="loading">
+      愛吃熊正在幫你抽籤…
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+
+    <!-- 抽籤結果卡 -->
+    <div class="result-card" id="resultCard">
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-main" id="resultMain"></div>
+      <div class="result-tag" id="resultTag"></div>
+      <div class="result-bear" id="resultBear"></div>
+    </div>
+
+    <!-- 抽籤紀錄 -->
+    <div class="history-wrap" id="historyWrap">
+      <div class="history-title">📝 最近 3 次籤詩</div>
+      <div id="historyList"></div>
+    </div>
+
+    <!-- +1 功德值動畫字樣 -->
+    <div class="plus-one" id="plusOne">+1</div>
 
   </div>
+
+  <script>
+    // ====== 抽籤內容（你可以之後自己改成完整版本） ======
+    const lots = [
+      {
+        title: "珍珠奶茶好朋友籤",
+        main: "今天適合來一杯你最喜歡的飲料，搭配一份小點心。",
+        tag: "飲料・甜食・小確幸",
+        bear: "🐻 熊熊說：慢慢喝沒關係，把今天的辛苦也一起吞下去，然後記得對自己說聲辛苦了。"
+      },
+      {
+        title: "家常飯暖暖籤",
+        main: "適合吃一頓家常味的料理，可以是滷肉飯、滷雞腿或是味噌湯。",
+        tag: "家常菜・滷肉飯・暖胃",
+        bear: "🐻 熊熊說：有時候最療癒的不是大餐，而是那碗讓你覺得安心的白飯和熱湯。"
+      },
+      {
+        title: "揪人一起吃籤",
+        main: "今天適合找一個人一起吃飯，不一定要大餐，但要可以聊天。",
+        tag: "一起吃飯・聊天・陪伴",
+        bear: "🐻 熊熊說：跟在乎的人一起吃飯，胃會飽，心也會被裝滿一點點。"
+      },
+      {
+        title: "便當小確幸籤",
+        main: "簡單的便當也很好，只要裡面有你喜歡的一樣小菜就足夠。",
+        tag: "便當・上班族・快速補充",
+        bear: "🐻 熊熊說：不用每一餐都完美，有時候只是好好吃完一個便當，就是對自己的照顧。"
+      }
+    ];
+
+    // ====== DOM 取得 ======
+    const btnDraw = document.getElementById("btnDraw");
+    const btnOffer = document.getElementById("btnOffer");
+    const btnHistory = document.getElementById("btnHistory");
+
+    const loading = document.getElementById("loading");
+    const resultCard = document.getElementById("resultCard");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultMain = document.getElementById("resultMain");
+    const resultTag = document.getElementById("resultTag");
+    const resultBear = document.getElementById("resultBear");
+
+    const meritValueEl = document.getElementById("meritValue");
+    const plusOne = document.getElementById("plusOne");
+
+    const historyWrap = document.getElementById("historyWrap");
+    const historyList = document.getElementById("historyList");
+
+    // ====== 狀態 & localStorage ======
+    const STORAGE_MERIT = "luckyg_merit";
+    const STORAGE_HISTORY = "luckyg_food_history";
+
+    let merit = 0;
+    let history = [];
+
+    function loadState() {
+      try {
+        const m = parseInt(localStorage.getItem(STORAGE_MERIT) || "0", 10);
+        if (!isNaN(m)) merit = m;
+        const h = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+        if (Array.isArray(h)) history = h;
+      } catch(e) {
+        merit = 0;
+        history = [];
+      }
+      updateMerit();
+      renderHistory();
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_MERIT, String(merit));
+      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+    }
+
+    function updateMerit() {
+      meritValueEl.textContent = merit;
+    }
+
+    // +1 動畫
+    function showPlusOne(text) {
+      plusOne.textContent = text;
+      plusOne.classList.remove("show");
+      void plusOne.offsetWidth;
+      plusOne.classList.add("show");
+    }
+
+    // ====== 抽籤 ======
+    btnDraw.addEventListener("click", () => {
+      resultCard.style.display = "none";
+      loading.style.display = "flex";
+
+      setTimeout(() => {
+        loading.style.display = "none";
+
+        const picked = lots[Math.floor(Math.random() * lots.length)];
+        const now = new Date();
+
+        resultTitle.textContent = picked.title;
+        resultMain.textContent  = picked.main;
+        resultTag.textContent   = "關鍵字：" + picked.tag;
+        resultBear.textContent  = picked.bear;
+        resultCard.style.display = "block";
+
+        // 功德值 +1
+        merit += 1;
+        updateMerit();
+        showPlusOne("+1 功德值");
+        // 紀錄
+        history.unshift({
+          time: now.toISOString(),
+          title: picked.title,
+          main: picked.main
+        });
+        if (history.length > 20) history.pop();
+        saveState();
+        renderHistory();
+      }, 900);
+    });
+
+    // ====== 上供品：功德值 +3 ======
+    btnOffer.addEventListener("click", () => {
+      merit += 3;
+      updateMerit();
+      saveState();
+      showPlusOne("+3 功德值");
+    });
+
+    // ====== 抽籤紀錄 顯示/收合 ======
+    btnHistory.addEventListener("click", () => {
+      if (historyWrap.style.display === "block") {
+        historyWrap.style.display = "none";
+      } else {
+        historyWrap.style.display = "block";
+      }
+    });
+
+    function renderHistory() {
+      if (!history.length) {
+        historyList.innerHTML = '<div style="color:#b08a62;font-size:12px;">目前還沒有籤詩紀錄，先來抽一籤吧～</div>';
+        return;
+      }
+      // 只顯示最新 3 筆，捲動可看更多
+      const show = history.slice(0, 3);
+      historyList.innerHTML = "";
+      show.forEach(item => {
+        const d = new Date(item.time);
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+          <div>${item.title}</div>
+          <div class="history-time">${d.toLocaleString("zh-TW",{hour12:false})}</div>
+        `;
+        historyList.appendChild(div);
+      });
+    }
+
+    // 初始化
+    loadState();
+  </script>
 </body>
 </html>
