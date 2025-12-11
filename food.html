@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* ======= 全域樣式 ======= */
-    body {
+        body {
       margin: 0;
       padding: 0;
       background: #ffb54b; /* 上方橘色狀態列下面那條 */
@@ -256,6 +256,24 @@
     }
   </style>
 </head>
+<!-- 籤詩結果視窗 -->
+<div class="modal-backdrop" id="modalResult">
+  <div class="modal-window">
+    <button class="modal-close" onclick="closeResult()">✕</button>
+    <h2 id="modalResultTitle"></h2>
+    <p id="modalResultMain"></p>
+    <p class="modal-tag" id="modalResultTag"></p>
+    <p class="modal-bear" id="modalResultBear"></p>
+  </div>
+</div>
+<!-- 紀錄視窗 -->
+<div class="modal-backdrop" id="modalHistory">
+  <div class="modal-window">
+    <button class="modal-close" onclick="closeHistory()">✕</button>
+    <h2>近期籤詩紀錄</h2>
+    <div id="historyListModal"></div>
+  </div>
+</div>
 <body>
   <div class="app-wrap">
 
