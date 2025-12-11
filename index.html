@@ -19,17 +19,35 @@
     <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
   </div>
 
-  <!-- 功德值角標：整個畫面的右上角 -->
+  <!-- 左上角：抽籤紀錄角標 -->
+  <button id="historyBtn" class="top-pill left-pill">
+    📘 抽籤紀錄
+  </button>
+
+  <!-- 右上角：功德值角標 -->
   <div class="merit-badge">
     功德值 <span id="merit">0</span>
   </div>
 
+  <!-- 右下角：IG 浮動貼紙 -->
+  <a href="https://instagram.com/luckygbear" target="_blank"
+     rel="noopener noreferrer" class="ig-sticker">
+    <div class="ig-sticker-icon">📸</div>
+    <div class="ig-sticker-text">
+      <div class="ig-sticker-small">追蹤愛吃熊</div>
+      <div class="ig-sticker-handle">@luckygbear</div>
+    </div>
+  </a>
+
   <div class="app">
-    <!-- 標題 -->
-    <header class="header">
-      <div class="title">愛吃熊美食占卜</div>
-      <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
-    </header>
+    <!-- 標題（整塊可以點進 IG） -->
+    <a href="https://instagram.com/luckygbear" target="_blank"
+       rel="noopener noreferrer" class="ig-header-link">
+      <header class="header">
+        <div class="title">愛吃熊美食占卜</div>
+        <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
+      </header>
+    </a>
 
     <!-- 主視覺：熊熊圖當背景 -->
     <section class="temple-wrapper">
@@ -43,23 +61,16 @@
       請先擲筊，一次聖筊就可以抽籤。
     </p>
 
-    <!-- 三個大按鈕在下方 -->
+    <!-- 三個大圓形按鈕在下方 -->
     <section class="button-row">
-      <button id="boBtn" class="main-btn primary">
-        🙏 擲筊
+      <button id="boBtn" class="round-btn round-main">
+        🙏<span>擲筊</span>
       </button>
-      <button id="drawBtn" class="main-btn primary hidden">
-        🧧 抽籤
+      <button id="drawBtn" class="round-btn round-mid hidden">
+        🧧<span>抽籤</span>
       </button>
-      <button id="offerBtn" class="main-btn primary">
-        🍱 上供品
-      </button>
-    </section>
-
-    <!-- 次要按鈕：抽籤紀錄 -->
-    <section class="button-row secondary">
-      <button id="historyBtn" class="sub-btn">
-        📘 抽籤紀錄
+      <button id="offerBtn" class="round-btn round-main">
+        🍱<span>上供品</span>
       </button>
     </section>
 
@@ -67,7 +78,7 @@
     <section id="currentLotCard" class="lot-card hidden"></section>
   </div>
 
-  <!-- 詩籤彈窗 -->
+  <!-- 詩籤彈窗（大一點＋詩籤排版） -->
   <div id="lotModal" class="modal hidden"
        onclick="if (event.target === this) window.closeAllModals();">
     <div class="modal-content">
@@ -79,7 +90,7 @@
     </div>
   </div>
 
-  <!-- 抽籤 & 功德紀錄彈窗 -->
+  <!-- 抽籤紀錄彈窗（原 script.js 會用到） -->
   <div id="historyModal" class="modal hidden"
        onclick="if (event.target === this) window.closeAllModals();">
     <div class="modal-content">
@@ -94,7 +105,7 @@
   <!-- 你的原本遊戲邏輯（擲筊 / 抽籤 / 寫紀錄） -->
   <script src="script.js"></script>
 
-  <!-- 啟動畫面、功德動畫、愛吃熊祝福、供品邏輯、籤詩彈窗 -->
+  <!-- 啟動畫面、功德動畫、愛吃熊祝福、供品邏輯、詩籤彈窗排版 -->
   <script>
     /* --- 啟動畫面淡出 --- */
     function hideLoadingScreen() {
@@ -109,7 +120,7 @@
       setTimeout(hideLoadingScreen, 1800);
     });
 
-    /* --- 愛吃熊祝福語（18句） --- */
+    /* --- 愛吃熊祝福語（供品用） --- */
     const BEAR_BLESSINGS = [
       "愛吃熊送你一口好心情，記得慢慢吃、好好吃。",
       "你今天辛苦了，給自己一份好吃的，就會更有力量喔！",
@@ -130,6 +141,22 @@
       "願你的碗裡永遠裝著安心、期待與小小的快樂。",
       "如果覺得累，那就先吃好吃的，愛吃熊會陪著你。"
     ];
+
+    /* --- 愛吃熊建議（詩籤視窗用）--- */
+    const BEAR_ADVICE = [
+      "今天先照顧好肚子，再去面對那些讓你緊張的事情就好。",
+      "慢慢吃、慢慢想，不用一次把所有答案都找出來。",
+      "如果覺得心裡亂，就先從一頓好好吃的餐開始整理生活。",
+      "允許自己挑一個真的想吃的，而不是「應該吃」的東西。",
+      "吃飯時專心享受味道，就是在好好陪伴自己。",
+      "你已經很努力了，給自己一點喜歡的食物當小獎勵吧。"
+    ];
+
+    function getRandomAdvice() {
+      return BEAR_ADVICE[
+        Math.floor(Math.random() * BEAR_ADVICE.length)
+      ];
+    }
 
     /* --- 功德值：只會增加，不會減少 --- */
     window.addMerit = function (delta) {
@@ -154,7 +181,7 @@
       setTimeout(() => plus.remove(), 900);
     };
 
-    /* --- 熊熊祝福氣泡 --- */
+    /* --- 熊熊祝福氣泡（供品顯示） --- */
     function showBearBlessing() {
       const bubble = document.getElementById('bearBubble');
       if (!bubble) return;
@@ -195,18 +222,55 @@
         if (el) el.classList.remove('hidden');
       });
 
-      /* 3. 監聽目前詩籤卡片內容變化 -> 自動跳出彈窗顯示 */
+      /* 3. 監聽目前詩籤卡片內容變化 -> 自動跳出「詩籤樣式」彈窗 */
       const lotCard = document.getElementById('currentLotCard');
       const lotModal = document.getElementById('lotModal');
       const lotText = document.getElementById('lotText');
 
       if (lotCard && lotModal && lotText) {
         const observer = new MutationObserver(() => {
-          const html = lotCard.innerHTML.trim();
-          if (!html) return;
+          const rawText = lotCard.innerText.trim();
+          if (!rawText) return;
 
-          // 把原本塞在下面卡片的內容轉移到彈窗
-          lotText.innerHTML = html;
+          const lines = rawText.split(/\n+/).map(l => l.trim()).filter(Boolean);
+          const title = lines[0] || "今日美食籤";
+          const dish = lines[1] || "好料一份";
+          const detailLines = lines.slice(2);
+          const detailHtml = detailLines
+            .map(l => l.replace(/ /g, "&nbsp;"))
+            .join("<br>");
+
+          const poemLines = [
+            `${dish}香氣暖心房`,
+            "慢慢入口不慌不忙",
+            "照顧肚子也是力量",
+            "好好吃飯勇氣滿滿"
+          ];
+
+          const advice = getRandomAdvice();
+
+          lotText.innerHTML = `
+            <div class="lot-modal-card">
+              <div class="lot-modal-title">${title}</div>
+
+              <div class="lot-modal-section lot-poem">
+                ${poemLines
+                  .map(l => `<div class="lot-poem-line">${l}</div>`)
+                  .join("")}
+              </div>
+
+              <div class="lot-modal-section">
+                <div class="lot-section-label">今日吃貨指引</div>
+                <div class="lot-section-body">${detailHtml}</div>
+              </div>
+
+              <div class="lot-modal-section">
+                <div class="lot-section-label">愛吃熊小提醒</div>
+                <div class="lot-section-body">${advice}</div>
+              </div>
+            </div>
+          `;
+
           lotModal.classList.remove('hidden');
           lotCard.classList.add('hidden');
         });
