@@ -19,6 +19,11 @@
     <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
   </div>
 
+  <!-- 功德值角標：整個畫面的右上角 -->
+  <div class="merit-badge">
+    功德值 <span id="merit">0</span>
+  </div>
+
   <div class="app">
     <!-- 標題 -->
     <header class="header">
@@ -26,47 +31,37 @@
       <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
     </header>
 
-    <!-- 主視覺：熊熊圖當背景 + 浮動功能按鈕 + 功德值 -->
+    <!-- 主視覺：熊熊圖當背景 -->
     <section class="temple-wrapper">
-      <div class="temple-image-box">
-        <!-- 功德值角標（右上角，不擋對聯） -->
-        <div class="merit-badge">
-          功德值 <span id="merit">0</span>
-        </div>
-
-        <!-- 浮動圓形按鈕：貼在右邊中間 -->
-        <div class="floating-buttons">
-          <button id="boBtn" class="circle-btn circle-main">
-            🙏<span>擲筊</span>
-          </button>
-
-          <button id="drawBtn" class="circle-btn circle-main hidden">
-            🧧<span>抽籤</span>
-          </button>
-
-          <button id="historyBtn" class="circle-btn">
-            📘<span>紀錄</span>
-          </button>
-
-          <button id="offerBtn" class="circle-btn small">
-            🍱<span>供品</span>
-          </button>
-
-          <!-- 清空按鈕：保留給 script.js 用，但畫面隱藏 -->
-          <button id="resetBtn" class="circle-btn danger hidden">
-            ♻️<span>清空</span>
-          </button>
-        </div>
-      </div>
-
+      <div class="temple-image-box"></div>
       <!-- 熊熊祝福對話氣泡（用 JS 填文字） -->
       <div id="bearBubble" class="bear-bubble"></div>
     </section>
 
-    <!-- 狀態提示文字（已移除聖筊機率說明） -->
+    <!-- 狀態提示文字（不再顯示聖筊機率） -->
     <p id="statusText" class="status-text">
       請先擲筊，一次聖筊就可以抽籤。
     </p>
+
+    <!-- 三個大按鈕在下方 -->
+    <section class="button-row">
+      <button id="boBtn" class="main-btn primary">
+        🙏 擲筊
+      </button>
+      <button id="drawBtn" class="main-btn primary hidden">
+        🧧 抽籤
+      </button>
+      <button id="offerBtn" class="main-btn primary">
+        🍱 上供品
+      </button>
+    </section>
+
+    <!-- 次要按鈕：抽籤紀錄 -->
+    <section class="button-row secondary">
+      <button id="historyBtn" class="sub-btn">
+        📘 抽籤紀錄
+      </button>
+    </section>
 
     <!-- 目前詩籤卡片：只當中繼容器，實際顯示改為彈窗 -->
     <section id="currentLotCard" class="lot-card hidden"></section>
