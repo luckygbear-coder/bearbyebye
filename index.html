@@ -19,7 +19,7 @@
     <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
   </div>
 
-  <!-- 左上角：抽籤紀錄角標 -->
+  <!-- 左上角：抽籤紀錄按鈕 -->
   <button id="historyBtn" class="top-pill left-pill">
     📘 抽籤紀錄
   </button>
@@ -29,29 +29,27 @@
     功德值 <span id="merit">0</span>
   </div>
 
-  <!-- 右下角：IG 浮動貼紙 -->
-  <a href="https://instagram.com/luckygbear" target="_blank"
-     rel="noopener noreferrer" class="ig-sticker">
-    <div class="ig-sticker-icon">📸</div>
-    <div class="ig-sticker-text">
-      <div class="ig-sticker-small">追蹤愛吃熊</div>
-      <div class="ig-sticker-handle">@luckygbear</div>
-    </div>
-  </a>
-
   <div class="app">
-    <!-- 標題（整塊可以點進 IG） -->
-    <a href="https://instagram.com/luckygbear" target="_blank"
-       rel="noopener noreferrer" class="ig-header-link">
-      <header class="header">
-        <div class="title">愛吃熊美食占卜</div>
-        <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
-      </header>
-    </a>
+    <!-- 標題（純文字，不是超連結） -->
+    <header class="header">
+      <div class="title">愛吃熊美食占卜</div>
+      <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
+    </header>
 
-    <!-- 主視覺：熊熊圖當背景 -->
+    <!-- IG 追蹤按鈕 -->
+    <section class="button-row single">
+      <a href="https://instagram.com/luckygbear" target="_blank"
+         rel="noopener noreferrer" class="pill-btn ig-btn">
+        📸 追蹤愛吃熊 IG @luckygbear
+      </a>
+    </section>
+
+    <!-- 主視覺：完整熊熊原圖（用 <img> 顯示，不切頭） -->
     <section class="temple-wrapper">
-      <div class="temple-image-box"></div>
+      <img src="images/bear-loading-couplet.png"
+           alt="愛吃熊與美食"
+           class="temple-image" />
+
       <!-- 熊熊祝福對話氣泡（用 JS 填文字） -->
       <div id="bearBubble" class="bear-bubble"></div>
     </section>
@@ -61,8 +59,8 @@
       請先擲筊，一次聖筊就可以抽籤。
     </p>
 
-    <!-- 三個大圓形按鈕在下方 -->
-    <section class="button-row">
+    <!-- 下方三顆大圓按鈕 -->
+    <section class="round-button-row">
       <button id="boBtn" class="round-btn round-main">
         🙏<span>擲筊</span>
       </button>
@@ -160,7 +158,7 @@
 
     /* --- 功德值：只會增加，不會減少 --- */
     window.addMerit = function (delta) {
-      if (!delta || delta <= 0) return; // 不接受扣分
+      if (!delta || delta <= 0) return;
 
       const badgeValue = document.getElementById('merit');
       if (!badgeValue) return;
@@ -169,7 +167,6 @@
       const next = current + delta;
       badgeValue.textContent = next;
 
-      // 飄出的 +1 動畫
       const badge = document.querySelector('.merit-badge');
       if (!badge) return;
 
@@ -191,7 +188,7 @@
       bubble.textContent = msg;
 
       bubble.classList.remove('show');
-      void bubble.offsetWidth; // 強制重繪
+      void bubble.offsetWidth;
       bubble.classList.add('show');
     }
 
@@ -205,7 +202,7 @@
 
     /* --- DOM 載入後的額外處理 --- */
     document.addEventListener('DOMContentLoaded', () => {
-      /* 1. 上供品：永遠可以按，按一次 +1 功德 + 祝福 */
+      /* 上供品：永遠可以按，按一次 +1 功德 + 祝福 */
       const offerBtn = document.getElementById('offerBtn');
       if (offerBtn) {
         offerBtn.disabled = false;
@@ -216,13 +213,12 @@
         });
       }
 
-      /* 2. 確保重要按鈕一定可見 */
       ["boBtn", "historyBtn", "offerBtn"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.remove('hidden');
       });
 
-      /* 3. 監聽目前詩籤卡片內容變化 -> 自動跳出「詩籤樣式」彈窗 */
+      /* 監聽目前詩籤卡片內容變化 -> 自動跳出「詩籤樣式」彈窗 */
       const lotCard = document.getElementById('currentLotCard');
       const lotModal = document.getElementById('lotModal');
       const lotText = document.getElementById('lotText');
