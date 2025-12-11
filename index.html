@@ -42,10 +42,10 @@
 
     <!-- 狀態提示文字 -->
     <p id="statusText" class="status-text">
-      請先擲筊，問問愛吃熊今天要吃什麼。
+      請按「抽詩籤」，讓愛吃熊幫你決定今天要吃什麼。
     </p>
 
-    <!-- 抽籤按鈕：這版不需要改按，只保留 class / id 以備未來使用 -->
+    <!-- 抽籤小按鈕這版不用，保留結構 -->
     <section class="draw-row hidden">
       <button id="drawBtn" class="pill-btn draw-btn">
         🧧 抽籤
@@ -55,7 +55,7 @@
     <!-- 下方四顆奶油色圓形大按鈕 -->
     <section class="round-button-row">
       <button id="boBtn" class="round-btn">
-        🙏<span>擲筊</span>
+        🧧<span>抽詩籤</span>
       </button>
 
       <button id="offerBtn" class="round-btn">
@@ -67,7 +67,7 @@
       </button>
 
       <button id="igBtn" class="round-btn">
-        📸<span>追蹤愛吃熊</span>
+        📸<span>愛吃熊</span>
       </button>
     </section>
 
@@ -174,7 +174,7 @@
       ];
     }
 
-    /* === 詩籤資料（範例，可之後自己增加 / 替換） === */
+    /* === 詩籤資料（可以之後自己增加 / 替換） === */
     const LOTS = [
       {
         no: "第一籤",
@@ -411,24 +411,27 @@
       const lotModal = document.getElementById('lotModal');
       const lotText = document.getElementById('lotText');
       const historyModal = document.getElementById('historyModal');
+      const temple = document.querySelector('.temple-wrapper');
 
-      /* --- 擲筊：每次都 +1 功德；90% 聖筊會直接抽籤 --- */
+      /* --- 抽詩籤：每次都 +1 功德，先有抽籤動畫再出籤 --- */
       if (boBtn) {
         boBtn.addEventListener('click', () => {
-          window.addMerit(1); // 無論結果都 +1
+          window.addMerit(1); // 每次抽籤都 +1 功德
 
-          const holy = Math.random() < 0.9; // 聖筊機率 90%
-          if (holy) {
-            if (statusText)
-              statusText.textContent =
-                "聖筊！愛吃熊准許你抽籤～詩籤已經幫你準備好了。";
-            // 直接抽籤
-            drawLot(false);
-          } else {
-            if (statusText)
-              statusText.textContent =
-                "這次不是聖筊，再擲一次問問愛吃熊吧～";
+          if (statusText)
+            statusText.textContent = "愛吃熊正在幫你翻籤筒，稍等一下下～";
+
+          if (temple) {
+            temple.classList.remove('shake');
+            void temple.offsetWidth; // 強制重繪
+            temple.classList.add('shake');
           }
+
+          // 等動畫晃一下再出籤
+          setTimeout(() => {
+            drawLot(false);
+            if (temple) temple.classList.remove('shake');
+          }, 900);
         });
       }
 
@@ -448,7 +451,7 @@
         });
       }
 
-      /* --- 追蹤愛吃熊：開 IG 網頁 --- */
+      /* --- 愛吃熊 IG：開 IG 網頁 --- */
       if (igBtn) {
         igBtn.addEventListener('click', () => {
           window.open('https://instagram.com/luckygbear', '_blank');
@@ -477,8 +480,6 @@
             .map(l => l.replace(/ /g, "&nbsp;"))
             .join("<br>");
 
-          // 從標題中抓 dish 名字當第一句
-          // 例如：「第三籤．甜甜補勇氣｜甜甜飽」
           let dishShort = detailLine1 || "好吃的一餐";
           const poemLines = [
             `${dishShort}香氣暖心房`,
@@ -514,10 +515,9 @@
           lotModal.classList.remove('hidden');
           lotCard.classList.add('hidden');
 
-          // 狀態文字改為：熊熊已給你今日吃貨詩籤
           if (statusText) {
             statusText.textContent =
-              "熊熊食神已給你今日的吃貨詩籤，可以慢慢品味，也可以再擲筊問下一餐。";
+              "愛吃熊食神已給你今日的吃貨詩籤，可以慢慢品味，也可以再抽下一餐。";
           }
         });
 
