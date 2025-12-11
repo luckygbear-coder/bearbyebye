@@ -469,7 +469,74 @@
   <!-- ===================== JS ===================== -->
   <script>
     /* ========= 出遊熊小語 ========= */
-    const bearTalkList = [
+ // ========= 使用者選擇狀態 & DOM =========
+ let selectedRegion = "全台";
+ let selectedTarget = "不限";
+ let selectedDays   = 2;
+
+ let todayTravelCount = 0;
+ let todayFoodCount   = 0;
+
+ const bearTalk       = document.getElementById("bearTalk");
+ const dayValue       = document.getElementById("dayValue");
+ const todayCountText = document.getElementById("todayCountText");
+ const modalResult    = document.getElementById("modalResult");
+ const modalHistory   = document.getElementById("modalHistory");
+ const historyList    = document.getElementById("historyList");
+
+ // 點選區域按鈕
+ document.querySelectorAll(".region-chip").forEach(btn => {
+   btn.addEventListener("click", () => {
+     document.querySelectorAll(".region-chip").forEach(b => b.classList.remove("active"));
+     btn.classList.add("active");
+     selectedRegion = btn.innerText;
+   });
+ });
+
+ // 點選出遊對象
+ document.querySelectorAll(".target-chip").forEach(btn => {
+   btn.addEventListener("click", () => {
+     document.querySelectorAll(".target-chip").forEach(b => b.classList.remove("active"));
+     btn.classList.add("active");
+     selectedTarget = btn.dataset.target;
+   });
+ });
+
+ // 天數加減
+ document.getElementById("dayMinus").addEventListener("click", () => {
+   if (selectedDays > 1) selectedDays--;
+   dayValue.innerText = selectedDays;
+ });
+ document.getElementById("dayPlus").addEventListener("click", () => {
+   if (selectedDays < 5) selectedDays++;
+   dayValue.innerText = selectedDays;
+ });
+
+ // 更新今日抽籤次數
+ function updateCounts() {
+   todayCountText.innerHTML =
+     `今日旅遊籤：${todayTravelCount} 次 ｜ 今日美食籤：${todayFoodCount} 次`;
+ }
+
+ // 顯示出遊熊隨機小語
+ function showBearTalk() {
+   const msg = bearTalkList[Math.floor(Math.random() * bearTalkList.length)];
+   bearTalk.innerText = msg;
+   bearTalk.style.display = "block";
+   setTimeout(() => { bearTalk.style.display = "none"; }, 2200);
+ }
+
+ // 開啟 / 關閉 modal（給 HTML onclick 用）
+ function openModal(el) {
+   el.classList.add("show");
+ }
+ function closeResult() {
+   modalResult.classList.remove("show");
+ }
+ function closeHistory() {
+   modalHistory.classList.remove("show");
+ }
+      const bearTalkList = [
       "出發吧！今天的風景準備好迎接你了～",
       "玩得開心最重要，不用把行程塞滿喔！",
       "心情決定旅行的味道，今天想放鬆還是探險？",
@@ -480,70 +547,6 @@
       "今天，就讓出遊熊帶你看看不一樣的世界！"
     ];
 
-    /* ========= 使用者選擇狀態 ========= */
-    let selectedRegion = "全台";
-    let selectedTarget = "不限";
-    let selectedDays   = 2;
-
-    /* 今天已抽次數 */
-    let todayTravelCount = 0;
-    let todayFoodCount   = 0;
-
-    /* 抓 DOM */
-    const bearTalk       = document.getElementById("bearTalk");
-    const dayValue       = document.getElementById("dayValue");
-    const todayCountText = document.getElementById("todayCountText");
-
-    const modalResult  = document.getElementById("modalResult");
-    const modalHistory = document.getElementById("modalHistory");
-    const historyList  = document.getElementById("historyList");
-
-    // 地區按鈕
-    document.querySelectorAll(".region-chip").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".region-chip").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        selectedRegion = btn.innerText;
-      });
-    });
-
-    // 出遊對象
-    document.querySelectorAll(".target-chip").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".target-chip").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        selectedTarget = btn.dataset.target;
-      });
-    });
-
-    // 天數加減
-    document.getElementById("dayMinus").addEventListener("click", () => {
-      if (selectedDays > 1) selectedDays--;
-      dayValue.innerText = selectedDays;
-    });
-    document.getElementById("dayPlus").addEventListener("click", () => {
-      if (selectedDays < 5) selectedDays++;
-      dayValue.innerText = selectedDays;
-    });
-
-    // 更新今日抽籤次數
-    function updateCounts() {
-      todayCountText.innerHTML =
-        `今日旅遊籤：${todayTravelCount} 次 ｜ 今日美食籤：${todayFoodCount} 次`;
-    }
-
-    // 顯示出遊熊隨機小語
-    function showBearTalk() {
-      const msg = bearTalkList[Math.floor(Math.random() * bearTalkList.length)];
-      bearTalk.innerText = msg;
-      bearTalk.style.display = "block";
-      setTimeout(() => { bearTalk.style.display = "none"; }, 2200);
-    }
-
-    // 開啟/關閉 modal
-    function openModal(el) { el.classList.add("show"); }
-    function closeResult() { modalResult.classList.remove("show"); }
-    function closeHistory(){ modalHistory.classList.remove("show"); }
 
     /* ====== 旅遊景點 / 美食籤 陣列 ====== */
     const travelSpots = [];
