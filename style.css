@@ -20,14 +20,14 @@ body {
 .app {
   max-width: 480px;
   margin: 0 auto;
-  padding: 16px 16px 40px;
+  padding: 8px 16px 40px;  /* 整體往上收一點 */
 }
 
 /* === 標題區 === */
 .header {
   text-align: center;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 28px;  /* 留一些空間給右上角功德值 */
+  margin-bottom: 6px;
 }
 
 .title {
@@ -65,36 +65,14 @@ body {
   transition: opacity 0.6s ease;
 }
 
-/* === 熊熊主視覺（背景鋪滿） === */
-.temple-wrapper {
-  position: relative;
-  margin: 12px auto 10px;
-  width: 92%;
-  border-radius: 28px;
-  overflow: hidden;
-  background-image: url("images/bear-loading-couplet.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 450px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-}
-
-.temple-image-box {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* === 功德值角標（右上） === */
+/* === 功德值角標：整個畫面的右上角 === */
 .merit-badge {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  left: auto;
+  position: fixed;
+  top: 8px;
+  right: 10px;
   padding: 6px 12px;
-  border-radius: 16px;
-  background: rgba(255, 248, 230, 0.92);
+  border-radius: 18px;
+  background: rgba(255, 248, 230, 0.96);
   border: 2px solid #f1c688;
   font-size: 13px;
   font-weight: 600;
@@ -102,7 +80,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  z-index: 12;
+  z-index: 11000;
 }
 
 .merit-badge #merit {
@@ -136,57 +114,31 @@ body {
   }
 }
 
-/* 浮動按鈕：改成在「好好吃喔」橫批下面、置中一排 */
-.floating-buttons {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;              /* 距離底部一點點，可以再微調 */
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: row;       /* 改成橫向排列 */
-  gap: 10px;
-  z-index: 10;               /* 一定蓋在背景圖上 */
+/* === 熊熊主視覺（背景鋪滿） === */
+.temple-wrapper {
+  position: relative;
+  margin: 6px auto 8px;
+  width: 92%;
+  border-radius: 28px;
+  overflow: hidden;
+  background-image: url("images/bear-loading-couplet.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 420px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
-.circle-btn {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 248, 230, 0.96);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: #7b4228;
-  cursor: pointer;
-}
-
-.circle-btn span {
-  margin-top: 2px;
-}
-
-.circle-main {
-  background: linear-gradient(135deg, #f0c48a, #f8e0b6);
-}
-
-.small {
-  width: 52px;
-  height: 52px;
-  font-size: 11px;
-}
-
-.danger {
-  background: linear-gradient(135deg, #f19a88, #f6c0b3);
+.temple-image-box {
+  width: 100%;
+  height: 100%;
 }
 
 /* === 熊熊祝福氣泡 === */
 .bear-bubble {
   position: absolute;
   left: 50%;
-  top: 18%;
+  top: 16%;
   transform: translateX(-50%);
   max-width: 260px;
   padding: 10px 14px;
@@ -240,8 +192,48 @@ body {
   text-align: center;
   color: #8b5336;
   font-size: 14px;
-  margin-top: 8px;
+  margin-top: 6px;
   margin-bottom: 10px;
+}
+
+/* === 下方按鈕區 === */
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+/* 三個大按鈕 */
+.main-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 150px;
+  padding: 10px 0;
+  border-radius: 999px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fffaf3;
+  background: linear-gradient(135deg, #f0a64d, #f6c07c);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* 次要按鈕：紀錄 */
+.button-row.secondary {
+  margin-top: 2px;
+}
+
+.sub-btn {
+  flex: 0 0 auto;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid #d79b60;
+  font-size: 14px;
+  color: #8b5336;
+  background: #fff7e6;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
 }
 
 /* 目前詩籤卡片（只做中繼，不會真的顯示） */
