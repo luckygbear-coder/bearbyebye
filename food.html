@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>愛吃熊美食占卜</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* ======= 全域 ======= */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffb54b; /* 上方橘色會露出一點，跟你現在一樣 */
+      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .app-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #ffeec9;
+      padding: 12px 16px 20px;
+      box-sizing: border-box;
+    }
+
+    /* ======= Header 區 ======= */
+    .header {
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #7a4329;
+      margin: 0 0 4px 0;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #9b5b36;
+      margin: 0 0 10px 0;
+    }
+
+    .merit-pill {
+      display: inline-block;
+      margin-top: 2px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1.5px solid #f0c57a;
+      background: #fff7e0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      font-size: 13px;
+      color: #9b5b36;
+    }
+
+    /* ======= 中間主卡片（熊熊美食圖） ======= */
+    .main-card {
+      margin-top: 12px;
+      background: #ffe3b1;
+      border-radius: 24px;
+      padding: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .main-img {
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .main-img img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ======= 說明文字 ======= */
+    .description {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #7a4329;
+      text-align: center;
+    }
+
+    /* ======= 下方圓形功能按鈕列 ======= */
+    .menu-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .menu-btn {
+      flex: 1;
+      max-width: 90px;
+      text-decoration: none;
+      color: #7a4329;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .menu-circle {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 4px;
+      border-radius: 50%;
+      background: #fffaf2;
+      border: 1.5px solid #f5d1a8;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .menu-circle img {
+      width: 30px;
+      height: 30px;
+      margin-bottom: 4px;
+    }
+
+    .menu-btn:active .menu-circle {
+      transform: scale(0.95);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+
+    .menu-label {
+      line-height: 1.2;
+    }
+
+    /* 小螢幕微調 */
+    @media (max-width: 380px) {
+      .title {
+        font-size: 20px;
+      }
+      .main-card {
+        margin-top: 10px;
+      }
+      .menu-circle {
+        width: 70px;
+        height: 70px;
+      }
+      .menu-circle img {
+        width: 26px;
+        height: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrap">
+
+    <!-- Header：標題 + 副標 + 功德值 -->
+    <header class="header">
+      <h1 class="title">愛吃熊美食占卜</h1>
+      <p class="subtitle">不是正在吃美食，就是在吃美食的路上</p>
+      <div class="merit-pill">
+        功德值 <span id="meritValue">0</span>
+      </div>
+    </header>
+
+    <!-- 熊熊美食大圖 -->
+    <section class="main-card">
+      <div class="main-img">
+        <!-- 把這個 src 換成你實際的美食熊圖片路徑 -->
+        <img src="images/food-bear.png" alt="愛吃熊美食占卜">
+      </div>
+    </section>
+
+    <!-- 文案說明 -->
+    <p class="description">
+      請按「抽詩籤」，讓愛吃熊幫你決定今天要吃什麼。
+    </p>
+
+    <!-- 下方四顆圓形按鈕 -->
+    <nav class="menu-row">
+      <!-- 1. 抽詩籤 -->
+      <a href="#" class="menu-btn" id="btnDraw">
+        <div class="menu-circle">
+          <img src="images/icon-draw.png" alt="抽詩籤">
+          <div class="menu-label">抽詩籤</div>
+        </div>
+      </a>
+
+      <!-- 2. 上供品 -->
+      <a href="#" class="menu-btn" id="btnOffer">
+        <div class="menu-circle">
+          <img src="images/icon-offer.png" alt="上供品">
+          <div class="menu-label">上供品</div>
+        </div>
+      </a>
+
+      <!-- 3. 抽籤紀錄 -->
+      <a href="#" class="menu-btn" id="btnHistory">
+        <div class="menu-circle">
+          <img src="images/icon-history.png" alt="抽籤紀錄">
+          <div class="menu-label">抽籤紀錄</div>
+        </div>
+      </a>
+
+      <!-- 4. 熊熊去哪玩（原本的 IG 按鈕改成這個） -->
+      <a href="travel.html" class="menu-btn" id="btnTravel">
+        <div class="menu-circle">
+          <!-- 換成你喜歡的出遊熊小圖 -->
+          <img src="images/travel.png" alt="熊熊去哪玩">
+          <div class="menu-label">熊熊去哪玩</div>
+        </div>
+      </a>
+    </nav>
+
+    <!-- 如果你有原本的抽籤／上供品 JS，請把整個 <script> 貼在這裡 -->
+    <!--
+    <script>
+       // 這裡放你原本的程式碼，例如：
+       // document.getElementById("btnDraw").addEventListener("click", function(){ ... });
+    </script>
+    -->
+
+  </div>
+</body>
+</html>
