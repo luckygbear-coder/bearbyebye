@@ -43,41 +43,7 @@ body {
   margin-top: 4px;
 }
 
-/* 標題整塊可點進 IG */
-.ig-header-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.ig-header-link:hover {
-  opacity: 0.9;
-  cursor: pointer;
-}
-
-/* === 啟動畫面 === */
-#loading-screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffefc9;
-  z-index: 10000;
-}
-
-#loading-screen img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-#loading-screen.fade-out {
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-/* === 左上／右上角標按鈕 === */
+/* === 上方角標按鈕 === */
 .top-pill {
   position: fixed;
   top: 8px;
@@ -99,7 +65,7 @@ body {
   color: #8b5336;
 }
 
-/* === 右上：功德值角標 === */
+/* 右上功德值角標 */
 .merit-badge {
   position: fixed;
   top: 8px;
@@ -148,63 +114,72 @@ body {
   }
 }
 
-/* === 右下角：IG 浮動貼紙 === */
-.ig-sticker {
-  position: fixed;
-  right: 14px;
-  bottom: 20px;
-  padding: 8px 12px;
+/* === IG 追蹤按鈕（按鈕樣式連結） === */
+.button-row.single {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #ffcf96, #ffe9c7);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+}
+
+.ig-btn {
+  background: #fff7e6;
+  color: #8b5336;
+}
+
+/* === 啟動畫面 === */
+#loading-screen {
+  position: fixed;
+  inset: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
-  text-decoration: none;
-  color: #8b4d2d;
-  z-index: 9000;
+  justify-content: center;
+  background: #ffefc9;
+  z-index: 10000;
 }
 
-.ig-sticker-icon {
-  font-size: 18px;
+#loading-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.ig-sticker-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
+#loading-screen.fade-out {
+  opacity: 0;
+  transition: opacity 0.6s ease;
 }
 
-.ig-sticker-small {
-  font-size: 11px;
-}
-
-.ig-sticker-handle {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-/* === 熊熊主視覺（背景鋪滿） === */
+/* === 熊熊主視覺：完整圖片 === */
 .temple-wrapper {
   position: relative;
   margin: 6px auto 8px;
   width: 92%;
   border-radius: 28px;
   overflow: hidden;
-  background-image: url("images/bear-loading-couplet.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 420px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  background: #ffe4b8;
 }
 
-.temple-image-box {
+.temple-image {
   width: 100%;
-  height: 100%;
+  height: auto;
+  display: block;
 }
 
-/* === 熊熊祝福氣泡 === */
+/* 熊熊祝福氣泡 */
 .bear-bubble {
   position: absolute;
   left: 50%;
@@ -266,13 +241,12 @@ body {
   margin-bottom: 12px;
 }
 
-/* === 下方圓形按鈕 === */
-.button-row {
+/* === 下方三顆圓形按鈕 === */
+.round-button-row {
   display: flex;
   justify-content: center;
-  gap: 14px;
+  gap: 16px;
   margin-bottom: 8px;
-  flex-wrap: nowrap;
 }
 
 .round-btn {
@@ -288,6 +262,7 @@ body {
   font-size: 14px;
   font-weight: 600;
   color: #fff7ea;
+  cursor: pointer;
 }
 
 .round-btn span {
@@ -304,7 +279,7 @@ body {
   background: radial-gradient(circle at 30% 20%, #ffe1b8, #f19b3f);
 }
 
-/* 目前詩籤卡片（只做中繼，不會真的顯示） */
+/* 目前詩籤卡片（中繼） */
 .lot-card {
   margin-top: 6px;
   padding: 12px 14px;
@@ -315,7 +290,7 @@ body {
   font-size: 14px;
 }
 
-/* === Modal 彈窗 === */
+/* === Modal 詩籤彈窗 === */
 .modal {
   position: fixed;
   inset: 0;
