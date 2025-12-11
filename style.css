@@ -36,7 +36,72 @@ body {
   color: #b15532;
   letter-spacing: 0.2em;
 }
+/* --- Header 區塊 --- */
 
+.header-wrap {
+  text-align: left;
+  padding: 10px 4px;
+}
+
+/* 標題 */
+.page-title {
+  margin: 0;
+  font-size: 24px;
+  color: #7a4329;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  margin: 4px 0 10px 0;
+  font-size: 13px;
+  color: #9b5b36;
+}
+
+/* 上方兩顆按鈕排在同一列 */
+.top-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* 功德值膠囊 */
+.merit-pill {
+  font-size: 13px;
+  color: #9b5b36;
+  background: #fff7e0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid #f0c57a;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  display: inline-block;
+  width: fit-content;
+}
+
+/* 出遊熊按鈕（模仿下面四顆圓形風格） */
+.travel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  text-decoration: none;
+  color: #7a4329;
+  font-size: 13px;
+  font-weight: 600;
+
+  background: #fffaf2;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1.5px solid #f5d1a8;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+/* 小太陽 icon */
+.travel-icon {
+  width: 18px;
+  height: 18px;
+}
 .subtitle {
   font-size: 13px;
   color: #a36b52;
