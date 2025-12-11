@@ -1,18 +1,25 @@
-/* ======= 全域 ======= */
-body {
+/* ======= 整體高度鎖住，不滾動 ======= */
+html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+
+body {
   background: #ffb54b; /* 上方橘色 */
   font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden; /* 首頁不要上下滑動 */
 }
 
 .app-wrap {
   max-width: 480px;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100%;
   background: #ffeec9;
-  padding: 12px 16px 24px;
+  padding: 12px 16px 14px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ======= Header 區 ======= */
@@ -21,6 +28,7 @@ body {
   justify-content: space-between;
   align-items: flex-start;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .title-block h1 {
@@ -34,7 +42,7 @@ body {
   margin: 4px 0 0 0;
   font-size: 13px;
   color: #9b5b36;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .ig-btn {
@@ -67,38 +75,56 @@ body {
 
 /* ======= 熊熊大圖卡片 ======= */
 .main-card {
-  margin-top: 16px;
+  margin-top: 10px;
   background: #ffe3b1;
-  border-radius: 26px;
-  padding: 10px;
+  border-radius: 22px;
+  padding: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  flex-shrink: 0;
 }
 
 .main-illust {
-  border-radius: 22px;
+  border-radius: 18px;
   overflow: hidden;
+  transform-origin: center center;
 }
 
 .main-illust img {
   width: 100%;
   display: block;
   height: auto;
+  max-height: 320px; /* 控制高度避免超出畫面 */
+}
+
+/* 抽籤時搖晃動畫 */
+.main-illust.shake {
+  animation: bearShake 0.6s ease-in-out;
+}
+
+@keyframes bearShake {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(-3deg); }
+  50%  { transform: rotate(3deg); }
+  75%  { transform: rotate(-2deg); }
+  100% { transform: rotate(0deg); }
 }
 
 /* ======= 提示文字 ======= */
 .hint-text {
-  margin-top: 14px;
+  margin-top: 10px;
   font-size: 13px;
   color: #7a4329;
   text-align: center;
+  flex-shrink: 0;
 }
 
 /* ======= 下方奶油色按鈕列 ======= */
 .menu-row {
-  margin-top: 14px;
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .menu-pill {
@@ -128,13 +154,14 @@ body {
 
 /* ======= Loading 等待動畫 ======= */
 .loading {
-  margin-top: 12px;
+  margin-top: 8px;
   display: none;
   align-items: center;
   justify-content: center;
   gap: 6px;
   font-size: 12px;
   color: #9b5b36;
+  flex-shrink: 0;
 }
 
 .dot {
@@ -156,8 +183,8 @@ body {
 /* ======= +1 功德值動畫 ======= */
 .plus-one {
   position: fixed;
-  top: 80px;
-  right: 26px;
+  top: 76px;
+  right: 24px;
   font-size: 18px;
   color: #ff7b59;
   font-weight: 700;
@@ -252,14 +279,20 @@ body {
   white-space: pre-line;
 }
 
-/* ======= 紀錄列表 ======= */
-#historyListModal > div {
+/* ======= 詩籤日記列表 ======= */
+#historyListModal > .history-item {
   padding: 8px 0;
   border-bottom: 1px dashed #e8c08d;
+  cursor: pointer;
 }
 
-#historyListModal > div:last-child {
+#historyListModal > .history-item:last-child {
   border-bottom: none;
+}
+
+.history-name {
+  font-size: 14px;
+  color: #7a4329;
 }
 
 .history-time {
@@ -269,9 +302,30 @@ body {
   margin-top: 2px;
 }
 
+/* ======= 上供品氣泡 ======= */
+.offer-bubble {
+  position: relative;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: #fff1d6;
+  border-radius: 16px;
+  border: 1.5px solid #f3c690;
+}
+
+.offer-bubble::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: -8px;
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent #fff1d6 transparent;
+}
+
 /* 小螢幕微調 */
 @media (max-width: 380px) {
   .title-block h1 { font-size: 20px; }
   .subtitle { font-size: 12px; }
   .menu-pill { font-size: 12px; padding: 6px 4px; }
+  .main-illust img { max-height: 280px; }
 }
