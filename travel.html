@@ -2,11 +2,11 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>來一趟說走就走的旅行｜出遊熊旅行籤</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>一趟說走就走的旅行～❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
-    /* ======= 基本設定：一頁式不捲動 ======= */
+    /* ========= 基本設定 ========= */
     html, body {
       margin: 0;
       padding: 0;
@@ -15,20 +15,20 @@
     body {
       background: #ffb54b;
       font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
-      overflow: hidden; /* 整頁不要滑動 */
+      overflow: hidden; /* 一頁式不滑動 */
     }
     .app-wrap {
       max-width: 480px;
       height: 100vh;
       margin: 0 auto;
       background: #ffeec9;
-      padding: 6px 12px 8px;
+      padding: 6px 12px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
     }
 
-    /* ======= Header ======= */
+    /* ========= Header ========= */
     .header {
       text-align: center;
       flex-shrink: 0;
@@ -44,15 +44,15 @@
       color: #9b5b36;
     }
 
-    /* ======= 上方大圖：出遊熊 + 台灣地圖 ======= */
+    /* ========= 大圖區 ========= */
     .travel-hero-card {
       margin-top: 4px;
       background: #ffe3b1;
       border-radius: 20px;
       padding: 6px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.16);
+      position: relative;
       flex-shrink: 0;
-      position: relative; /* 給 IG 按鈕 & 對話框用 */
     }
     .travel-hero-img {
       position: relative;
@@ -61,12 +61,12 @@
     }
     .travel-hero-img img {
       width: 100%;
-      display: block;
       height: auto;
-      max-height: 230px; /* 壓一下高度讓下面放得下 */
+      display: block;
+      max-height: 300px; /* A1：大圖自動比例，但限制上限避免過高 */
     }
 
-    /* 地區按鈕：大顆＋微透明 */
+    /* ========= 地區按鈕 ========= */
     .region-chip {
       position: absolute;
       padding: 6px 16px;
@@ -75,70 +75,61 @@
       border: 1.5px solid #f5d1a8;
       background: rgba(255, 250, 242, 0.9);
       color: #7a4329;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
       cursor: pointer;
-      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
       backdrop-filter: blur(2px);
     }
     .region-chip.active {
-      background: rgba(255, 207, 152, 0.95);
+      background: rgba(255,207,152,0.95);
       border-color: #f0a96b;
     }
     .region-chip:active {
       transform: scale(0.95);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
     }
 
-    /* 位置重新拉開 – 不擋重要元素 */
-    .chip-all     { top: 20%; left: 18%; }   /* 不擋太陽 */
-    .chip-north   { top: 10%; right: 18%; }  /* 不遮 101 頂端 */
+    /* 位置微調（避開太陽 / 101 / 熊 / 行李箱） */
+    .chip-all     { top: 20%; left: 18%; }
+    .chip-north   { top: 10%; right: 18%; }
     .chip-central { top: 38%; right: 24%; }
-    .chip-south   { top: 66%; right: 22%; }  /* 不擋熊熊身體 */
+    .chip-south   { top: 66%; right: 22%; }
     .chip-east    { top: 30%; right: 6%; }
-    .chip-islands { top: 70%; left: 4%; }    /* 不蓋行李箱 */
+    .chip-islands { top: 70%; left: 4%; }
 
-    /* ======= 出遊熊說話氣泡（抽籤時出現） ======= */
-    .bear-talk {
+    /* ========= IG 按鈕 ========= */
+    .ig-btn {
       position: absolute;
-      right: 10px;
+      right: 8px;
+      bottom: 6px;
+      background: #fff5de;
+      border: 1.5px solid #f0c57a;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: #7a4329;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    /* ========= 出遊熊小語 ========= */
+    .bear-talk-bubble {
+      position: absolute;
       top: 6px;
+      right: 10px;
       max-width: 60%;
       background: #fffaf2;
-      border-radius: 14px;
       padding: 6px 8px;
+      border-radius: 14px;
       border: 1.5px solid #f5d1a8;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
       font-size: 12px;
       color: #7a4329;
       display: none;
     }
 
-    /* ======= 出遊熊 IG 按鈕（在圖片右上角外圍一點點） ======= */
-    .ig-btn {
-      position: absolute;
-      right: 8px;
-      bottom: 6px;
-      border-radius: 999px;
-      padding: 4px 10px;
-      background: #fff5de;
-      border: 1.5px solid #f0c57a;
-      font-size: 11px;
-      color: #7a4329;
-      text-decoration: none;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .ig-btn span {
-      font-size: 13px;
-    }
-
-    /* ======= 小標題 ======= */
+    /* ========= 次標題 ========= */
     .section-title {
       margin-top: 4px;
       text-align: center;
-      flex-shrink: 0;
     }
     .section-title h2 {
       margin: 0;
@@ -146,38 +137,36 @@
       color: #7a4329;
     }
     .section-title p {
-      margin: 2px 0 0 0;
+      margin: 2px 0 0;
       font-size: 12px;
       color: #9b5b36;
     }
 
-    /* ======= 分頁切換：去哪玩 / 吃什麼 ======= */
+    /* ========= 分頁切換（去哪玩 / 吃什麼） ========= */
     .tab-row {
       margin-top: 4px;
       display: flex;
       background: #ffe3b1;
-      border-radius: 999px;
       padding: 2px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      flex-shrink: 0;
+      border-radius: 999px;
     }
     .tab-btn {
       flex: 1;
+      background: transparent;
       border-radius: 999px;
       border: none;
-      background: transparent;
       font-size: 13px;
+      padding: 6px;
       color: #9b5b36;
-      padding: 6px 0;
       cursor: pointer;
     }
     .tab-btn.active {
       background: #fffaf2;
       color: #7a4329;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
 
-    /* ======= 選項區：出遊對象 + 天數 ======= */
+    /* ========= 選擇出遊對象 + 天數 ========= */
     .options-row {
       margin-top: 4px;
       display: flex;
@@ -191,15 +180,14 @@
       padding: 6px 8px;
       border: 1.5px solid #f5d1a8;
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      font-size: 11px;
-      color: #9b5b36;
     }
     .option-title {
-      margin-bottom: 4px;
-      font-weight: 600;
-      color: #7a4329;
       font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: #7a4329;
     }
+
     .target-chip-row {
       display: flex;
       flex-wrap: wrap;
@@ -208,9 +196,9 @@
     .target-chip {
       padding: 3px 7px;
       border-radius: 999px;
-      border: 1.5px solid #f5d1a8;
-      background: #fff;
       font-size: 11px;
+      background: #fff;
+      border: 1.5px solid #f5d1a8;
       color: #7a4329;
       cursor: pointer;
     }
@@ -223,56 +211,43 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-top: 0;
     }
     .day-btn {
       width: 24px;
       height: 24px;
-      border-radius: 999px;
-      border: 1.5px solid #f5d1a8;
       background: #fff;
+      border-radius: 50%;
+      border: 1.5px solid #f5d1a8;
+      cursor: pointer;
       font-size: 15px;
       color: #7a4329;
-      cursor: pointer;
     }
     .day-value {
-      min-width: 26px;
+      width: 26px;
       text-align: center;
       font-size: 14px;
       color: #7a4329;
     }
-    .day-note {
-      margin-top: 2px;
-      font-size: 10px;
-      color: #b07a50;
-    }
 
-    /* ======= 抽籤按鈕 + 今日次數 + 紀錄 ======= */
+    /* ========= 抽籤按鈕區 ========= */
     .bottom-area {
       margin-top: 4px;
-      flex-shrink: 0;
     }
     .btn-row {
       display: flex;
-      align-items: center;
       gap: 6px;
     }
     .btn-draw {
-      flex: 1.2;
-      border-radius: 999px;
+      flex: 1.3;
       border: none;
+      background: linear-gradient(90deg,#ffb46f,#ff8f6b);
       padding: 8px 10px;
+      border-radius: 999px;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: bold;
       color: #7a4329;
-      background: linear-gradient(90deg, #ffb46f, #ff8f6b);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       cursor: pointer;
-      white-space: nowrap;
-    }
-    .btn-draw:active {
-      transform: translateY(1px);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
     .btn-record {
       flex: 0.9;
@@ -283,40 +258,9 @@
       font-size: 12px;
       color: #7a4329;
       cursor: pointer;
-      white-space: nowrap;
     }
 
-    .today-count {
-      margin-top: 2px;
-      font-size: 11px;
-      color: #9b5b36;
-      text-align: right;
-    }
-
-    .loading {
-      margin-top: 3px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 12px;
-      color: #9b5b36;
-    }
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #ff9f6b;
-      animation: bounce 0.8s infinite alternate;
-    }
-    .dot:nth-child(2) { animation-delay: 0.15s; }
-    .dot:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes bounce {
-      from { transform: translateY(0); opacity: 0.4; }
-      to   { transform: translateY(-6px); opacity: 1; }
-    }
-
-    /* ======= Modal 共用 ======= */
+    /* ========= Modal 共用 ========= */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -336,8 +280,7 @@
       background: #fff7e6;
       border-radius: 18px;
       border: 2px solid #f3c690;
-      padding: 12px 16px 14px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      padding: 12px 16px;
       position: relative;
     }
     .modal-close {
@@ -347,660 +290,207 @@
       font-size: 20px;
       background: none;
       border: none;
-      color: #7a4329;
       cursor: pointer;
-    }
-    .modal-window h3 {
-      margin: 4px 0 6px 0;
-      font-size: 17px;
       color: #7a4329;
-    }
-    .modal-window p {
-      font-size: 13px;
-      color: #7a4329;
-      line-height: 1.6;
-      margin: 3px 0;
-    }
-    .modal-meta {
-      font-size: 12px;
-      color: #b07a50;
-    }
-    .modal-bear {
-      margin-top: 6px;
-      padding: 6px 8px;
-      border-radius: 12px;
-      background: #fff1d6;
-      border: 1px dashed #f0c57a;
-      font-size: 12px;
-      white-space: pre-line;
-    }
-
-    /* 紀錄列表 */
-    #historyList {
-      font-size: 13px;
-      color: #7a4329;
-    }
-    .history-item {
-      padding: 6px 0;
-      border-bottom: 1px dashed #e8c08d;
-      cursor: pointer;
-    }
-    .history-item:last-child { border-bottom: none; }
-    .history-title { font-weight: 600; }
-    .history-meta  { font-size: 11px; color: #b07a50; }
-
-    .history-empty {
-      font-size: 13px;
-      color: #7a4329;
-      margin-top: 6px;
-    }
-
-    @media (max-width: 380px) {
-      .header h1 { font-size: 19px; }
-      .region-chip { font-size: 13px; padding: 5px 12px; }
-      .btn-draw { font-size: 13px; }
     }
   </style>
 </head>
+
 <body>
-<div class="app-wrap">
-  <header class="header">
-    <h1>說走就走的旅行</h1>
-    <p>讓出遊熊陪你一起吃喝玩樂❤️</p>
-  </header>
+  <div class="app-wrap">
 
-  <!-- 上方大圖：出遊熊 + 台灣地圖＋地區按鈕 -->
-  <section class="travel-hero-card">
-    <div class="travel-hero-img">
-      <img src="images/travel.png" alt="出遊熊去哪玩">
-      <button class="region-chip chip-all active"     id="btnAll">全台</button>
-      <button class="region-chip chip-north"   id="btnNorth">北部</button>
-      <button class="region-chip chip-central" id="btnCentral">中部</button>
-      <button class="region-chip chip-south"   id="btnSouth">南部</button>
-      <button class="region-chip chip-east"    id="btnEast">東部</button>
-      <button class="region-chip chip-islands" id="btnIslands">外島</button>
+    <header class="header">
+      <h1>說走就走的旅行</h1>
+      <p>讓出遊熊陪你一起吃喝玩樂❤️</p>
+    </header>
+
+    <!-- 大圖 + 地區按鈕 -->
+    <section class="travel-hero-card">
+      <div class="travel-hero-img">
+        <img src="images/travel.png" alt="出遊熊去哪玩">
+
+        <button class="region-chip chip-all active" id="btnAll">全台</button>
+        <button class="region-chip chip-north" id="btnNorth">北部</button>
+        <button class="region-chip chip-central" id="btnCentral">中部</button>
+        <button class="region-chip chip-south" id="btnSouth">南部</button>
+        <button class="region-chip chip-east" id="btnEast">東部</button>
+        <button class="region-chip chip-islands" id="btnIslands">外島</button>
+      </div>
+
+      <div class="bear-talk-bubble" id="bearTalk"></div>
+
+      <a href="https://instagram.com/luckygbear" target="_blank" class="ig-btn">
+        📷 出遊熊 IG
+      </a>
+    </section>
+
+    <section class="section-title">
+      <h2>去哪玩吃什麼</h2>
+      <p>選地圖上的地點，再搭配出遊對象與天數，讓出遊熊幫你抽籤～</p>
+    </section>
+
+    <!-- 分頁切換 -->
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabTravel">去哪玩</button>
+      <button class="tab-btn" id="tabFood">吃什麼</button>
     </div>
 
-    <!-- 抽籤時出現的出遊熊小語 -->
-    <div class="bear-talk" id="bearTalk"></div>
+    <!-- 出遊對象 + 天數 -->
+    <div class="options-row">
+      <div class="option-block">
+        <div class="option-title">出遊對象</div>
+        <div class="target-chip-row">
+          <button class="target-chip active" data-target="不限">不限</button>
+          <button class="target-chip" data-target="親子">親子</button>
+          <button class="target-chip" data-target="情侶">情侶</button>
+          <button class="target-chip" data-target="大人放鬆">大人放鬆</button>
+          <button class="target-chip" data-target="一個人">一個人</button>
+        </div>
+      </div>
 
-    <!-- 出遊熊 IG 按鈕 -->
-    <a class="ig-btn" href="https://www.instagram.com/luckygbear" target="_blank" rel="noopener noreferrer">
-      <span>📷</span> 出遊熊 IG @luckygbear
-    </a>
-  </section>
-
-  <!-- 標題 -->
-  <section class="section-title">
-    <h2>去哪玩吃什麼</h2>
-    <p>選地圖上的地點，再搭配出遊對象與天數，讓出遊熊幫你抽籤～</p>
-  </section>
-
-  <!-- 分頁切換 -->
-  <div class="tab-row">
-    <button class="tab-btn active" id="tabTravel">去哪玩</button>
-    <button class="tab-btn" id="tabFood">吃什麼</button>
-  </div>
-
-  <!-- 選項區 -->
-  <div class="options-row">
-    <div class="option-block">
-      <div class="option-title">出遊對象</div>
-      <div class="target-chip-row">
-        <button class="target-chip active" data-target="不限">不限</button>
-        <button class="target-chip" data-target="親子">親子</button>
-        <button class="target-chip" data-target="情侶">情侶</button>
-        <button class="target-chip" data-target="大人放鬆">大人放鬆</button>
-        <button class="target-chip" data-target="一個人">一個人</button>
+      <div class="option-block">
+        <div class="option-title">玩幾天</div>
+        <div class="day-row">
+          <button class="day-btn" id="dayMinus">-</button>
+          <div class="day-value" id="dayValue">2</div>
+          <button class="day-btn" id="dayPlus">+</button>
+        </div>
+        <div class="day-note">(1–5 天，小旅行最剛好)</div>
       </div>
     </div>
-    <div class="option-block">
-      <div class="option-title">玩幾天</div>
-      <div class="day-row">
-        <button class="day-btn" id="dayMinus">-</button>
-        <div class="day-value" id="dayValue">2</div>
-        <button class="day-btn" id="dayPlus">+</button>
+
+    <!-- 抽籤按鈕 -->
+    <div class="bottom-area">
+      <div class="btn-row">
+        <button class="btn-draw" id="btnDraw">抽旅遊籤 ✨</button>
+        <button class="btn-record" id="btnHistory">查看紀錄 📚</button>
       </div>
-      <div class="day-note">(1–5 天，小旅行最剛好)</div>
+
+      <div class="loading" id="loading">
+        出遊熊幫你抽籤中…
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+
+      <div class="today-count" id="todayCountText">
+        今日旅遊籤：0 次 ｜ 今日美食籤：0 次
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 抽籤結果 Modal -->
+  <div class="modal-backdrop" id="modalResult">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeResult()">✕</button>
+      <h3 id="modalResultTitle"></h3>
+      <p class="modal-meta" id="modalResultMeta"></p>
+      <p id="modalResultDesc"></p>
+      <p class="modal-meta" id="modalResultExtra"></p>
+      <p class="modal-bear" id="modalResultBear"></p>
     </div>
   </div>
 
-  <!-- 下方：抽籤 / 紀錄 / 今日次數 -->
-  <div class="bottom-area">
-    <div class="btn-row">
-      <button class="btn-draw" id="btnDraw">抽旅遊籤 ✨</button>
-      <button class="btn-record" id="btnHistory">查看紀錄 📚</button>
-    </div>
-
-    <div class="loading" id="loading">
-      出遊熊幫你抽籤中…
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-    </div>
-
-    <div class="today-count" id="todayCountText">
-      今日旅遊籤：0 次　｜　今日美食籤：0 次
+  <!-- 紀錄 Modal -->
+  <div class="modal-backdrop" id="modalHistory">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeHistory()">✕</button>
+      <h3>出遊與美食紀錄</h3>
+      <p style="font-size:12px;color:#b07a50;margin-bottom:6px;">
+        點選一筆紀錄，可以重新查看內容。
+      </p>
+      <div id="historyList"></div>
     </div>
   </div>
-</div>
 
-<!-- 抽籤結果 Modal -->
-<div class="modal-backdrop" id="modalResult">
-  <div class="modal-window">
-    <button class="modal-close" onclick="closeResult()">✕</button>
-    <h3 id="modalResultTitle"></h3>
-    <p class="modal-meta" id="modalResultMeta"></p>
-    <p id="modalResultDesc"></p>
-    <p class="modal-meta" id="modalResultExtra"></p>
-    <p class="modal-bear" id="modalResultBear"></p>
-  </div>
-</div>
+  <script>
+    // ========= 第 2 / 6 份：出遊熊小語、初始化 =========
 
-<!-- 紀錄 Modal -->
-<div class="modal-backdrop" id="modalHistory">
-  <div class="modal-window">
-    <button class="modal-close" onclick="closeHistory()">✕</button>
-    <h3>出遊與美食紀錄</h3>
-    <p style="font-size:12px;color:#b07a50;margin:0 0 6px 0;">
-      點選一筆紀錄，可以重新查看當時的出遊 / 美食建議。
-    </p>
-    <div id="historyList"></div>
-  </div>
-</div>
-
-<script>
-  // ======== 出遊熊小語（抽籤時會顯示在氣泡裡） ========
-  const bearTips = [
-    "今天想去哪裡都可以，最重要的是跟誰一起去，還有要對自己溫柔一點。",
-    "不一定要把景點排滿，只要留下一個『好玩、好吃、好睡』的旅行就很值得。",
-    "如果累了就慢慢走，旅行不是比速度，而是比誰玩得最舒服。",
-    "拍照的同時也記得抬頭看看風景，讓眼睛也享受現在。",
-    "有小孩同行沒關係，多一點休息站，就會多很多好心情。",
-    "即使只是到附近走走，也是一種旅行，因為你的心願意出發了。",
-    "帶一點零食或水果在包包裡，餓的時候心情比較不會暴走。",
-    "今天就交給出遊熊安排，放心玩、放心吃、放心笑。"
+  /* 出遊熊小語（抽籤時會顯示在右上氣泡） */
+  const bearTalkList = [
+    "出發吧！今天的風景準備好迎接你了～",
+    "玩得開心最重要，不用把行程塞滿喔！",
+    "心情決定旅行的味道，今天想放鬆還是探險？",
+    "保持彈性，常常會遇到意外的美好～",
+    "旅行就是給心一個放假的理由 🌿",
+    "不一定要走遠，只要願意出發就是旅行。",
+    "記得補充水分喔！快樂要持久才行～",
+    "今天，就讓出遊熊帶你看看不一樣的世界！"
   ];
 
-  // ======== 旅遊景點（精簡版，之後可再加） ========
-  const travelSpots = [
-    // 北部
-    {
-      region: "北部", regionKey: "north",
-      name: "陽明山夜景 & 溫泉小旅行",
-      daysMin: 1, daysMax: 2,
-      targets: ["不限","情侶","大人放鬆","一個人"],
-      desc: "白天上山散步看花，晚上泡溫泉、看台北夜景，很適合想放鬆又不想跑太遠的行程。",
-      extra: "必吃：山上小店的地瓜、熱湯或小火鍋，在冷冷的空氣裡特別好吃。",
-      bear: "🐻 出遊熊提醒：山上早晚溫差大，記得帶外套；想拍照的話，行程別排太滿，留給夕陽一點時間。"
-    },
-    {
-      region: "北部", regionKey: "north",
-      name: "九份老街 & 金瓜石山城散步",
-      daysMin: 1, daysMax: 2,
-      targets: ["不限","親子","情侶","一個人"],
-      desc: "走進山城小巷，逛老街、吃芋圓，看山海交界，天氣好時遠方海景超療癒。",
-      extra: "必吃：芋圓、草仔粿、魚丸湯；如果下雨，山城霧氣反而多了一種魔法感。",
-      bear: "🐻 出遊熊提醒：山路多樓梯，鞋子記得穿好走的，肚子餓時老街小吃隨便一間都很暖心。"
-    },
-    {
-      region: "北部", regionKey: "north",
-      name: "淡水河畔夕陽散步",
-      daysMin: 1, daysMax: 1,
-      targets: ["不限","親子","情侶","一個人"],
-      desc: "搭捷運就能到，河岸散步、吃小吃，天氣好時夕陽灑在河面上超美。",
-      extra: "必吃：阿給、魚丸湯、鐵蛋，再配上一支冰淇淋慢慢散步回去。",
-      bear: "🐻 出遊熊提醒：夕陽後風會變涼，記得帶件薄外套，也可以安排河畔腳踏車小小運動一下。"
-    },
+  /* ====== 旅遊景點陣列（後面第 3 / 6、4 / 6 會塞進內容） ====== */
+  const travelSpots = [];
 
-    // 中部
-    {
-      region: "中部", regionKey: "central",
-      name: "台中審計新村 & 草悟道散步",
-      daysMin: 1, daysMax: 2,
-      targets: ["不限","親子","情侶","一個人","大人放鬆"],
-      desc: "文創小店、美食與綠樹步道，一整天慢慢逛、不趕時間也不無聊。",
-      extra: "必吃：特色冰品、咖啡與甜點，搭配草悟道的綠蔭，很有療癒感。",
-      bear: "🐻 出遊熊提醒：可以帶一本書或筆記本，一邊喝咖啡一邊寫下此刻的心情。"
-    },
-    {
-      region: "中部", regionKey: "central",
-      name: "合歡山看星星 & 日出",
-      daysMin: 2, daysMax: 3,
-      targets: ["不限","情侶","大人放鬆","一個人"],
-      desc: "晚上看滿天星星，清晨看日出從山頭冒出來，超級療癒，需要一點體力與保暖裝備。",
-      extra: "補充能量：山上可以帶熱可可、麵包、小零食，在看星星時慢慢享用。",
-      bear: "🐻 出遊熊提醒：山上冷到會凍熊，請帶厚外套、帽子、手套，行程前一晚要睡飽一點。"
-    },
+  /* ====== 美食籤資料陣列（第 5 / 6、6 / 6 會塞資料） ====== */
+  const foodSpots = [];
 
-    // 南部
-    {
-      region: "南部", regionKey: "south",
-      name: "墾丁藍天白雲海邊行程",
-      daysMin: 2, daysMax: 3,
-      targets: ["不限","親子","情侶","大人放鬆"],
-      desc: "白天戲水、散步，晚上逛大街吃海產，適合想曬太陽、放空的大人小孩。",
-      extra: "必吃：海鮮、綿綿冰、小酒吧飲品，邊吃邊看海邊風景。",
-      bear: "🐻 出遊熊提醒：防曬一定要擦，帽子墨鏡也帶上，玩水前後多補水，不要讓自己變成乾熊。"
-    },
-    {
-      region: "南部", regionKey: "south",
-      name: "台南老街巷弄美食小旅行",
-      daysMin: 2, daysMax: 3,
-      targets: ["不限","親子","情侶","一個人"],
-      desc: "白天逛古蹟、喝咖啡，晚上巡迴各種小吃，適合慢慢走慢慢吃的旅行。",
-      extra: "必吃：牛肉湯、鍋燒意麵、碗粿、布丁、冰品，一天絕對吃不完。",
-      bear: "🐻 出遊熊提醒：不要一次排太多店，吃到七分飽就休息，留空間給下一家驚喜。"
-    },
+  /* 使用者選擇狀態 */
+  let selectedRegion = "全台";
+  let selectedTarget = "不限";
+  let selectedDays = 2;
 
-    // 東部
-    {
-      region: "東部", regionKey: "east",
-      name: "花蓮海岸線自駕散心",
-      daysMin: 2, daysMax: 3,
-      targets: ["不限","親子","情侶","大人放鬆","一個人"],
-      desc: "一路看海、停靠小咖啡館與觀景台，適合想大口呼吸海風的人。",
-      extra: "必吃：炸彈蔥油餅、麻糬、扁食湯，再配上海邊的風景。",
-      bear: "🐻 出遊熊提醒：開車或騎車時不要太趕時間，有漂亮的風景就找安全的地方停下來好好看。"
-    },
+  /* 今天已抽次數 */
+  let todayTravelCount = 0;
+  let todayFoodCount = 0;
 
-    // 外島
-    {
-      region: "外島", regionKey: "islands",
-      name: "澎湖跳島看藍海",
-      daysMin: 3, daysMax: 4,
-      targets: ["不限","親子","情侶","大人放鬆"],
-      desc: "參加跳島行程、浮潛、看玄武岩與夕陽，是很有度假感的海島旅程。",
-      extra: "必吃：仙人掌冰、花枝丸、海鮮燒烤，是澎湖必嚐組合。",
-      bear: "🐻 出遊熊提醒：海島紫外線超強，防曬與補水要比平常再認真一點；想玩水務必注意安全。"
-    },
-
-    // 全台
-    {
-      region: "全台", regionKey: "all",
-      name: "任選城市慢遊 2 日小旅行",
-      daysMin: 2, daysMax: 3,
-      targets: ["不限","親子","情侶","大人放鬆","一個人"],
-      desc: "選一個你很久沒去或還沒去過的城市，不排太多行程，用散步的速度重新認識台灣。",
-      extra: "必吃：當地人推薦的市場早餐、在地飲料店、隨機路邊小吃。",
-      bear: "🐻 出遊熊提醒：這次旅行的主題叫做『慢』，不用把所有景點收集完，只要把心安頓好就夠了。"
-    }
-  ];
-
-  // ======== 美食籤 ========
-  const foodSpots = [
-    { region:"北部", regionKey:"north",
-      name:"台北巷口牛肉麵",
-      desc:"找一間在地人愛的老店，來一碗紅燒或清燉牛肉麵，配上一點酸菜，暖胃也暖心。",
-      extra:"小秘訣：點半筋半肉最過癮，吃完可以附近散散步幫助消化。",
-      bear:"🐻 出遊熊說：今天可以把這碗麵當成給自己的『辛苦獎勵碗』，慢慢吃，不滑手機更享受。"
-    },
-    { region:"北部", regionKey:"north",
-      name:"基隆廟口夜市小吃巡禮",
-      desc:"從天婦羅、營養三明治一路吃到甜湯，適合嘴巴想一直忙碌的日子。",
-      extra:"小建議：每樣都點小份一起分享，肚子跟荷包都比較開心。",
-      bear:"🐻 出遊熊說：夜市美食很多，選三樣最想吃的當主角，其它當驚喜配角就好。"
-    },
-
-    { region:"中部", regionKey:"central",
-      name:"台中商圈地瓜球 & 雞排巡禮",
-      desc:"散步逛街的同時，一邊吃地瓜球、炸雞排，超有放假感。",
-      extra:"建議：可以兩三個人分食一份，既滿足口腹之欲又不會太負擔。",
-      bear:"🐻 出遊熊說：想吃就吃，但可以約定今天多走幾千步，讓身體一起參與這場美食派對。"
-    },
-    { region:"中部", regionKey:"central",
-      name:"彰化肉圓 & 銅板小吃",
-      desc:"軟Q外皮配上扎實肉餡，再搭一碗湯或米糕，是在地人的日常味。",
-      extra:"秘境體驗：老街附近常有沒有裝潢的小店，味道卻很驚艷。",
-      bear:"🐻 出遊熊說：吃小吃的時候，不妨觀察一下店裡的阿公阿嬤，這就是最真的生活風景。"
-    },
-
-    { region:"南部", regionKey:"south",
-      name:"台南牛肉湯 + 鍋燒意麵早餐組合",
-      desc:"一早喝熱牛肉湯，再來一碗鍋燒意麵，南部人的幸福儀式一次體驗。",
-      extra:"吃完可以在巷弄裡散步，順便找咖啡店或豆花休息。",
-      bear:"🐻 出遊熊說：早起吃一頓好早餐，是對今天的自己說『你值得被好好照顧』。"
-    },
-    { region:"南部", regionKey:"south",
-      name:"高雄鹽埕老字號冰品 & 餅乾",
-      desc:"在老社區裡找一間冰店，點一碗古早味冰或雪花冰，慢慢吃掉那一點點暑氣。",
-      extra:"可以搭配附近的傳統餅舖，買幾塊餅當下午茶。",
-      bear:"🐻 出遊熊說：吃冰時記得小口慢慢吃，讓涼涼的心情慢慢停在心裡。"
-    },
-
-    { region:"東部", regionKey:"east",
-      name:"花蓮炸彈蔥油餅 & 麻糬",
-      desc:"站在路邊排隊吃蔥油餅，再帶幾顆麻糬回民宿，是很多人到花蓮的固定儀式。",
-      extra:"如果天氣許可，可以帶著點心到海邊，一邊看海一邊吃。",
-      bear:"🐻 出遊熊說：嘴巴忙的時候，心也記得放鬆一下，讓海風幫你把煩惱吹走。"
-    },
-
-    { region:"外島", regionKey:"islands",
-      name:"澎湖海鮮大餐 + 仙人掌冰",
-      desc:"白天玩海，晚上吃海鮮大餐，最後來一支仙人掌冰作結。",
-      extra:"可以選擇幾樣真的很想吃的海鮮，不一定要點滿整桌。",
-      bear:"🐻 出遊熊說：吃海鮮的同時也要記得補水，讓身體維持在舒服的狀態。"
-    },
-
-    { region:"全台", regionKey:"all",
-      name:"珍珠奶茶 & 手搖飲小確幸",
-      desc:"挑一杯你喜歡的飲料，今天可以選半糖或少冰，給身體一點溫柔。",
-      extra:"喝飲料時刻意放慢速度，邊喝邊感謝今天還在努力的自己。",
-      bear:"🐻 出遊熊說：甜度少一點，罪惡感也會少一點，但幸福感還是很多。"
-    }
-  ];
-
-  // ======== 狀態 & localStorage ========
-  let currentTab = "travel"; // travel | food
-  let currentRegion = "all";
-  let currentTarget = "不限";
-  let currentDays = 2;
-
-  const STORAGE_COUNTS = "travel_today_counts_v2";
-  const STORAGE_HISTORY = "travel_history_v2";
-
-  let todayCounts = { date: "", travel: 0, food: 0 };
-  let history = []; // {time, type, data}
-
-  // ======== DOM 取得 ========
-  const tabTravel = document.getElementById("tabTravel");
-  const tabFood   = document.getElementById("tabFood");
-  const btnDraw   = document.getElementById("btnDraw");
-  const loadingEl = document.getElementById("loading");
-  const todayCountText = document.getElementById("todayCountText");
-  const bearTalkEl = document.getElementById("bearTalk");
-
-  const regionButtons = {
-    all: document.getElementById("btnAll"),
-    north: document.getElementById("btnNorth"),
-    central: document.getElementById("btnCentral"),
-    south: document.getElementById("btnSouth"),
-    east: document.getElementById("btnEast"),
-    islands: document.getElementById("btnIslands")
-  };
-
-  const targetChips = document.querySelectorAll(".target-chip");
-  const dayMinus = document.getElementById("dayMinus");
-  const dayPlus  = document.getElementById("dayPlus");
+  /* 抓 DOM */
+  const bearTalk = document.getElementById("bearTalk");
   const dayValue = document.getElementById("dayValue");
+  const todayCountText = document.getElementById("todayCountText");
 
-  const btnHistory   = document.getElementById("btnHistory");
+  const modalResult = document.getElementById("modalResult");
   const modalHistory = document.getElementById("modalHistory");
-  const historyList  = document.getElementById("historyList");
+  const historyList = document.getElementById("historyList");
 
-  const modalResult      = document.getElementById("modalResult");
-  const modalResultTitle = document.getElementById("modalResultTitle");
-  const modalResultMeta  = document.getElementById("modalResultMeta");
-  const modalResultDesc  = document.getElementById("modalResultDesc");
-  const modalResultExtra = document.getElementById("modalResultExtra");
-  const modalResultBear  = document.getElementById("modalResultBear");
-
-  // ======== 日期 ========
-  function getTodayStr() {
-    const d = new Date();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${d.getFullYear()}-${m}-${day}`;
-  }
-
-  // ======== localStorage：計數 ========
-  function loadCounts() {
-    try {
-      const raw = localStorage.getItem(STORAGE_COUNTS);
-      if (raw) {
-        const obj = JSON.parse(raw);
-        if (obj.date === getTodayStr()) {
-          todayCounts = obj;
-        }
-      }
-    } catch(e) {}
-    updateCountsText();
-  }
-  function saveCounts() {
-    todayCounts.date = getTodayStr();
-    localStorage.setItem(STORAGE_COUNTS, JSON.stringify(todayCounts));
-  }
-  function updateCountsText() {
-    todayCountText.textContent =
-      `今日旅遊籤：${todayCounts.travel} 次　｜　今日美食籤：${todayCounts.food} 次`;
-  }
-
-  // ======== localStorage：紀錄 ========
-  function loadHistory() {
-    try {
-      const raw = localStorage.getItem(STORAGE_HISTORY);
-      if (raw) history = JSON.parse(raw);
-    } catch(e) {
-      history = [];
-    }
-  }
-  function saveHistory() {
-    localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
-  }
-
-  // ======== 分頁切換 ========
-  function setTab(tab) {
-    currentTab = tab;
-    if (tab === "travel") {
-      tabTravel.classList.add("active");
-      tabFood.classList.remove("active");
-      btnDraw.textContent = "抽旅遊籤 ✨";
-    } else {
-      tabFood.classList.add("active");
-      tabTravel.classList.remove("active");
-      btnDraw.textContent = "抽美食籤 🍴";
-    }
-  }
-  tabTravel.addEventListener("click", () => setTab("travel"));
-  tabFood.addEventListener("click", () => setTab("food"));
-
-  // ======== 地區切換 ========
-  function setRegion(key) {
-    currentRegion = key;
-    Object.entries(regionButtons).forEach(([k, btn]) => {
-      if (!btn) return;
-      if (k === key) btn.classList.add("active");
-      else btn.classList.remove("active");
-    });
-  }
-  Object.entries(regionButtons).forEach(([key, btn]) => {
-    if (!btn) return;
-    btn.addEventListener("click", () => setRegion(key));
-  });
-
-  // ======== 出遊對象 ========
-  targetChips.forEach(chip => {
-    chip.addEventListener("click", () => {
-      targetChips.forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-      currentTarget = chip.dataset.target;
+  // 點選區域按鈕
+  document.querySelectorAll(".region-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".region-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedRegion = btn.innerText;
     });
   });
 
-  // ======== 天數 +/- ========
-  function updateDayDisplay() {
-    dayValue.textContent = currentDays;
-  }
-  dayMinus.addEventListener("click", () => {
-    if (currentDays > 1) {
-      currentDays--;
-      updateDayDisplay();
-    }
-  });
-  dayPlus.addEventListener("click", () => {
-    if (currentDays < 5) {
-      currentDays++;
-      updateDayDisplay();
-    }
+  // 點選出遊對象
+  document.querySelectorAll(".target-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".target-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedTarget = btn.dataset.target;
+    });
   });
 
-  // ======== 出遊熊說話氣泡 ========
+  // 天數加減
+  document.getElementById("dayMinus").addEventListener("click", () => {
+    if (selectedDays > 1) selectedDays--;
+    dayValue.innerText = selectedDays;
+  });
+  document.getElementById("dayPlus").addEventListener("click", () => {
+    if (selectedDays < 5) selectedDays++;
+    dayValue.innerText = selectedDays;
+  });
+
+  // 更新今日抽籤次數
+  function updateCounts() {
+    todayCountText.innerHTML =
+      `今日旅遊籤：${todayTravelCount} 次 ｜ 今日美食籤：${todayFoodCount} 次`;
+  }
+
+  // 顯示出遊熊隨機小語
   function showBearTalk() {
-    const msg = bearTips[Math.floor(Math.random() * bearTips.length)];
-    bearTalkEl.textContent = msg;
-    bearTalkEl.style.display = "block";
-    bearTalkEl.style.opacity = "1";
-    setTimeout(() => {
-      bearTalkEl.style.opacity = "0";
-      setTimeout(() => {
-        bearTalkEl.style.display = "none";
-      }, 400);
-    }, 2200);
+    const msg = bearTalkList[Math.floor(Math.random() * bearTalkList.length)];
+    bearTalk.innerText = msg;
+    bearTalk.style.display = "block";
+    setTimeout(() => { bearTalk.style.display = "none"; }, 2200);
   }
 
-  // ======== 抽籤結果 Modal ========
-  function openResultModal(typeLabel, title, meta, desc, extra, bearText) {
-    modalResultTitle.textContent = `【${typeLabel}】${title}`;
-    modalResultMeta.textContent  = meta;
-    modalResultDesc.textContent  = desc;
-    modalResultExtra.textContent = extra;
-    modalResultBear.textContent  = bearText;
-    modalResult.classList.add("show");
+  // 開啟 modal
+  function openModal(el) {
+    el.classList.add("show");
   }
   function closeResult() {
     modalResult.classList.remove("show");
   }
-  window.closeResult = closeResult;
-  modalResult.addEventListener("click", (e) => {
-    if (e.target === modalResult) closeResult();
-  });
-
-  // ======== 抽旅遊籤 ========
-  function drawTravel() {
-    let list = travelSpots.filter(s => {
-      if (currentRegion !== "all" && s.regionKey !== currentRegion) return false;
-      if (currentDays < s.daysMin || currentDays > s.daysMax) return false;
-      if (currentTarget !== "不限" && !s.targets.includes(currentTarget)) return false;
-      return true;
-    });
-    if (!list.length) {
-      list = travelSpots.filter(s => currentRegion === "all" || s.regionKey === currentRegion);
-    }
-    if (!list.length) list = travelSpots;
-    const picked = list[Math.floor(Math.random()*list.length)];
-
-    const meta =
-      `地區：${picked.region}｜適合天數：約 ${picked.daysMin}–${picked.daysMax} 天｜推薦對象：${picked.targets.join("、")}`;
-
-    openResultModal("旅遊籤", picked.name, meta, picked.desc, picked.extra, picked.bear);
-
-    // 計數 & 紀錄
-    todayCounts.travel++;
-    updateCountsText();
-    saveCounts();
-
-    history.unshift({
-      time: new Date().toISOString(),
-      type: "旅遊籤",
-      data: {
-        title: picked.name,
-        region: picked.region,
-        meta,
-        desc: picked.desc,
-        extra: picked.extra,
-        bear: picked.bear
-      }
-    });
-    if (history.length > 120) history.pop();
-    saveHistory();
-  }
-
-  // ======== 抽美食籤 ========
-  function drawFood() {
-    let list = foodSpots.filter(f => {
-      if (currentRegion === "all") return true;
-      return f.regionKey === currentRegion || f.regionKey === "all";
-    });
-    if (!list.length) list = foodSpots;
-    const picked = list[Math.floor(Math.random()*list.length)];
-
-    const meta = `建議地區：${picked.region}`;
-    openResultModal("美食籤", picked.name, meta, picked.desc, picked.extra, picked.bear);
-
-    todayCounts.food++;
-    updateCountsText();
-    saveCounts();
-
-    history.unshift({
-      time: new Date().toISOString(),
-      type: "美食籤",
-      data: {
-        title: picked.name,
-        region: picked.region,
-        meta,
-        desc: picked.desc,
-        extra: picked.extra,
-        bear: picked.bear
-      }
-    });
-    if (history.length > 120) history.pop();
-    saveHistory();
-  }
-
-  // ======== 抽籤按鈕 ========
-  btnDraw.addEventListener("click", () => {
-    showBearTalk();              // 出遊熊先開口說話
-    loadingEl.style.display = "flex";
-    btnDraw.disabled = true;
-
-    setTimeout(() => {
-      loadingEl.style.display = "none";
-      btnDraw.disabled = false;
-      if (currentTab === "travel") drawTravel();
-      else drawFood();
-    }, 800); // 小小停頓增加抽籤感
-  });
-
-  // ======== 紀錄 Modal ========
-  function openHistory() {
-    historyList.innerHTML = "";
-    if (!history.length) {
-      historyList.innerHTML = '<p class="history-empty">目前還沒有紀錄，先來抽一籤吧～</p>';
-    } else {
-      history.slice(0, 50).forEach((item, idx) => {
-        const d = new Date(item.time);
-        const div = document.createElement("div");
-        div.className = "history-item";
-        div.dataset.index = idx;
-        div.innerHTML = `
-          <div class="history-title">【${item.type}】${item.data.title}</div>
-          <div class="history-meta">${d.toLocaleString("zh-TW",{hour12:false})}｜地區：${item.data.region}</div>
-        `;
-        historyList.appendChild(div);
-      });
-    }
-    modalHistory.classList.add("show");
-  }
   function closeHistory() {
     modalHistory.classList.remove("show");
   }
-  window.closeHistory = closeHistory;
-
-  btnHistory.addEventListener("click", openHistory);
-
-  // 點紀錄 → 打開結果視窗
-  historyList.addEventListener("click", (e) => {
-    const itemEl = e.target.closest(".history-item");
-    if (!itemEl) return;
-    const idx = parseInt(itemEl.dataset.index, 10);
-    const item = history[idx];
-    if (!item) return;
-    modalHistory.classList.remove("show");
-    openResultModal(item.type, item.data.title, item.data.meta, item.data.desc, item.data.extra, item.data.bear);
-  });
-
-  // 點背景關閉紀錄
-  modalHistory.addEventListener("click", (e) => {
-    if (e.target === modalHistory) closeHistory();
-  });
-
-  // ======== 初始化 ========
-  function init() {
-    setTab("travel");
-    setRegion("all");
-    updateDayDisplay();
-    loadCounts();
-    loadHistory();
-  }
-  init();
-</script>
-</body>
-</html>
+  
