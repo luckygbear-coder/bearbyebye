@@ -19,60 +19,59 @@
     <img src="images/bear-loading-couplet.png" alt="愛吃熊啟動畫面">
   </div>
 
-  <!-- 左上角：抽籤紀錄按鈕 -->
-  <button id="historyBtn" class="top-pill left-pill">
-    📘 抽籤紀錄
-  </button>
-
   <!-- 右上角：功德值角標 -->
   <div class="merit-badge">
     功德值 <span id="merit">0</span>
   </div>
 
   <div class="app">
-    <!-- 標題（純文字，不是超連結） -->
+    <!-- 標題 -->
     <header class="header">
       <div class="title">愛吃熊美食占卜</div>
       <div class="subtitle">不是正在吃美食，就是在吃美食的路上</div>
     </header>
 
-    <!-- IG 追蹤按鈕 -->
-    <section class="button-row single">
-      <a href="https://instagram.com/luckygbear" target="_blank"
-         rel="noopener noreferrer" class="pill-btn ig-btn">
-        📸 追蹤愛吃熊 IG @luckygbear
-      </a>
-    </section>
-
-    <!-- 主視覺：完整熊熊原圖（用 <img> 顯示，不切頭） -->
+    <!-- 主視覺：完整熊熊原圖（不裁切） -->
     <section class="temple-wrapper">
       <img src="images/bear-loading-couplet.png"
            alt="愛吃熊與美食"
            class="temple-image" />
-
-      <!-- 熊熊祝福對話氣泡（用 JS 填文字） -->
+      <!-- 熊熊祝福對話氣泡（上供品用） -->
       <div id="bearBubble" class="bear-bubble"></div>
     </section>
 
-    <!-- 狀態提示文字（不再顯示聖筊機率） -->
+    <!-- 狀態提示文字 -->
     <p id="statusText" class="status-text">
       請先擲筊，一次聖筊就可以抽籤。
     </p>
 
-    <!-- 下方三顆大圓按鈕 -->
-    <section class="round-button-row">
-      <button id="boBtn" class="round-btn round-main">
-        🙏<span>擲筊</span>
-      </button>
-      <button id="drawBtn" class="round-btn round-mid hidden">
-        🧧<span>抽籤</span>
-      </button>
-      <button id="offerBtn" class="round-btn round-main">
-        🍱<span>上供品</span>
+    <!-- 抽籤按鈕：小奶油色 pill -->
+    <section class="draw-row">
+      <button id="drawBtn" class="pill-btn draw-btn hidden">
+        🧧 抽籤
       </button>
     </section>
 
-    <!-- 目前詩籤卡片：只當中繼容器，實際顯示改為彈窗 -->
+    <!-- 下方四顆奶油色圓形大按鈕 -->
+    <section class="round-button-row">
+      <button id="boBtn" class="round-btn">
+        🙏<span>擲筊</span>
+      </button>
+
+      <button id="offerBtn" class="round-btn">
+        🍱<span>上供品</span>
+      </button>
+
+      <button id="historyBtn" class="round-btn">
+        📘<span>抽籤紀錄</span>
+      </button>
+
+      <button id="igBtn" class="round-btn">
+        📸<span>追蹤 IG</span>
+      </button>
+    </section>
+
+    <!-- 目前詩籤卡片（中繼容器，實際顯示改為彈窗） -->
     <section id="currentLotCard" class="lot-card hidden"></section>
   </div>
 
@@ -88,7 +87,7 @@
     </div>
   </div>
 
-  <!-- 抽籤紀錄彈窗（原 script.js 會用到） -->
+  <!-- 抽籤紀錄彈窗（script.js 會填內容） -->
   <div id="historyModal" class="modal hidden"
        onclick="if (event.target === this) window.closeAllModals();">
     <div class="modal-content">
@@ -100,10 +99,10 @@
     </div>
   </div>
 
-  <!-- 你的原本遊戲邏輯（擲筊 / 抽籤 / 寫紀錄） -->
+  <!-- 原本的邏輯檔 -->
   <script src="script.js"></script>
 
-  <!-- 啟動畫面、功德動畫、愛吃熊祝福、供品邏輯、詩籤彈窗排版 -->
+  <!-- 額外 UI / 動畫 / 詩籤視窗邏輯 -->
   <script>
     /* --- 啟動畫面淡出 --- */
     function hideLoadingScreen() {
@@ -178,7 +177,7 @@
       setTimeout(() => plus.remove(), 900);
     };
 
-    /* --- 熊熊祝福氣泡（供品顯示） --- */
+    /* --- 熊熊祝福氣泡（上供品顯示） --- */
     function showBearBlessing() {
       const bubble = document.getElementById('bearBubble');
       if (!bubble) return;
@@ -188,7 +187,7 @@
       bubble.textContent = msg;
 
       bubble.classList.remove('show');
-      void bubble.offsetWidth;
+      void bubble.offsetWidth; // 強制重繪
       bubble.classList.add('show');
     }
 
@@ -202,8 +201,12 @@
 
     /* --- DOM 載入後的額外處理 --- */
     document.addEventListener('DOMContentLoaded', () => {
-      /* 上供品：永遠可以按，按一次 +1 功德 + 祝福 */
       const offerBtn = document.getElementById('offerBtn');
+      const igBtn = document.getElementById('igBtn');
+      const historyBtn = document.getElementById('historyBtn');
+      const boBtn = document.getElementById('boBtn');
+
+      /* 上供品：永遠可以按，按一次 +1 功德 + 祝福 */
       if (offerBtn) {
         offerBtn.disabled = false;
         offerBtn.classList.remove('disabled');
@@ -213,22 +216,37 @@
         });
       }
 
-      ["boBtn", "historyBtn", "offerBtn"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('hidden');
-      });
+      /* 追蹤 IG：開啟 IG 連結 */
+      if (igBtn) {
+        igBtn.addEventListener('click', () => {
+          window.open('https://instagram.com/luckygbear', '_blank');
+        });
+      }
 
-      /* 監聽目前詩籤卡片內容變化 -> 自動跳出「詩籤樣式」彈窗 */
+      /* 抽籤紀錄按鈕：script.js 會負責打開 #historyModal */
+      if (historyBtn) historyBtn.classList.remove('hidden');
+      if (boBtn) boBtn.classList.remove('hidden');
+
+      /* --- 詩籤卡變化 -> 顯示詩籤彈窗 --- */
       const lotCard = document.getElementById('currentLotCard');
       const lotModal = document.getElementById('lotModal');
       const lotText = document.getElementById('lotText');
+      const historyModal = document.getElementById('historyModal');
 
       if (lotCard && lotModal && lotText) {
         const observer = new MutationObserver(() => {
           const rawText = lotCard.innerText.trim();
           if (!rawText) return;
 
-          const lines = rawText.split(/\n+/).map(l => l.trim()).filter(Boolean);
+          // 關掉抽籤紀錄視窗，避免遮住詩籤
+          if (historyModal) historyModal.classList.add('hidden');
+
+          // 解析原本的詩籤文字
+          let lines = rawText.split(/\n+/).map(l => l.trim()).filter(Boolean);
+
+          // 把「(點這裡可再次查看完整詩籤)」這句從內容移除
+          lines = lines.filter(line => !line.includes("點這裡可再次查看完整詩籤"));
+
           const title = lines[0] || "今日美食籤";
           const dish = lines[1] || "好料一份";
           const detailLines = lines.slice(2);
