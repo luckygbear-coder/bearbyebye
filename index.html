@@ -4,8 +4,20 @@
   <meta charset="UTF-8" />
   <title>愛吃熊美食占卜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- ✅ PWA / Icon 設定一定要放在 head -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f4a63a">
+
+  <!-- ✅ iOS 必吃：主畫面 icon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="等一下吃什麼">
+
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="app-wrap">
 
@@ -25,20 +37,11 @@
       <div class="merit-pill">
         功德值 <span id="meritValue">0</span>
       </div>
-      <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#f4a63a">
-
-<!-- iOS 必吃：主畫面 icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="等一下吃什麼">
     </header>
 
     <!-- 熊熊美食插畫卡片 -->
     <section class="main-card">
       <div class="main-illust" id="bearImage">
-        <!-- 換成你的美食熊圖片 -->
         <img src="images/bear.png" alt="愛吃熊美食占卜">
       </div>
     </section>
