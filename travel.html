@@ -86,14 +86,44 @@
       transform: scale(0.95);
     }
 
-    /* 位置微調（避開太陽 / 101 / 熊 / 行李箱） */
-    .chip-all     { top: 33%; left: 15%; }   /* 太陽與台灣中間偏左，不遮到兩邊 */
-    .chip-north   { top: 7%;  right: 18%; }  /* 再往上，讓 101 露出來 */
-    .chip-central { top: 38%; right: 24%; }
-    .chip-south   { top: 66%; right: 22%; }
-    .chip-east    { top: 30%; right: 6%; }
-    .chip-islands { top: 70%; left: 6%; }
+/* ====== 地區按鈕位置微調（新版） ====== */
 
+/* 全台：放在太陽下面一點、台灣上方中間，兩者不擋 */
+.chip-all {
+  top: 28%;
+  left: 42%;
+  transform: translateX(-50%);
+}
+
+/* 北部：往更上方移，不擋到 101 頂端 */
+.chip-north {
+  top: 4%;
+  right: 20%;
+}
+
+/* 中部：維持差不多 */
+.chip-central {
+  top: 38%;
+  right: 24%;
+}
+
+/* 南部：維持但微調一點更準 */
+.chip-south {
+  top: 66%;
+  right: 22%;
+}
+
+/* 東部：稍微往中間移一點更好看 */
+.chip-east {
+  top: 30%;
+  right: 10%;
+}
+
+/* 外島：保持左下角 */
+.chip-islands {
+  top: 72%;
+  left: 8%;
+}
     /* ========= IG 按鈕 ========= */
     .ig-btn {
       position: absolute;
@@ -305,7 +335,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 999;
+      z-index: 998;
     }
     .modal-backdrop.show { display: flex; }
 
