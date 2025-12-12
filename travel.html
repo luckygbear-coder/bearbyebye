@@ -483,10 +483,9 @@
       "今天，就讓出遊熊帶你看看不一樣的世界！"
     ];
 
-    // ========= 資料陣列 =========
-    const travelSpots = [];
-    const foodSpots   = [];
-
+// ========= 資料陣列 =========
+const travelSpots = [];
+// ⚠ 這裡不要宣告 foodSpots，因為後面已經有 const foodSpots = [...]
     /* ====== 旅遊景點資料（和你之前一樣，只是整理好） ====== */
     /* 北部 */
     travelSpots.push(
@@ -658,10 +657,7 @@
        bear:"熊熊提醒：尊重在地文化，是旅行最重要的禮物。"}
     );
 
-    /* ===== 美食籤（用小工具函式塞資料） ===== */
-    function addFood(title, desc, kcal, sport, explain, bear) {
-      foodSpots.push({ title, desc, kcal, sport, explain, bear });
-    }
+
 
 // ===== 美食籤（每區至少 10 種） =====
 const foodSpots = [
