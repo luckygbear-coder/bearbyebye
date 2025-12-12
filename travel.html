@@ -1278,46 +1278,62 @@ const foodSpots = [
       }, 900);
     }
 
-    function drawFood() {
-      if (!foodSpots.length) {
-        alert("美食資料還在烹煮中，等等再試一次～");
-        return;
+function drawFood() {
+  if (!foodSpots.length) {
+    alert("美食資料還在烹煮中，等等再試一次～");
+    return;
+  }
+
+  showBearTalk();
+  if (loadingEl.style) loadingEl.style.display = "flex";
+
+  setTimeout(() => {
+    if (loadingEl.style) loadingEl.style.display = "none";
+
+    // 先決定要用哪一個美食池
+    let pool = foodSpots;
+
+    // 如果不是「全台」，就用地區過濾
+    if (selectedRegion !== "全台") {
+      const filtered = foodSpots.filter(s => s.region === selectedRegion);
+      if (filtered.length) {
+        pool = filtered;          // 有資料就用該區
       }
-      showBearTalk();
-      loadingEl.style.display = "flex";
-
-      setTimeout(() => {
-        loadingEl.style.display = "none";
-
-        const food = foodSpots[Math.floor(Math.random() * foodSpots.length)];
-        const todayStr = getTodayStr();
-        todayFoodCount++;
-        updateCounts();
-
-        const meta  = `熱量：約 ${food.kcal} 大卡｜建議運動：約 ${food.sport} 分鐘`;
-        const extra = `美食籤解說：${food.explain}`;
-        const bear  = `🐻 熊熊提醒：${food.bear}`;
-
-        modalResultTitle.textContent = `【美食籤】${food.title}`;
-        modalResultMeta.textContent  = meta;
-        modalResultDesc.textContent  = food.desc;
-        modalResultExtra.textContent = extra;
-        modalResultBear.textContent  = bear;
-
-        openModal(modalResult);
-
-        addHistory({
-          type: "美食",
-          date: todayStr,
-          title: food.title,
-          region: "",
-          meta,
-          desc: food.desc,
-          extra,
-          bear
-        });
-      }, 900);
+      // 如果該區沒有任何美食，就自動退回全部 pool（避免抽不到）
     }
+
+    // 從池子裡抽一個
+    const spot = pool[Math.floor(Math.random() * pool.length)];
+    const todayStr = getTodayStr();
+    todayFoodCount++;
+    updateCounts();
+
+    const meta  = `地區：${spot.region}｜熱量：約 ${spot.kcal} 大卡｜建議運動：約 ${spot.sport} 分鐘`;
+    const extra = `美食籤解說：${spot.explain}`;
+    const bear  = `🐻 熊熊提醒：${spot.bear}`;
+
+    // 顯示在結果視窗
+    modalResultTitle.textContent = `【美食籤】${spot.title}`;
+    modalResultMeta.textContent  = meta;
+    modalResultDesc.textContent  = spot.desc;
+    modalResultExtra.textContent = extra;
+    modalResultBear.textContent  = bear;
+
+    openModal(modalResult);
+
+    // 存入歷史（這次有寫入 region，紀錄列表會顯示地區）
+    addHistory({
+      type: "美食",
+      date: todayStr,
+      title: spot.title,
+      region: spot.region,
+      meta,
+      desc: spot.desc,
+      extra,
+      bear
+    });
+  }, 900);
+}
 
     btnDraw.addEventListener("click", () => {
       if (currentTab === "travel") drawTravel();
