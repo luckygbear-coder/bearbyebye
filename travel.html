@@ -1223,20 +1223,27 @@ const foodSpots = [
       }).join("");
     }
 
-    historyList.addEventListener("click", (e) => {
-      const item = e.target.closest(".history-item");
-      if (!item) return;
-      const idx = Number(item.dataset.idx);
-      const r = historyRecords[idx];
-      if (!r) return;
+historyList.addEventListener("click", (e) => {
+  const item = e.target.closest(".history-item");
+  if (!item) return;
 
-      modalResultTitle.textContent = r.title;
-      modalResultMeta.textContent  = r.meta;
-      modalResultDesc.textContent  = r.desc;
-      modalResultExtra.textContent = r.extra;
-      modalResultBear.textContent  = r.bear;
-      openModal(modalResult);
-    });
+  const idx = Number(item.dataset.idx);
+  const r = historyRecords[idx];
+  if (!r) return;
+
+  // 先關掉「紀錄視窗」
+  closeHistory();
+
+  // 再把資料塞進「結果視窗」
+  modalResultTitle.textContent = r.title;
+  modalResultMeta.textContent  = r.meta;
+  modalResultDesc.textContent  = r.desc;
+  modalResultExtra.textContent = r.extra;
+  modalResultBear.textContent  = r.bear;
+
+  // 打開「結果視窗」
+  openModal(modalResult);
+});
 
     function setTab(tab) {
       currentTab = tab;
