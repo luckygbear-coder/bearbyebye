@@ -1,6 +1,6 @@
 {
   "name": "玩樂熊",
-  "short_name": "一趟說走就走旅行",
+  "short_name": "出遊玩樂熊",
   "start_url": "./travel.html",
   "scope": "./",
   "display": "standalone",
