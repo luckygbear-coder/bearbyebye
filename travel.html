@@ -1323,10 +1323,14 @@ const foodSpots = [
       else drawFood();
     });
 
-    btnHistory.addEventListener("click", () => {
-      renderHistoryList();
-      openModal(modalHistory);
-    });
+btnHistory.addEventListener("click", () => {
+  // 先關掉結果視窗，避免兩個視窗疊在一起
+  modalResult.classList.remove("show");
+
+  // 再打開紀錄視窗
+  renderHistoryList();
+  openModal(modalHistory);
+});
 
     [modalResult, modalHistory].forEach(backdrop => {
       backdrop.addEventListener("click", (e) => {
