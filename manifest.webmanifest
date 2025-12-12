@@ -24,3 +24,29 @@
     }
   ]
 }
+{
+  "name": "出遊熊",
+  "short_name": "一趟說走就走旅行",
+  "start_url": "./travel.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffe9b1",
+  "theme_color": "#f4a63a",
+  "icons": [
+    {
+      "src": "icons/travel-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/travel-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/travel-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
